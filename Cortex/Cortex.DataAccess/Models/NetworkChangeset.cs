@@ -14,6 +14,11 @@ namespace Cortex.DataAccess.Models
 
         public DateTimeOffset Date { get; set; }
 
+        [ForeignKey(nameof(Author))]
+        public Guid AuthorId { get; set; }
+
         public Network Network { get; set; }
+
+        public User Author { get; set; }
     }
 }

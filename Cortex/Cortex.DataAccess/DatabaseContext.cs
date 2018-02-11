@@ -20,6 +20,8 @@ namespace Cortex.DataAccess
 
         public DbSet<NetworkUserAccess> NetworkUserAccesses { get; set; }
 
+        public DbSet<NetworkChangeset> NetworkChangesets { get; set; }
+
         public DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
