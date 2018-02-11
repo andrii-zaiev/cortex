@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cortex.DataAccess", "Cortex.DataAccess\Cortex.DataAccess.csproj", "{2A9FA4F5-EA35-4B05-AA18-7FFADCA0E0C9}"
 EndProject
@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cortex.BusinessLogic", "Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cortex.Auth", "Cortex.Auth\Cortex.Auth.csproj", "{B45629EB-BA89-4172-88AA-2AF90853484A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cortex.Web", "Cortex.Web\Cortex.Web.csproj", "{C74EE7EF-F765-4EAB-A8AA-0F030A777C77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cortex.Web", "Cortex.Web\Cortex.Web.csproj", "{C74EE7EF-F765-4EAB-A8AA-0F030A777C77}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cortex.Ioc", "Cortex.Ioc\Cortex.Ioc.csproj", "{76277DE3-339F-4D92-A700-07C51388A0F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{C74EE7EF-F765-4EAB-A8AA-0F030A777C77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C74EE7EF-F765-4EAB-A8AA-0F030A777C77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C74EE7EF-F765-4EAB-A8AA-0F030A777C77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76277DE3-339F-4D92-A700-07C51388A0F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76277DE3-339F-4D92-A700-07C51388A0F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76277DE3-339F-4D92-A700-07C51388A0F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76277DE3-339F-4D92-A700-07C51388A0F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

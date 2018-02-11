@@ -21,13 +21,13 @@ namespace Cortex.DataAccess.Models
         [ForeignKey(nameof(ReadAccess))]
         public Guid ReadAccessId { get; set; }
 
-        [ForeignKey(nameof(WriteAcces))]
+        [ForeignKey(nameof(WriteAccess))]
         public Guid WriteAccessId { get; set; }
 
         public User Owner { get; set; }
 
         public NetworkAccess ReadAccess { get; set; }
 
-        public NetworkAccess WriteAcces { get; set; }
+        public NetworkAccess WriteAccess { get; set; }
     }
 }
