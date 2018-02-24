@@ -13,4 +13,7 @@
     <ProjectReference Include="..\Cortex.BusinessLogic\Cortex.BusinessLogic.csproj" />
     <ProjectReference Include="..\Cortex.Ioc\Cortex.Ioc.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Source\scripts\" />
+  </ItemGroup>
 </Project>
