@@ -90,3 +90,29 @@ body {
         }
     }
 }
+
+// General styles
+input[type="text"],
+textarea {
+    &:focus {
+        border-color: @primary-color;
+    }
+
+    &:invalid {
+        border-color: #F44336;
+        background-color: #FFCDD2;
+    }
+}
+
+.button-primary {
+    .button();
+
+    background-color: @primary-color;
+    border-color: @primary-color;
+    color: @light-text-color;
+
+    &:hover {
+        background-color: @light-primary-color;
+        border-color: @light-primary-color;
+    }
+}

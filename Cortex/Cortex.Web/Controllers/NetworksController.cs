@@ -15,9 +15,19 @@ namespace Cortex.Web.Controllers
         }
 
         [HttpPost("/create-network")]
-        public IActionResult CreateNetwork(object model)
+        public IActionResult CreateNetwork(NewNetworkModel model)
         {
-            throw new NotImplementedException();
+            return RedirectToAction(nameof(GetNetwork), 
+                new
+                {
+                    id = Guid.NewGuid()
+                });
+        }
+
+        [HttpGet("/networks/{id:guid}")]
+        public IActionResult GetNetwork(Guid id)
+        {
+            return View();
         }
 
         [HttpGet("/networks")]
