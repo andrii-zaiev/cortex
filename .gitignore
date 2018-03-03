@@ -7,3 +7,5 @@ dist
 fonts
 
 *.user
+*.js
+*.js.map

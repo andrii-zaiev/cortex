@@ -58,11 +58,16 @@ body {
     .body {
         flex-grow: 1;
         overflow-y: auto;
+        padding: 30px;
+
+        & > * {
+            color: @text-color;
+        }
     }
 }
 
 .menu {
-    flex-basis: 250px;
+    flex: 0 0 250px;
     padding: 10px 0;
     margin: 0;
     list-style-type: none;
