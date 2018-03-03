@@ -2,6 +2,86 @@
 
 @import "constants.less";
 
-.menu {
+body {
+    background-color: @background-color;
     display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    margin: 0;
+    list-style-type: none;
+    background-color: @primary-color;
+    color: @light-text-color;
+    cursor: default;
+
+    li {
+        margin-bottom: 0;
+    }
+
+    .navbar-heading + .navbar-item {
+        margin-left: auto;
+    }
+
+    .navbar-heading,
+    .navbar-item {
+        margin: 0 10px;
+
+        a {
+            color: inherit;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .navbar-heading a:hover {
+        text-decoration: none;
+    }
+}
+
+.logo {
+    height: 40px;
+    vertical-align: middle;
+}
+
+.main-container {
+    flex-grow: 1;
+    display: flex;
+
+    .body {
+        flex-grow: 1;
+        overflow-y: auto;
+    }
+}
+
+.menu {
+    flex-basis: 250px;
+    padding: 10px 0;
+    margin: 0;
+    list-style-type: none;
+    background-color: @dark-background-color;
+
+    .menu-item {
+        &:hover {
+            background-color: #616161;
+        }
+
+        a {
+            display: block;
+            padding: 10px 30px;
+            color: @light-text-color;
+            text-decoration: none;
+        }
+
+        i {
+            width: 30px;
+        }
+    }
 }

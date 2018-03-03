@@ -6,15 +6,47 @@
     <title>@ViewData["Title"] - Cortex</title>
 </head>
 <body>
-    <nav class="menu">
-        <h2>Cortex</h2>
+    <nav>
+        <ul class="navbar">
+            <li>
+                <img class="logo" src="/images/logo.svg" alt="Logo" />
+            </li>
+            <li class="navbar-heading">
+                <a href="/" class="fs-1">Cortex</a>
+            </li>
+            <li class="navbar-item">
+                <a href="#" class="fs-4">Account</a>
+            </li>
+            <li class="navbar-item">
+                <a href="#" class="fs-4">Log out</a>
+            </li>
+        </ul>
     </nav>
 
-    <div>
-        @RenderBody()
-        <footer>
-            <p>&copy; 2018 - Cortex</p>
-        </footer>
+    <div class="main-container">
+        <ul class="menu">
+            <li class="menu-item">
+                <a href="#" class="fs-4">
+                    <i class="fa fa-plus"></i>
+                    Create network
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="fs-4">
+                    <i class="fa fa-user"></i>
+                    Your networks
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="fs-4">
+                    <i class="fa fa-users"></i>
+                    Shared with you
+                </a>
+            </li>
+        </ul>
+        <div class="body">
+            @RenderBody()
+        </div>
     </div>
 
     <environment include="Development">
