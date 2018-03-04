@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cortex.DataAccess.Models
+namespace Cortex.DataAccess.Entities
 {
     public class NetworkAccess
     {

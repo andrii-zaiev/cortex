@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Cortex.DataAccess.Models
+namespace Cortex.DataAccess.Entities
 {
     public class NetworkUserAccess
     {

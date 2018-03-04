@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Cortex.DataAccess.Models
+namespace Cortex.DataAccess.Entities
 {
     public class Network
     {
