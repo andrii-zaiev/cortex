@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Cortex.DataAccess\Cortex.DataAccess.csproj" />
+    <ProjectReference Include="..\Cortex.Repositories\Cortex.Repositories.csproj" />
   </ItemGroup>
 
   <ItemGroup>

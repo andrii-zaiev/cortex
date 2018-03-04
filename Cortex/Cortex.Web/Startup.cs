@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Cortex.Auth;
 using Cortex.Ioc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,6 +21,9 @@ namespace Cortex.Web
         {
             Injector.Configure(services, Configuration);
 
+            services.AddIdentity<IdentityUser, DefaultIdentityRole>()
+                .AddUserStore<UserStore>();
+
             services.AddMvc();
         }
 
@@ -41,6 +41,8 @@ namespace Cortex.Web
             }
 
             app.UseStaticFiles();
+
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
