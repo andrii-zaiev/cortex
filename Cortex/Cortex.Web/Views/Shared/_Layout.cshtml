@@ -14,12 +14,27 @@
             <li class="navbar-heading">
                 <a href="/" class="fs-1">Cortex</a>
             </li>
-            <li class="navbar-item">
-                <a href="#" class="fs-4">Account</a>
-            </li>
-            <li class="navbar-item">
-                <a href="#" class="fs-4">Log out</a>
-            </li>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li class="navbar-item">
+                    <a href="#" class="fs-4">Account</a>
+                </li>
+                <li class="navbar-item">
+                    <form method="post" asp-controller="Account" asp-action="LogOut">
+                        @Html.AntiForgeryToken()
+                        <button class="fs-4 button-link">Log out</button>
+                    </form>
+                </li>
+            }
+            else
+            {
+                <li class="navbar-item">
+                    <a class="fs-4" asp-controller="Account" asp-action="Register">Register</a>
+                </li>
+                <li class="navbar-item">
+                    <a class="fs-4" asp-controller="Account" asp-action="LogIn">Log in</a>
+                </li>
+            }
         </ul>
     </nav>
 

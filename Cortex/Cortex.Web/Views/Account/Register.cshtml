@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Register";
-    Layout = null;
+    Layout = "LogInLayout";
 }
 
 <h2>Register</h2>
@@ -31,5 +31,8 @@
         <input required="" maxlength="200" asp-for="ConfirmPassword" />
     </div>
 
-    <button type="submit" class="button-primary">Register</button>
+    <div class="buttons-section">
+        <a asp-controller="Account" asp-action="LogIn">Go to Log In</a>
+        <button type="submit" class="button-primary">Register</button>
+    </div>
 </form>

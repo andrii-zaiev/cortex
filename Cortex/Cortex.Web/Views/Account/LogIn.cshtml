@@ -1,7 +1,30 @@
-﻿
+﻿@model Cortex.Web.Models.Account.LogInModel
+
 @{
-    ViewData["Title"] = "LogIn";
+    ViewData["Title"] = "Log In";
+    Layout = "LogInLayout";
 }
 
-<h2>LogIn</h2>
+<h2>Log In</h2>
 
+<form class="form" method="post" asp-controller="Account" asp-action="LogIn">
+    @Html.AntiForgeryToken()
+
+    <div class="form-row">
+        <label asp-for="UserName"></label>
+        <input required="" maxlength="30" asp-for="UserName" />
+    </div>
+    <div class="form-row">
+        <label asp-for="Password"></label>
+        <input required="" maxlength="200" asp-for="Password" />
+    </div>
+    <div class="plain-form-row">
+        <input asp-for="RememberMe" />
+        <label asp-for="RememberMe"></label>
+    </div>
+
+    <div class="buttons-section">
+        <a asp-controller="Account" asp-action="Register">Go to Register</a>
+        <button type="submit" class="button-primary">Log In</button>
+    </div>
+</form>

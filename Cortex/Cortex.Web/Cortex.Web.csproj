@@ -1,8 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <TypeScriptToolsVersion>2.5</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Source\scripts\validation\init-validation.ts" />
+    <None Remove="Source\scripts\validation\validator.ts" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
@@ -14,6 +18,7 @@
     <ProjectReference Include="..\Cortex.Auth\Cortex.Auth.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Source\scripts\" />
+    <TypeScriptCompile Include="Source\scripts\validation\init-validation.ts" />
+    <TypeScriptCompile Include="Source\scripts\validation\validator.ts" />
   </ItemGroup>
 </Project>
