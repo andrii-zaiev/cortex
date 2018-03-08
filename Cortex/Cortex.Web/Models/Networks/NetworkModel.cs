@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cortex.Web.Models
+namespace Cortex.Web.Models.Networks
 {
     public class NetworkModel
     {

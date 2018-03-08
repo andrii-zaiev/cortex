@@ -1,7 +1,35 @@
-﻿
+﻿@model Cortex.Web.Models.Account.RegisterModel
+
 @{
     ViewData["Title"] = "Register";
+    Layout = null;
 }
 
 <h2>Register</h2>
 
+<form class="form" method="post" asp-controller="Account" asp-action="Register">
+    @Html.AntiForgeryToken()
+
+    <div class="form-row">
+        <label asp-for="UserName"></label>
+        <input required="" maxlength="30" asp-for="UserName" />
+    </div>
+    <div class="form-row">
+        <label asp-for="Email"></label>
+        <input required="" maxlength="200" asp-for="Email" />
+    </div>
+    <div class="form-row">
+        <label asp-for="Name"></label>
+        <input required="" maxlength="200" asp-for="Name" />
+    </div>
+    <div class="form-row">
+        <label asp-for="Password"></label>
+        <input required="" maxlength="200" asp-for="Password" />
+    </div>
+    <div class="form-row">
+        <label asp-for="ConfirmPassword"></label>
+        <input required="" maxlength="200" asp-for="ConfirmPassword" />
+    </div>
+
+    <button type="submit" class="button-primary">Register</button>
+</form>

@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cortex.Auth\Cortex.Auth.csproj" />
-    <ProjectReference Include="..\Cortex.Ioc\Cortex.Ioc.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\scripts\" />

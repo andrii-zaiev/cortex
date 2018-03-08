@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cortex.Web.Models;
+using Cortex.Web.Models.Networks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cortex.Web.Controllers

@@ -1,4 +1,5 @@
 ﻿using System;
+using Cortex.Web.Models.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using IdentityUser = Cortex.Auth.IdentityUser;
@@ -26,7 +27,7 @@ namespace Cortex.Web.Controllers
 
         [HttpPost("/register")]
         [ValidateAntiForgeryToken]
-        public IActionResult Register(object registerModel)
+        public IActionResult Register(RegisterModel registerModel)
         {
             return RedirectToAction("Index", "Main");
         }
@@ -39,7 +40,7 @@ namespace Cortex.Web.Controllers
 
         [HttpPost("/log-in")]
         [ValidateAntiForgeryToken]
-        public IActionResult LogIn(object logInModel)
+        public IActionResult LogIn(LogInModel logInModel)
         {
             return RedirectToAction("Index", "Main");
         }

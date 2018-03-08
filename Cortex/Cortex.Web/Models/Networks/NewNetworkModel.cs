@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Cortex.Web.Models
+namespace Cortex.Web.Models.Networks
 {
     public class NewNetworkModel
     {

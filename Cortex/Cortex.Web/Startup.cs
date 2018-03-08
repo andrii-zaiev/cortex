@@ -1,7 +1,10 @@
 using Cortex.Auth;
-using Cortex.Ioc;
+using Cortex.DataAccess;
+using Cortex.Repositories.Implementation;
+using Cortex.Repositories.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,10 +22,15 @@ namespace Cortex.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            Injector.Configure(services, Configuration);
+            string connectionString = Configuration.GetConnectionString("CortexDB");
+
+            services.AddDbContext<DatabaseContext>(builder => builder.UseSqlServer(connectionString));
+
+            services.AddTransient<IUserRepository, UserRepository>();
 
             services.AddIdentity<IdentityUser, DefaultIdentityRole>()
-                .AddUserStore<UserStore>();
+                .AddUserStore<UserStore>()
+                .AddRoleStore<DefaultUserRoleStore>();
 
             services.AddMvc();
         }
