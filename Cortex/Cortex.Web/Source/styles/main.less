@@ -100,7 +100,7 @@ textarea {
         border-color: @primary-color;
     }
 
-    &:invalid {
+    &.invalid {
         border-color: #F44336;
         background-color: #FFCDD2;
     }
@@ -121,6 +121,11 @@ input[type="checkbox"] {
     &:hover {
         background-color: @light-primary-color;
         border-color: @light-primary-color;
+    }
+
+    &:disabled {
+        background-color: @disabled-color;
+        border-color: @disabled-color;
     }
 }
 

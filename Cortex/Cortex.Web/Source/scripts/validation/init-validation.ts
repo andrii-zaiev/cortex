@@ -1,6 +1,6 @@
 ﻿import Validator from './validator';
 
-document.addEventListener('load', () => {
+window.onload = () => {
     const forms = document.querySelectorAll('form[data-validate]');
     const validators = [];
 
@@ -8,4 +8,4 @@ document.addEventListener('load', () => {
         const v = new Validator(form as HTMLFormElement);
         validators.push(v);
     }
-});
+};

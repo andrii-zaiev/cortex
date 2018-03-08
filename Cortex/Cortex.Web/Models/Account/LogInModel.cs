@@ -11,6 +11,7 @@ namespace Cortex.Web.Models.Account
 
         [Required]
         [DisplayName("Password")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [DisplayName("Remember Me")]
