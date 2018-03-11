@@ -4,9 +4,14 @@ using Cortex.Repositories.Implementation;
 using Cortex.Repositories.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Rewrite.Internal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using IdentityUser = Cortex.Auth.IdentityUser;
 
 namespace Cortex.Web
 {
@@ -39,6 +44,12 @@ namespace Cortex.Web
                 })
                 .AddUserStore<UserStore>()
                 .AddRoleStore<DefaultUserRoleStore>();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/log-in";
+                options.LogoutPath = "/log-out";
+            });
 
             services.AddMvc();
         }

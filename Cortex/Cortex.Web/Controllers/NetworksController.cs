@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Cortex.Web.Models;
 using Cortex.Web.Models.Networks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cortex.Web.Controllers
 {
+    [Authorize]
     public class NetworksController : Controller
     {
         [HttpGet("/create-network")]
@@ -26,6 +28,7 @@ namespace Cortex.Web.Controllers
         }
 
         [HttpGet("/networks/{id:guid}")]
+        [AllowAnonymous]
         public IActionResult GetNetwork(Guid id)
         {
             return View();

@@ -7,7 +7,12 @@
 
 <h2>Log In</h2>
 
-<form class="form" method="post" data-validate="" asp-controller="Account" asp-action="LogIn">
+<form class="form"
+      method="post"
+      data-validate=""
+      asp-controller="Account"
+      asp-action="LogIn"
+      asp-route-returnUrl="@ViewData["ReturnUrl"]">
     @Html.AntiForgeryToken()
 
     <div class="form-row">

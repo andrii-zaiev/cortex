@@ -58,14 +58,15 @@ namespace Cortex.Web.Controllers
         }
 
         [HttpGet("/log-in")]
-        public IActionResult LogIn()
+        public IActionResult LogIn(string returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
 
         [HttpPost("/log-in")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LogIn(LogInModel logInModel)
+        public async Task<IActionResult> LogIn(LogInModel logInModel, string returnUrl = null)
         {
             SignInResult result = await _signInManager.PasswordSignInAsync(
                 logInModel.UserName,
@@ -75,8 +76,15 @@ namespace Cortex.Web.Controllers
 
             if (result.Succeeded)
             {
+                if (returnUrl != null)
+                {
+                    return Redirect(returnUrl);
+                }
+
                 return RedirectToAction("Index", "Main");
             }
+
+            ViewData["ReturnUrl"] = returnUrl;
 
             return View();
         }
