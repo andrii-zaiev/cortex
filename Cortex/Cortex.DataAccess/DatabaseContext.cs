@@ -41,6 +41,9 @@ namespace Cortex.DataAccess
                 foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
+            modelbuilder.Entity<User>()
+                .HasAlternateKey(u => u.UserName);
+
             base.OnModelCreating(modelbuilder);
         }
     }
