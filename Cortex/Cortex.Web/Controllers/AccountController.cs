@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Cortex.Web.Models.Account;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using IdentityUser = Cortex.Auth.IdentityUser;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace Cortex.Web.Controllers
 {
@@ -47,6 +49,8 @@ namespace Cortex.Web.Controllers
 
             if (result.Succeeded)
             {
+                await _signInManager.SignInAsync(identityUser, false);
+
                 return RedirectToAction("Index", "Main");
             }
 
@@ -61,16 +65,30 @@ namespace Cortex.Web.Controllers
 
         [HttpPost("/log-in")]
         [ValidateAntiForgeryToken]
-        public IActionResult LogIn(LogInModel logInModel)
+        public async Task<IActionResult> LogIn(LogInModel logInModel)
         {
-            return RedirectToAction("Index", "Main");
+            SignInResult result = await _signInManager.PasswordSignInAsync(
+                logInModel.UserName,
+                logInModel.Password,
+                logInModel.RememberMe,
+                false);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", "Main");
+            }
+
+            return View();
         }
 
         [HttpPost("/log-out")]
+        [Authorize]
         [ValidateAntiForgeryToken]
-        public IActionResult LogOut()
+        public async Task<IActionResult> LogOut()
         {
-            throw new NotImplementedException();
+            await _signInManager.SignOutAsync();
+
+            return RedirectToAction("Index", "Main");
         }
     }
 }
