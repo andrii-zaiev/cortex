@@ -28,7 +28,15 @@ namespace Cortex.Web
 
             services.AddTransient<IUserRepository, UserRepository>();
 
-            services.AddIdentity<IdentityUser, DefaultIdentityRole>()
+            services.AddIdentity<IdentityUser, DefaultIdentityRole>(options =>
+                {
+                    options.Password.RequiredLength = 0;
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequiredUniqueChars = 0;
+                })
                 .AddUserStore<UserStore>()
                 .AddRoleStore<DefaultUserRoleStore>();
 

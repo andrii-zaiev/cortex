@@ -28,16 +28,12 @@ namespace Cortex.Auth
 
         public async Task<string> GetUserNameAsync(IdentityUser user, CancellationToken cancellationToken)
         {
-            UserModel userModel = await _userRepository.GetByIdAsync(user.Id);
-
-            return userModel.UserName;
+            return user.UserName;
         }
 
         public async Task SetUserNameAsync(IdentityUser user, string userName, CancellationToken cancellationToken)
         {
-            UserModel userModel = await _userRepository.GetByIdAsync(user.Id);
-            userModel.UpdateUserName(userName);
-            await _userRepository.UpdateAsync(userModel);
+            user.UserName = userName;
         }
 
         public Task<string> GetNormalizedUserNameAsync(IdentityUser user, CancellationToken cancellationToken)
@@ -100,9 +96,7 @@ namespace Cortex.Auth
 
         public async Task SetPasswordHashAsync(IdentityUser user, string passwordHash, CancellationToken cancellationToken)
         {
-            UserModel userModel = await _userRepository.GetByIdAsync(user.Id);
-            userModel.UpdatePasswordHash(passwordHash);
-            await _userRepository.UpdateAsync(userModel);
+            user.PasswordHash = passwordHash;
         }
 
         public async Task<string> GetPasswordHashAsync(IdentityUser user, CancellationToken cancellationToken)
@@ -117,9 +111,7 @@ namespace Cortex.Auth
 
         public async Task SetEmailAsync(IdentityUser user, string email, CancellationToken cancellationToken)
         {
-            UserModel userModel = await _userRepository.GetByIdAsync(user.Id);
-            userModel.UpdateEmail(email);
-            await _userRepository.UpdateAsync(userModel);
+            user.Email = email;
         }
 
         public async Task<string> GetEmailAsync(IdentityUser user, CancellationToken cancellationToken)

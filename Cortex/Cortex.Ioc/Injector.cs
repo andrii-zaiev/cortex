@@ -12,11 +12,6 @@ namespace Cortex.Ioc
     {
         public static void Configure(IServiceCollection services, IConfiguration configuration)
         {
-            string connectionString = configuration.GetConnectionString("CortexDB");
-
-            services.AddDbContext<DatabaseContext>(builder => builder.UseSqlServer(connectionString));
-
-            services.AddTransient<IUserRepository, UserRepository>();
         }
     }
 }

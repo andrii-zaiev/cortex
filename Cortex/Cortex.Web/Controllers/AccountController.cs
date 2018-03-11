@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Cortex.Web.Models.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -27,9 +28,29 @@ namespace Cortex.Web.Controllers
 
         [HttpPost("/register")]
         [ValidateAntiForgeryToken]
-        public IActionResult Register(RegisterModel registerModel)
+        public async Task<IActionResult> Register(RegisterModel registerModel)
         {
-            return RedirectToAction("Index", "Main");
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var identityUser = new IdentityUser
+            {
+                Id = Guid.NewGuid(),
+                Email = registerModel.Email,
+                Name = registerModel.Name,
+                UserName = registerModel.UserName
+            };
+
+            IdentityResult result = await _userManager.CreateAsync(identityUser, registerModel.Password);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", "Main");
+            }
+
+            return BadRequest();
         }
 
         [HttpGet("/log-in")]
