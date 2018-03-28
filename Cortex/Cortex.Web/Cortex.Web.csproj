@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cortex.Auth\Cortex.Auth.csproj" />
+    <ProjectReference Include="..\Cortex.Services\Cortex.Services.csproj" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Source\scripts\validation\init-validation.ts" />

@@ -1,12 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Cortex.DataAccess.Entities;
 
 namespace Cortex.DomainModels
 {
     public class NetworkModel
     {
         public NetworkModel(
+            Network entity,
+            NetworkAccess readAccess,
+            IList<NetworkUserAccess> readAccessUsers,
+            NetworkAccess writeAccess,
+            IList<NetworkUserAccess> writeAccessUsers)
+            : this(
+                entity.Id,
+                entity.Name,
+                entity.Description,
+                entity.CreatedDate,
+                entity.OwnerId,
+                new NetworkAccessModel(readAccess, readAccessUsers),
+                new NetworkAccessModel(writeAccess, writeAccessUsers))
+        {
+        }
+
+        private NetworkModel(
             Guid id,
             string name,
             string description,

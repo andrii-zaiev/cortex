@@ -6,10 +6,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Cortex.DataAccess\Cortex.DataAccess.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Dtos\" />
+    <ProjectReference Include="..\Cortex.DomainModels\Cortex.DomainModels.csproj" />
+    <ProjectReference Include="..\Cortex.Repositories\Cortex.Repositories.csproj" />
   </ItemGroup>
 
 </Project>
