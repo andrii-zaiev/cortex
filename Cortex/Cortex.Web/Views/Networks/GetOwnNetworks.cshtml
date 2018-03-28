@@ -1,6 +1,5 @@
-﻿@using Cortex.Web.Models
-@using Cortex.Web.Models.Networks
-@model List<Cortex.Web.Models.Networks.NetworkModel>
+﻿@using Cortex.Web.Models.Networks
+@model List<NetworkModel>
 
 @{
     ViewBag.Title = "Your networks";
@@ -14,8 +13,10 @@
         @foreach (NetworkModel network in Model)
         {
             <div class="network-container">
-                <a class="fs-3" href="@network.Id">@network.Name</a>
-                <small>@network.CreatedDate</small>
+                <a class="fs-3" asp-controller="Networks" asp-action="GetNetwork" asp-route-id="@network.Id">
+                    @network.Name
+                </a>
+                <small>@network.CreatedDate.ToString("dd-MMM-yyyy HH:mm 'UTC'")</small>
                 <p>@network.Description</p>
             </div>
         }

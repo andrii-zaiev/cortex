@@ -74,15 +74,22 @@ namespace Cortex.Web.Controllers
 
             Dictionary<Guid, User> users = (await _userService.GetUsersAsync(requiredUsers)).ToDictionary(u => u.Id);
 
-            var model = new NetworkModel(network, users, User.GetId() == network.OwnerId);
+            var model = new NetworkDetailsModel(network, users, User.GetId() == network.OwnerId);
 
             return View(model);
         }
 
         [HttpGet("/networks")]
-        public IActionResult GetOwnNetworks()
+        public async Task<IActionResult> GetOwnNetworks()
         {
-            return View(Enumerable.Empty<NetworkModel>().ToList());
+            IList<Network> networks =  await _networkService.GetUserNetworksAsync(User.GetId());
+
+            List<NetworkModel> models = networks
+                .Select(n => new NetworkModel(n, null))
+                .OrderBy(n => n.Name)
+                .ToList();
+
+            return View(models);
         }
 
         [HttpGet("/networks/shared")]

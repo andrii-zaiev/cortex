@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Cortex.DomainModels;
 using Cortex.Repositories.Interfaces;
@@ -30,6 +32,13 @@ namespace Cortex.Services
             NetworkModel network = await _networkRepository.GetNetworkAsync(networkId);
 
             return new Network(network);
+        }
+
+        public async Task<IList<Network>> GetUserNetworksAsync(Guid userId)
+        {
+            IList<NetworkModel> networks = await _networkRepository.GetUserNetworksAsync(userId);
+
+            return networks.Select(n => new Network(n)).ToList();
         }
 
         public async Task<bool> CanAccessNetworkAsync(Guid networkId, Guid userId)

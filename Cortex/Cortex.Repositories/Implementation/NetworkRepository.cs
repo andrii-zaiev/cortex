@@ -58,6 +58,32 @@ namespace Cortex.Repositories.Implementation
                 userAccessesMapping[entity.WriteAccessId].ToList());
         }
 
+        public async Task<IList<NetworkModel>> GetUserNetworksAsync(Guid userId)
+        {
+            List<Network> networks = await Context.Networks
+                .Include(nameof(Network.ReadAccess))
+                .Include(nameof(Network.WriteAccess))
+                .Where(n => n.OwnerId == userId)
+                .ToListAsync();
+
+            List<Guid> accessIds = networks.SelectMany(n => new[] { n.ReadAccessId, n.WriteAccessId }).ToList();
+
+            List<NetworkUserAccess> userAccesses = await Context.NetworkUserAccesses
+                .Include(nameof(NetworkUserAccess.User))
+                .Where(n => accessIds.Contains(n.NetworkAccessId))
+                .ToListAsync();
+            ILookup<Guid, NetworkUserAccess> userAccessesMapping = userAccesses.ToLookup(a => a.NetworkAccessId);
+
+            return networks
+                .Select(n => new NetworkModel(
+                    n,
+                    n.ReadAccess,
+                    userAccessesMapping[n.ReadAccessId].ToList(),
+                    n.WriteAccess,
+                    userAccessesMapping[n.WriteAccessId].ToList()))
+                .ToList();
+        }
+
         private void CreateNetworkAccess(NetworkAccessModel networkAccess)
         {
             var entity = new NetworkAccess
