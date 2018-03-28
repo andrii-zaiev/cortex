@@ -39,7 +39,7 @@ namespace Cortex.Services
             switch (network.ReadAccess.AccessMode)
             {
                 case AccessMode.Private:
-                    return false;
+                    return network.OwnerId == userId;
                 case AccessMode.ByPermission:
                     return network.ReadAccess.PermittedUsers.Contains(userId);
                 case AccessMode.Public:

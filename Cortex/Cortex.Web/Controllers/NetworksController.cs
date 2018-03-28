@@ -15,10 +15,12 @@ namespace Cortex.Web.Controllers
     public class NetworksController : Controller
     {
         private readonly INetworkService _networkService;
+        private readonly IUserService _userService;
 
-        public NetworksController(INetworkService networkService)
+        public NetworksController(INetworkService networkService, IUserService userService)
         {
             _networkService = networkService;
+            _userService = userService;
         }
 
         [HttpGet("/create-network")]
@@ -65,10 +67,16 @@ namespace Cortex.Web.Controllers
             }
 
             Network network = await _networkService.GetNetworkAsync(id);
+            List<Guid> requiredUsers = network.ReadAccess.PermittedUsers
+                .Union(network.WriteAccess.PermittedUsers)
+                .Union(Enumerable.Repeat(network.OwnerId, 1))
+                .ToList();
 
+            Dictionary<Guid, User> users = (await _userService.GetUsersAsync(requiredUsers)).ToDictionary(u => u.Id);
 
+            var model = new NetworkModel(network, users, User.GetId() == network.OwnerId);
 
-            return View();
+            return View(model);
         }
 
         [HttpGet("/networks")]
@@ -80,18 +88,7 @@ namespace Cortex.Web.Controllers
         [HttpGet("/networks/shared")]
         public IActionResult GetSharedNetworks()
         {
-            var networks = new List<NetworkModel>
-            {
-                new NetworkModel
-                {
-                    AuthorName = "Jane Brown",
-                    AuthorLogin = "jbrown",
-                    CreatedDate = DateTimeOffset.Now,
-                    Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed hendrerit, augue eu rutrum hendrerit, turpis erat dictum justo, ut porta mauris purus at lacus. Donec purus ante, ultrices et dapibus vitae, pretium ac ex. Aliquam erat volutpat. Integer eu elementum libero. Curabitur venenatis tortor faucibus pulvinar consectetur. Morbi ac neque in risus auctor vulputate vitae scelerisque est. Etiam pretium dignissim ligula, sit amet tempus risus lacinia at. Pellentesque consectetur nulla justo, vitae fermentum quam tristique non. Vestibulum in mi ipsum.",
-                    Id = Guid.NewGuid(),
-                    Name = "CNN"
-                }
-            };
+            var networks = new List<NetworkModel>();
             return View(networks);
         }
     }

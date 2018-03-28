@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cortex.DataAccess;
@@ -20,7 +21,7 @@ namespace Cortex.Repositories.Implementation
         {
             User entity = await base.GetByIdAsync(id);
 
-            return ConvertEntityToModel(entity);
+            return new UserModel(entity);
         }
 
         public async Task CreateAsync(UserModel user)
@@ -60,29 +61,23 @@ namespace Cortex.Repositories.Implementation
         {
             User entity = await Context.Users.SingleOrDefaultAsync(user => user.UserName == userName);
 
-            return ConvertEntityToModel(entity);
+            return new UserModel(entity);
         }
 
         public async Task<UserModel> GetByEmailAsync(string email)
         {
             User entity = await Context.Users.SingleOrDefaultAsync(user => user.Email == email);
 
-            return ConvertEntityToModel(entity);
+            return new UserModel(entity);
         }
 
-        private static UserModel ConvertEntityToModel(User entity)
+        public async Task<IList<UserModel>> GetUsersAsync(IList<Guid> ids)
         {
-            if (entity == null)
-            {
-                return null;
-            }
+            List<User> entities = await Context.Users
+                .Where(u => ids.Contains(u.Id))
+                .ToListAsync();
 
-            return new UserModel(
-                entity.Id,
-                entity.Name,
-                entity.UserName,
-                entity.Email,
-                entity.PasswordHash);
+            return entities.Select(u => new UserModel(u)).ToList();
         }
     }
 }

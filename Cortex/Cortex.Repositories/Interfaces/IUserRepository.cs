@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cortex.DomainModels;
 
@@ -15,5 +16,7 @@ namespace Cortex.Repositories.Interfaces
         Task<UserModel> GetByUserNameAsync(string userName);
 
         Task<UserModel> GetByEmailAsync(string email);
+
+        Task<IList<UserModel>> GetUsersAsync(IList<Guid> ids);
     }
 }

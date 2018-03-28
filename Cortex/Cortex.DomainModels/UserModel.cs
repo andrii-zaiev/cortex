@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Cortex.DataAccess.Entities;
 
 namespace Cortex.DomainModels
 {
     public class UserModel
     {
-        public UserModel(Guid id, string name, string userName, string email, string passwordHash)
+        public UserModel(User user)
+            : this(user.Id, user.Name, user.UserName, user.Email, user.PasswordHash)
+        {
+        }
+
+        private UserModel(Guid id, string name, string userName, string email, string passwordHash)
         {
             Id = id;
             Name = name;
