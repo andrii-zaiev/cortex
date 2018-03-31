@@ -67,12 +67,12 @@ namespace Cortex.Web.Controllers
             }
 
             Network network = await _networkService.GetNetworkAsync(id);
-            List<Guid> requiredUsers = network.ReadAccess.PermittedUsers
+            List<Guid> networkUserIds = network.ReadAccess.PermittedUsers
                 .Union(network.WriteAccess.PermittedUsers)
                 .Union(Enumerable.Repeat(network.OwnerId, 1))
                 .ToList();
 
-            Dictionary<Guid, User> users = (await _userService.GetUsersAsync(requiredUsers)).ToDictionary(u => u.Id);
+            Dictionary<Guid, User> users = (await _userService.GetUsersAsync(networkUserIds)).ToDictionary(u => u.Id);
 
             var model = new NetworkDetailsModel(network, users, User.GetId() == network.OwnerId);
 
@@ -97,6 +97,34 @@ namespace Cortex.Web.Controllers
         {
             var networks = new List<NetworkModel>();
             return View(networks);
+        }
+
+        [HttpGet("/networks/{id:guid}/edit")]
+        public async Task<IActionResult> EditNetwork(Guid id)
+        {
+            Network network = await _networkService.GetNetworkAsync(id);
+
+            if (network.OwnerId != User.GetId())
+            {
+                return Forbid();
+            }
+
+            var model = new NetworkEditModel(network);
+
+            return View(model);
+        }
+
+        [HttpPost("/networks/edit")]
+        public async Task<IActionResult> Edit(NetworkEditModel model)
+        {
+            Network network = await _networkService.GetNetworkAsync(model.Id);
+
+            if (network.OwnerId != User.GetId())
+            {
+                return Forbid();
+            }
+
+            return RedirectToAction("GetNetwork", "Networks", new { network.Id });
         }
     }
 }

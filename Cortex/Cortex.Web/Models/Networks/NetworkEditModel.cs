@@ -1,9 +1,26 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using Cortex.Services.Dtos;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cortex.Web.Models.Networks
 {
-    public class NewNetworkModel
+    public class NetworkEditModel
     {
+        public NetworkEditModel()
+        {
+        }
+
+        public NetworkEditModel(Network network)
+        {
+            Id = network.Id;
+            Name = network.Name;
+            Description = network.Description;
+        }
+
+        [HiddenInput]
+        public Guid Id { get; set; }
+
         [MaxLength(100, ErrorMessage = "Name should be shorter than 100 symbols")]
         [Display(Name = "Name")]
         [Required]

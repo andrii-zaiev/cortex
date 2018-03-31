@@ -1,3 +1,4 @@
+using System;
 using Cortex.Auth;
 using Cortex.DataAccess;
 using Cortex.Repositories.Implementation;
@@ -38,6 +39,7 @@ namespace Cortex.Web
 
             services.ConfigureApplicationCookie(options =>
             {
+                options.ExpireTimeSpan = TimeSpan.FromDays(30);
                 options.LoginPath = "/log-in";
                 options.LogoutPath = "/log-out";
             });

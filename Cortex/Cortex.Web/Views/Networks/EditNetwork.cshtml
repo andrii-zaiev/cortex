@@ -1,0 +1,20 @@
+﻿@model Cortex.Web.Models.Networks.NetworkEditModel
+
+@{
+    ViewBag.Title = $"Edit {Model.Name}";
+}
+
+<h2>Edit network</h2>
+
+<form class="form" method="post" data-validate="" asp-controller="Networks" asp-action="Edit">
+    <input asp-for="Id" />
+    <div class="form-row">
+        <label asp-for="Name"></label>
+        <input id="name-input" required="" maxlength="100" asp-for="Name" />
+    </div>
+    <div class="form-row">
+        <label class="top-label" asp-for="Description"></label>
+        <textarea id="description-input" rows="5" maxlength="6000" asp-for="Description"></textarea>
+    </div>
+    <button type="submit" class="button-primary">Save</button>
+</form>
