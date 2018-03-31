@@ -4,6 +4,9 @@
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Source\scripts\accesses-editor\AccessesEditor.tsx" />
+    <None Remove="Source\scripts\accesses-editor\AccessModeSelector.tsx" />
+    <None Remove="Source\scripts\accesses-editor\init.tsx" />
     <None Remove="Source\scripts\validation\init-validation.ts" />
     <None Remove="Source\scripts\validation\validator.ts" />
   </ItemGroup>
@@ -19,6 +22,9 @@
     <ProjectReference Include="..\Cortex.Services\Cortex.Services.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Source\scripts\accesses-editor\AccessModeSelector.tsx" />
+    <TypeScriptCompile Include="Source\scripts\accesses-editor\AccessesEditor.tsx" />
+    <TypeScriptCompile Include="Source\scripts\accesses-editor\init.tsx" />
     <TypeScriptCompile Include="Source\scripts\validation\init-validation.ts" />
     <TypeScriptCompile Include="Source\scripts\validation\validator.ts" />
   </ItemGroup>
