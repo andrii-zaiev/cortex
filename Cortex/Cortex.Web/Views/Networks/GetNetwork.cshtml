@@ -6,51 +6,60 @@
 }
 
 <h2>@Model.Name</h2>
-<div>
+<small>
     <span>by</span>
     <span>
         @Model.Author.Name &lt;@Model.Author.UserName.ToLower()&gt;
     </span>
     <span>@Model.CreatedDate.ToString("dd-MMM-yyyy HH:mm 'UTC'")</span>
-</div>
-
-<div>
-    @Model.Description
-</div>
+</small>
 
 @if (Model.IsOwner)
 {
-    <div>
+    <div class="section">
         <h4>Access</h4>
-        <div>
-            <span>View</span>
-            <span>@Model.ReadAccess</span>
-            @if (Model.ReadAccessUsers.Any())
-            {
-                <span>
-                    @foreach (UserDisplayModel user in Model.ReadAccessUsers)
+        <div class="grid">
+            <div class="grid-row">
+                <span class="label-cell">View</span>
+                <div class="cell">
+                    <span>@Model.ReadAccess</span>
+                    @if (Model.ReadAccessUsers.Any())
                     {
                         <span>
-                            @user.Name &lt;@user.UserName.ToLower()&gt;
+                            @foreach (UserDisplayModel user in Model.ReadAccessUsers)
+                            {
+                                <span>
+                                    @user.Name &lt;@user.UserName.ToLower()&gt;
+                                </span>
+                            }
                         </span>
                     }
-                </span>
-            }
-        </div>
-        <div>
-            <span>Edit</span>
-            <span>@Model.WriteAccess</span>
-            @if (Model.WriteAccessUsers.Any())
-            {
-                <span>
-                    @foreach (UserDisplayModel user in Model.WriteAccessUsers)
+                </div>
+            </div>
+            <div class="grid-row">
+                <span class="label-cell">Edit</span>
+                <div class="cell">
+                    <span>@Model.WriteAccess</span>
+                    @if (Model.WriteAccessUsers.Any())
                     {
                         <span>
-                            @user.Name &lt;@user.UserName.ToLower()&gt;
+                            @foreach (UserDisplayModel user in Model.ReadAccessUsers)
+                            {
+                                <span>
+                                    @user.Name &lt;@user.UserName.ToLower()&gt;
+                                </span>
+                            }
                         </span>
                     }
-                </span>
-            }
+                </div>
+            </div>
         </div>
     </div>
 }
+
+<div class="section">
+    <h4>Description</h4>
+    <div>
+        @Model.Description
+    </div>
+</div>
