@@ -5,7 +5,17 @@
     ViewBag.Title = Model.Name;
 }
 
-<h2>@Model.Name</h2>
+<div class="heading">
+    <span class="fs-2">@Model.Name</span>
+    @if (Model.IsOwner)
+    {
+        <a class="button-primary button-small" asp-controller="Networks" asp-action="Edit" asp-route-id="@Model.Id">
+            <i class="fa fa-edit"></i>
+            <span>Edit</span>
+        </a>
+    }
+</div>
+
 <small>
     <span>by</span>
     <span>

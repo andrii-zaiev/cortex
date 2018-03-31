@@ -1,0 +1,53 @@
+﻿.form {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+
+    > button,
+    .buttons-section {
+        margin-top: 10px;
+        align-self: flex-end;
+
+        > :not(:last-child) {
+            margin-right: 10px;
+        }
+    }
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+
+    @label-flex: 0 0 100px;
+
+    label {
+        flex: @label-flex;
+    }
+
+    .top-label {
+        flex: @label-flex;
+        align-self: flex-start;
+    }
+
+    input,
+    textarea {
+        flex-grow: 1;
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 50px;
+        max-height: 300px;
+    }
+}
+
+.plain-form-row {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+
+    > :not(:last-child) {
+        margin-right: 5px;
+    }
+}
