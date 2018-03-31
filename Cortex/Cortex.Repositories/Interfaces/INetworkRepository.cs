@@ -12,5 +12,7 @@ namespace Cortex.Repositories.Interfaces
         Task<NetworkModel> GetNetworkAsync(Guid networkId);
 
         Task<IList<NetworkModel>> GetUserNetworksAsync(Guid userId);
+
+        Task UpdateNetworkAsync(NetworkModel network);
     }
 }

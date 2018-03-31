@@ -16,5 +16,7 @@ namespace Cortex.Services.Interfaces
         Task<bool> CanAccessNetworkAsync(Guid networkId, Guid userId);
 
         Task<bool> CanAccessNetworkAnonymouslyAsync(Guid networkId);
+
+        Task UpdateNetworkAsync(Guid id, NetworkUpdate networkUpdate);
     }
 }

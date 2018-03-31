@@ -64,5 +64,15 @@ namespace Cortex.Services
 
             return network.ReadAccess.AccessMode == AccessMode.Public;
         }
+
+        public async Task UpdateNetworkAsync(Guid id, NetworkUpdate networkUpdate)
+        {
+            NetworkModel network = await _networkRepository.GetNetworkAsync(id);
+
+            network.UpdateName(networkUpdate.Name)
+                   .UpdateDescription(networkUpdate.Description);
+
+            await _networkRepository.UpdateNetworkAsync(network);
+        }
     }
 }

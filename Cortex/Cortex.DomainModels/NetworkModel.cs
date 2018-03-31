@@ -70,5 +70,17 @@ namespace Cortex.DomainModels
                 readAccess,
                 writeAccess);
         }
+
+        public NetworkModel UpdateName(string name)
+        {
+            Name = name;
+            return this;
+        }
+
+        public NetworkModel UpdateDescription(string description)
+        {
+            Description = description;
+            return this;
+        }
     }
 }

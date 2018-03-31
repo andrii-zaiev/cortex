@@ -124,6 +124,10 @@ namespace Cortex.Web.Controllers
                 return Forbid();
             }
 
+            var networkUpdate = new NetworkUpdate(model.Name, model.Description);
+
+            await _networkService.UpdateNetworkAsync(model.Id, networkUpdate);
+
             return RedirectToAction("GetNetwork", "Networks", new { network.Id });
         }
     }

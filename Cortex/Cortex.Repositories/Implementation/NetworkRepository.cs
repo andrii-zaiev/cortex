@@ -84,6 +84,16 @@ namespace Cortex.Repositories.Implementation
                 .ToList();
         }
 
+        public async Task UpdateNetworkAsync(NetworkModel network)
+        {
+            Network entity = await Context.Networks.SingleAsync(n => n.Id == network.Id);
+
+            entity.Name = network.Name;
+            entity.Description = network.Description;
+
+            await UpdateAsync(entity);
+        }
+
         private void CreateNetworkAccess(NetworkAccessModel networkAccess)
         {
             var entity = new NetworkAccess
