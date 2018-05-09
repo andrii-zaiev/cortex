@@ -82,5 +82,17 @@ namespace Cortex.DomainModels
             Description = description;
             return this;
         }
+
+        public NetworkModel UpdateReadAccess(AccessMode readAccess)
+        {
+            ReadAccess.UpdateMode(readAccess);
+            return this;
+        }
+
+        public NetworkModel UpdateWriteAccess(AccessMode writeAccess)
+        {
+            WriteAccess.UpdateMode(writeAccess);
+            return this;
+        }
     }
 }

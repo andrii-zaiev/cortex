@@ -91,6 +91,9 @@ namespace Cortex.Repositories.Implementation
             entity.Name = network.Name;
             entity.Description = network.Description;
 
+            await UpdateNetworkAccessAsync(network.ReadAccess);
+            await UpdateNetworkAccessAsync(network.WriteAccess);
+
             await UpdateAsync(entity);
         }
 
@@ -103,6 +106,15 @@ namespace Cortex.Repositories.Implementation
             };
 
             Context.NetworkAccesses.Add(entity);
+        }
+
+        private async Task UpdateNetworkAccessAsync(NetworkAccessModel networkAccess)
+        {
+            NetworkAccess entity = await Context.NetworkAccesses.SingleAsync(n => n.Id == networkAccess.Id);
+
+            entity.AccessMode = networkAccess.AccessMode.ToEntity();
+
+            Context.Attach(entity);
         }
     }
 }

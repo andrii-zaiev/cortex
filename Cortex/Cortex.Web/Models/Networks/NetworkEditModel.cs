@@ -16,6 +16,8 @@ namespace Cortex.Web.Models.Networks
             Id = network.Id;
             Name = network.Name;
             Description = network.Description;
+            ViewMode = (int)network.ReadAccess.AccessMode;
+            EditMode = (int)network.WriteAccess.AccessMode;
         }
 
         [HiddenInput]

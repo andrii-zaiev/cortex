@@ -30,5 +30,11 @@ namespace Cortex.DomainModels
         {
             return new NetworkAccessModel(Guid.NewGuid(), AccessMode.Private, new List<Guid>());
         }
+
+        public NetworkAccessModel UpdateMode(AccessMode accessMode)
+        {
+            AccessMode = accessMode;
+            return this;
+        }
     }
 }

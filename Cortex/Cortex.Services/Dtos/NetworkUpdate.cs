@@ -1,19 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Cortex.DomainModels;
 
 namespace Cortex.Services.Dtos
 {
     public class NetworkUpdate
     {
-        public NetworkUpdate(string name, string description)
+        public NetworkUpdate(string name, string description, int readAccess, int writeAccess)
         {
             Name = name;
             Description = description;
+            ReadAccess = (AccessMode)readAccess;
+            WriteAccess = (AccessMode)writeAccess;
         }
 
-        public string Name { get; set; }
+        public string Name { get; }
 
-        public string Description { get; set; }
+        public string Description { get; }
+
+        public AccessMode ReadAccess { get; }
+
+        public AccessMode WriteAccess { get; }
     }
 }

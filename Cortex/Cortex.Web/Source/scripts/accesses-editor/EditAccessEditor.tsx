@@ -28,10 +28,16 @@ export default class EditAccessEditor
 
     public static getDerivedStateFromProps(nextProps, prevState) {
         if (nextProps.viewMode !== prevState.viewMode) {
+            const newMode = prevState.mode <= nextProps.viewMode
+                            ? prevState.mode
+                            : nextProps.viewMode;
+
+            if (newMode != prevState.mode) {
+                nextProps.onModeChanged(newMode);
+            }
+
             return {
-                mode: prevState.mode <= nextProps.viewMode
-                    ? prevState.mode
-                    : nextProps.viewMode,
+                mode: newMode,
                 viewMode: nextProps.viewMode
             };
         }

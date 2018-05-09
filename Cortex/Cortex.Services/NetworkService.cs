@@ -70,7 +70,9 @@ namespace Cortex.Services
             NetworkModel network = await _networkRepository.GetNetworkAsync(id);
 
             network.UpdateName(networkUpdate.Name)
-                   .UpdateDescription(networkUpdate.Description);
+                   .UpdateDescription(networkUpdate.Description)
+                   .UpdateReadAccess(networkUpdate.ReadAccess)
+                   .UpdateWriteAccess(networkUpdate.WriteAccess);
 
             await _networkRepository.UpdateNetworkAsync(network);
         }

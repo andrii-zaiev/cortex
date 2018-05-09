@@ -117,6 +117,11 @@ namespace Cortex.Web.Controllers
         [HttpPost("/networks/edit")]
         public async Task<IActionResult> Edit(NetworkEditModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return await EditNetwork(model.Id);
+            }
+
             Network network = await _networkService.GetNetworkAsync(model.Id);
 
             if (network.OwnerId != User.GetId())
@@ -124,7 +129,7 @@ namespace Cortex.Web.Controllers
                 return Forbid();
             }
 
-            var networkUpdate = new NetworkUpdate(model.Name, model.Description);
+            var networkUpdate = new NetworkUpdate(model.Name, model.Description, model.ViewMode, model.EditMode);
 
             await _networkService.UpdateNetworkAsync(model.Id, networkUpdate);
 
