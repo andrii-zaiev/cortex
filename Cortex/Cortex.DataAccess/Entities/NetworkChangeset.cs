@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cortex.DataAccess.Entities
@@ -16,6 +17,9 @@ namespace Cortex.DataAccess.Entities
 
         [ForeignKey(nameof(Author))]
         public Guid AuthorId { get; set; }
+
+        [MaxLength(40)]
+        public string Sha { get; set; }
 
         public Network Network { get; set; }
 

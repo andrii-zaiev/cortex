@@ -32,11 +32,13 @@ namespace Cortex.Web
 
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<INetworkRepository, NetworkRepository>();
+            services.AddTransient<INetworkChangesetRepository, NetworkChangesetRepository>();
 
             services.AddTransient<INetworkVersionsStorage, NetworkVersionsStorage>();
 
             services.AddTransient<INetworkService, NetworkService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<INetworkVersionsService, NetworkVersionsService>();
 
             services.ConfigureAuth();
 

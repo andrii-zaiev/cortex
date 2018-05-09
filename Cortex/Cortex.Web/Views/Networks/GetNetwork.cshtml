@@ -69,9 +69,18 @@
 
 <div class="section">
     <h4>Description</h4>
-    <div>
-        @Model.Description
-    </div>
+    @if (String.IsNullOrEmpty(Model.Description))
+    {
+        <div class="empty-text">
+            No description
+        </div>
+    }
+    else
+    {
+        <div>
+            @Model.Description
+        </div>
+    }
 </div>
 
 <div class="section">

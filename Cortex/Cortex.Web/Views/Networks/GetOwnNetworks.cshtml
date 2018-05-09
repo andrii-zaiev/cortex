@@ -17,7 +17,16 @@
                     @network.Name
                 </a>
                 <small>@network.CreatedDate.ToString("dd-MMM-yyyy HH:mm 'UTC'")</small>
-                <p>@network.Description</p>
+                @if (String.IsNullOrEmpty(network.Description))
+                {
+                    <p class="empty-text">
+                        No description
+                    </p>
+                }
+                else
+                {
+                    <p>@network.Description</p>
+                }
             </div>
         }
     </div>
