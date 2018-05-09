@@ -16,7 +16,11 @@
         <label class="top-label" asp-for="Description"></label>
         <textarea id="description-input" rows="5" maxlength="6000" asp-for="Description"></textarea>
     </div>
+    
+    <div class="form-row">
+        <label class="top-label">Access</label>
+        <div class="editor" id="access-editor" data-view-mode="@Model.ViewMode" data-edit-mode="@Model.EditMode"></div>
+    </div>
+
     <button type="submit" class="button-primary">Save</button>
 </form>
-
-<div id="access-editor"></div>

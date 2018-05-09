@@ -30,5 +30,11 @@ namespace Cortex.Web.Models.Networks
         [DataType(DataType.MultilineText)]
         [Display(Name = "Description")]
         public string Description { get; set; }
+
+        [Range(0, 2)]
+        public int ViewMode { get; set; }
+
+        [Range(0, 2)]
+        public int EditMode { get; set; }
     }
 }
