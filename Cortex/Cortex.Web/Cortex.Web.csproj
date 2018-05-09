@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Cortex.Auth\Cortex.Auth.csproj" />
     <ProjectReference Include="..\Cortex.Services\Cortex.Services.csproj" />
+    <ProjectReference Include="..\Cortex.VersionsStorage\Cortex.VersionsStorage.csproj" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Source\scripts\accesses-editor\EditAccessEditor.tsx" />

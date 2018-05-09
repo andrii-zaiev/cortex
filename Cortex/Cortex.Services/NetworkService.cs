@@ -6,16 +6,19 @@ using Cortex.DomainModels;
 using Cortex.Repositories.Interfaces;
 using Cortex.Services.Dtos;
 using Cortex.Services.Interfaces;
+using Cortex.VersionsStorage;
 
 namespace Cortex.Services
 {
     public class NetworkService : INetworkService
     {
         private readonly INetworkRepository _networkRepository;
+        private readonly INetworkVersionsStorage _versionsStorage;
 
-        public NetworkService(INetworkRepository networkRepository)
+        public NetworkService(INetworkRepository networkRepository, INetworkVersionsStorage versionsStorage)
         {
             _networkRepository = networkRepository;
+            _versionsStorage = versionsStorage;
         }
 
         public async Task<Guid> CreateNetworkAsync(NewNetwork newNetwork)
@@ -23,6 +26,8 @@ namespace Cortex.Services
             NetworkModel network = NetworkModel.CreateNew(newNetwork.Name, newNetwork.Description, newNetwork.OwnerId);
 
             await _networkRepository.CreateNetworkAsync(network);
+
+            _versionsStorage.Init(network.Id);
 
             return network.Id;
         }

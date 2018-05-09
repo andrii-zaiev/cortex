@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cortex.DomainModels", "Cort
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cortex.Exceptions", "Cortex.Exceptions\Cortex.Exceptions.csproj", "{4AB82D98-2BE6-430F-8605-72988745CCEA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cortex.VersionsStorage", "Cortex.VersionsStorage\Cortex.VersionsStorage.csproj", "{20CF3110-5066-4713-BC6D-52D40ECFAF51}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{4AB82D98-2BE6-430F-8605-72988745CCEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4AB82D98-2BE6-430F-8605-72988745CCEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4AB82D98-2BE6-430F-8605-72988745CCEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20CF3110-5066-4713-BC6D-52D40ECFAF51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20CF3110-5066-4713-BC6D-52D40ECFAF51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20CF3110-5066-4713-BC6D-52D40ECFAF51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20CF3110-5066-4713-BC6D-52D40ECFAF51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

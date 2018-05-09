@@ -5,6 +5,7 @@ using Cortex.Repositories.Implementation;
 using Cortex.Repositories.Interfaces;
 using Cortex.Services;
 using Cortex.Services.Interfaces;
+using Cortex.VersionsStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,8 @@ namespace Cortex.Web
 
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<INetworkRepository, NetworkRepository>();
+
+            services.AddTransient<INetworkVersionsStorage, NetworkVersionsStorage>();
 
             services.AddTransient<INetworkService, NetworkService>();
             services.AddTransient<IUserService, UserService>();
