@@ -84,7 +84,19 @@
 </div>
 
 <div class="section">
-    <h4>Versions</h4>
+    <div class="section-heading">
+        <h4>Versions</h4>
+        @if (Model.CanEdit)
+        {
+            <a class="button-primary button-small"
+               asp-controller="NetworkVersions"
+               asp-action="CreateVersion"
+               asp-route-networkId="@Model.Id">
+                <i class="fa fa-plus"></i>
+                <span>Add</span>
+            </a>
+        }
+    </div>
     <div>
         @await Component.InvokeAsync("NetworkVersions", new { Model.Id })
     </div>

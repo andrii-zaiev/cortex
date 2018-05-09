@@ -1,4 +1,6 @@
-﻿@import "constants.less";
+﻿@import "~getbase/less/base";
+
+@import "constants.less";
 
 .network-container {
     border: 1px solid @border-color;
@@ -16,13 +18,18 @@
     display: flex;
     align-items: center;
 
-    .button-primary {
-        margin-left: 20px;
+    & > * {
+        margin-right: 20px;
     }
 }
 
 .section {
     margin: 15px 0;
+
+    .section-heading > *{
+        display: inline-block;
+        margin-right: 20px;
+    }
 }
 
 .grid {

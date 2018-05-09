@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using Cortex.DomainModels;
 
 namespace Cortex.Services.Dtos
@@ -7,21 +9,9 @@ namespace Cortex.Services.Dtos
     {
         public NetworkVersion(NetworkChangesetModel changeset)
         {
-            Id = changeset.Id;
-            Comment = changeset.Comment;
-            NetworkId = changeset.NetworkId;
-            Date = changeset.Date;
-            AuthorId = changeset.AuthorId;
+            Metadata = new NetworkVersionMetadata(changeset);
         }
 
-        public Guid Id { get; }
-
-        public string Comment { get; }
-
-        public Guid NetworkId { get; }
-
-        public DateTimeOffset Date { get; }
-
-        public Guid AuthorId { get; }
+        public NetworkVersionMetadata Metadata { get; }
     }
 }

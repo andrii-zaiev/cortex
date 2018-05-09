@@ -26,5 +26,15 @@ namespace Cortex.Repositories.Implementation
 
             return models;
         }
+
+        public async Task<NetworkChangesetModel> GetNewestNetworkChangesetAsync(Guid networkId)
+        {
+            NetworkChangeset changeset = await Context.NetworkChangesets
+                .Where(nc => nc.NetworkId == networkId)
+                .OrderBy(c => c.Date)
+                .LastOrDefaultAsync();
+
+            return changeset != null ? new NetworkChangesetModel(changeset) : null;
+        }
     }
 }

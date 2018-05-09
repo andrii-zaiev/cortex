@@ -7,6 +7,8 @@ namespace Cortex.Services.Interfaces
 {
     public interface INetworkVersionsService
     {
-        Task<IList<NetworkVersion>> GetNetworkVersionsAsync(Guid networkId);
+        Task<IList<NetworkVersionMetadata>> GetNetworkVersionsAsync(Guid networkId);
+
+        Task<NetworkVersionMetadata> GetCurrentVersionAsync(Guid networkId);
     }
 }

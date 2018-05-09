@@ -24,7 +24,7 @@ namespace Cortex.Web.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync(Guid networkId)
         {
-            IList<NetworkVersion> versions = await _versionsService.GetNetworkVersionsAsync(networkId);
+            IList<NetworkVersionMetadata> versions = await _versionsService.GetNetworkVersionsAsync(networkId);
 
             List<Guid> authorIds = versions.Select(v => v.AuthorId).Distinct().ToList();
 
@@ -32,6 +32,7 @@ namespace Cortex.Web.ViewComponents
                 .ToDictionary(u => u.Id);
 
             List<NetworkVersionModel> models = versions
+                .OrderByDescending(v => v.Date)
                 .Select(v => new NetworkVersionModel(v, authors[v.AuthorId]))
                 .ToList();
 

@@ -1,0 +1,14 @@
+﻿@model Cortex.Web.Models.NetworkVersions.NewNetworkVersionModel
+
+@{
+    ViewBag.Title = "New version of " + Model.NetworkName;
+}
+
+<div class="heading">
+    <span class="fs-2">@Model.NetworkName</span>
+</div>
+
+<div id="network-editor"
+     data-network-id="@Model.NetworkId"
+     data-version-id="@Model.CurrentVersionId"
+     data-is-read-only="false"></div>

@@ -9,7 +9,11 @@ namespace Cortex.Web.Models.Networks
 {
     public class NetworkDetailsModel
     {
-        public NetworkDetailsModel(Network network, Dictionary<Guid, User> users, bool isOwner)
+        public NetworkDetailsModel(
+            Network network,
+            Dictionary<Guid, User> users,
+            bool isOwner,
+            bool canEdit)
         {
             IsOwner = isOwner;
             Id = network.Id;
@@ -25,27 +29,30 @@ namespace Cortex.Web.Models.Networks
             WriteAccessUsers = network.WriteAccess.PermittedUsers
                 .Select(id => new UserDisplayModel(users[id]))
                 .ToList();
+            CanEdit = canEdit;
         }
 
-        public Guid Id { get; set; }
+        public Guid Id { get; }
 
-        public string Name { get; set; }
+        public string Name { get; }
 
-        public string Description { get; set; }
+        public string Description { get; }
 
-        public DateTimeOffset CreatedDate { get; set; }
+        public DateTimeOffset CreatedDate { get; }
 
-        public UserDisplayModel Author { get; set; }
+        public UserDisplayModel Author { get; }
 
-        public bool IsOwner { get; set; }
+        public bool IsOwner { get; }
 
-        public string ReadAccess { get; set; }
+        public string ReadAccess { get; }
 
-        public List<UserDisplayModel> ReadAccessUsers { get; set; }
+        public List<UserDisplayModel> ReadAccessUsers { get; }
 
-        public string WriteAccess { get; set; }
+        public string WriteAccess { get; }
 
-        public List<UserDisplayModel> WriteAccessUsers { get; set; }
+        public List<UserDisplayModel> WriteAccessUsers { get; }
+
+        public bool CanEdit { get; }
 
         private static string ConvertAccessModeToString(AccessMode mode)
         {

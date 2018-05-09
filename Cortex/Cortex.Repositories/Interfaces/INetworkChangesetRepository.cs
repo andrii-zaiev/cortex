@@ -8,5 +8,7 @@ namespace Cortex.Repositories.Interfaces
     public interface INetworkChangesetRepository
     {
         Task<IList<NetworkChangesetModel>> GetNetworkChangesetsAsync(Guid networkId);
+
+        Task<NetworkChangesetModel> GetNewestNetworkChangesetAsync(Guid networkId);
     }
 }

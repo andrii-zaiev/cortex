@@ -8,5 +8,7 @@ namespace Cortex.Services.Interfaces
     public interface IUserService
     {
         Task<IList<User>> GetUsersAsync(IList<Guid> ids);
+
+        Task<User> GetUserAsync(Guid id);
     }
 }

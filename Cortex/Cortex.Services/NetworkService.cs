@@ -50,17 +50,7 @@ namespace Cortex.Services
         {
             NetworkModel network = await _networkRepository.GetNetworkAsync(networkId);
 
-            switch (network.ReadAccess.AccessMode)
-            {
-                case AccessMode.Private:
-                    return network.OwnerId == userId;
-                case AccessMode.ByPermission:
-                    return network.ReadAccess.PermittedUsers.Contains(userId);
-                case AccessMode.Public:
-                    return true;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            return CanAccess(userId, network.ReadAccess, network.OwnerId);
         }
 
         public async Task<bool> CanAccessNetworkAnonymouslyAsync(Guid networkId)
@@ -68,6 +58,13 @@ namespace Cortex.Services
             NetworkModel network = await _networkRepository.GetNetworkAsync(networkId);
 
             return network.ReadAccess.AccessMode == AccessMode.Public;
+        }
+
+        public async Task<bool> CanEditNetworkAsync(Guid networkId, Guid userId)
+        {
+            NetworkModel network = await _networkRepository.GetNetworkAsync(networkId);
+
+            return CanAccess(userId, network.WriteAccess, network.OwnerId);
         }
 
         public async Task UpdateNetworkAsync(Guid id, NetworkUpdate networkUpdate)
@@ -80,6 +77,21 @@ namespace Cortex.Services
                    .UpdateWriteAccess(networkUpdate.WriteAccess);
 
             await _networkRepository.UpdateNetworkAsync(network);
+        }
+
+        private static bool CanAccess(Guid userId, NetworkAccessModel access, Guid ownerId)
+        {
+            switch (access.AccessMode)
+            {
+                case AccessMode.Private:
+                    return ownerId == userId;
+                case AccessMode.ByPermission:
+                    return access.PermittedUsers.Contains(userId);
+                case AccessMode.Public:
+                    return true;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

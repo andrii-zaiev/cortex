@@ -24,11 +24,21 @@ namespace Cortex.Services
             _versionsStorage = versionsStorage;
         }
 
-        public async Task<IList<NetworkVersion>> GetNetworkVersionsAsync(Guid networkId)
+        public async Task<IList<NetworkVersionMetadata>> GetNetworkVersionsAsync(Guid networkId)
         {
             IList<NetworkChangesetModel> changesets = await _changesetRepository.GetNetworkChangesetsAsync(networkId);
 
-            return changesets.Select(c => new NetworkVersion(c)).ToList();
+            return changesets
+                .OrderBy(c => c.Date)
+                .Select((c, number) => new NetworkVersionMetadata(c))
+                .ToList();
+        }
+
+        public async Task<NetworkVersionMetadata> GetCurrentVersionAsync(Guid networkId)
+        {
+            NetworkChangesetModel changeset = await _changesetRepository.GetNewestNetworkChangesetAsync(networkId);
+
+            return changeset != null ? new NetworkVersionMetadata(changeset) : null;
         }
     }
 }
