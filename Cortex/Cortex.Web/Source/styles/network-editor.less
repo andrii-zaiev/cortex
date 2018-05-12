@@ -1,0 +1,30 @@
+﻿@import "constants.less";
+
+@toolbar-color: #FBFBFB;
+
+#network-editor {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0%;
+    margin-top: 10px;
+}
+
+.network-editor-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+}
+
+.toolbar {
+    flex: 0 0 50px;
+    background-color: @toolbar-color;
+    border: 1px solid @border-color;
+}
+
+.display-area {
+    flex: 1 1 0%;
+    background-color: white;
+    border-right: 1px solid @border-color;
+    border-bottom: 1px solid @border-color;
+    border-left: 1px solid @border-color;
+}

@@ -59,9 +59,12 @@ body {
     display: flex;
 
     .body {
+        display: flex;
+        flex-direction: column;
         flex-grow: 1;
         overflow-y: auto;
         padding: 30px;
+        background-color: @background-color;
 
         & > * {
             color: @text-color;
@@ -140,4 +143,10 @@ input[type="checkbox"] {
 .empty-text {
     font-style: italic;
     color: @medium-text-color;
+}
+
+.truncated-text {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }

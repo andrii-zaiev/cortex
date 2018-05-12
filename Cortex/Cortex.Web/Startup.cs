@@ -45,6 +45,7 @@ namespace Cortex.Web
             services.ConfigureApplicationCookie(options =>
             {
                 options.ExpireTimeSpan = TimeSpan.FromDays(30);
+                options.AccessDeniedPath = "/log-in";
                 options.LoginPath = "/log-in";
                 options.LogoutPath = "/log-out";
             });
