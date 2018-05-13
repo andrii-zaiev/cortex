@@ -45,4 +45,7 @@
     <TypeScriptCompile Include="Source\scripts\validation\init-validation.ts" />
     <TypeScriptCompile Include="Source\scripts\validation\validator.ts" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Source\scripts\network-editor\dialogs\" />
+  </ItemGroup>
 </Project>
