@@ -1,4 +1,7 @@
-﻿export default class Layer {
+﻿const layerWidth = 50;
+const baseLayerHeight = 100;
+
+export default class Layer {
     public id: number;
     public name: string;
     public neuronsNumber: number;
@@ -16,10 +19,10 @@
     }
 
     public get width(): number {
-        return 50;
+        return layerWidth;
     }
 
     public get height(): number {
-        return this.neuronsNumber;
+        return baseLayerHeight + this.neuronsNumber;
     }
 }
