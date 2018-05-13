@@ -4,4 +4,9 @@ import Connection from './Connection';
 export default class Network {
     public layers: Layer[];
     public connections: Connection[];
+
+    constructor() {
+        this.layers = [];
+        this.connections = [];
+    }
 }

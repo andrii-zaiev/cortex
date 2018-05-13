@@ -5,6 +5,7 @@ import '../../styles/network-editor.less';
 import EditorToolbar from './EditorToolbar';
 import NetworkDisplayArea from './NetworkDisplayArea';
 import Network from './models/Network';
+import Layer from './models/Layer';
 
 class NetworkEditorProps {
     public networkId: string;
@@ -22,7 +23,12 @@ export default class NetworkEditor
     constructor(props: NetworkEditorProps) {
         super(props);
 
-        this.state = { network: null };
+        const network = new Network();
+        network.layers = [
+            new Layer(1, 'Layer 1', 100, 0, 10, 10)
+        ];
+
+        this.state = { network: network };
     }
 
     public render(): React.ReactNode {

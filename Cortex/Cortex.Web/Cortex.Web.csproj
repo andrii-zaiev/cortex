@@ -8,6 +8,13 @@
     <None Remove="Source\scripts\accesses-editor\EditAccessEditor.tsx" />
     <None Remove="Source\scripts\accesses-editor\init.tsx" />
     <None Remove="Source\scripts\accesses-editor\ViewAccessEditor.tsx" />
+    <None Remove="Source\scripts\network-editor\EditorToolbar.tsx" />
+    <None Remove="Source\scripts\network-editor\init.tsx" />
+    <None Remove="Source\scripts\network-editor\models\Connection.ts" />
+    <None Remove="Source\scripts\network-editor\models\Layer.ts" />
+    <None Remove="Source\scripts\network-editor\models\Network.ts" />
+    <None Remove="Source\scripts\network-editor\NetworkDisplayArea.tsx" />
+    <None Remove="Source\scripts\network-editor\NetworkEditor.tsx" />
     <None Remove="Source\scripts\validation\init-validation.ts" />
     <None Remove="Source\scripts\validation\validator.ts" />
   </ItemGroup>
@@ -28,6 +35,13 @@
     <TypeScriptCompile Include="Source\scripts\accesses-editor\ViewAccessEditor.tsx" />
     <TypeScriptCompile Include="Source\scripts\accesses-editor\AccessesEditor.tsx" />
     <TypeScriptCompile Include="Source\scripts\accesses-editor\init.tsx" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\EditorToolbar.tsx" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\init.tsx" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\models\Connection.ts" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\models\Layer.ts" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\models\Network.ts" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\NetworkDisplayArea.tsx" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\NetworkEditor.tsx" />
     <TypeScriptCompile Include="Source\scripts\validation\init-validation.ts" />
     <TypeScriptCompile Include="Source\scripts\validation\validator.ts" />
   </ItemGroup>
