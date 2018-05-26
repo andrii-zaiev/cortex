@@ -23,10 +23,9 @@ export default class NetworkEditor
     constructor(props: NetworkEditorProps) {
         super(props);
 
-        const network = new Network();
-        network.layers = [
+        const network = new Network([
             new Layer(1, 'Layer 1', 100, 0, 10, 10)
-        ];
+        ], []);
 
         this.state = { network: network };
     }

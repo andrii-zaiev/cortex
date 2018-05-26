@@ -53,6 +53,8 @@ export default class NetworkDisplayArea
         this.startGrabbing = this.startGrabbing.bind(this);
         this.translate = this.translate.bind(this);
         this.endGrabbing = this.endGrabbing.bind(this);
+        this.selectLayer = this.selectLayer.bind(this);
+        this.deselectLayers = this.deselectLayers.bind(this);
 
         this.state = State.createInitial(props.network);
     }
@@ -76,7 +78,7 @@ export default class NetworkDisplayArea
             rect.enter().append('rect')
                 .style('stroke', 'black')
                 .style('stroke-width', 2)
-                .style('fill', 'lightgray'));
+                .on('click', l => this.selectLayer(l)));
 
         // Exit…
         rect.exit().remove();
@@ -88,6 +90,8 @@ export default class NetworkDisplayArea
             .attr('height', l => l.height * this.state.scale)
             .attr('x', l => l.x * this.state.scale + this.state.translate.x)
             .attr('y', l => l.y * this.state.scale + this.state.translate.y)
+            .style('fill', l => l.isSelected ? 'lightgray' : 'white')
+            .style('cursor', l => l.isSelected ? 'move' : 'pointer');
     }
 
     private updateScale(scrollAmount: number): void {
@@ -130,6 +134,24 @@ export default class NetworkDisplayArea
             new GrabbingState(false, 0, 0, '-webkit-grab')));
     }
 
+    private selectLayer(layer) {
+        d3.event.stopPropagation();
+
+        this.setState(prevState => new State(
+            prevState.network.selectLayer(layer),
+            prevState.translate,
+            prevState.scale,
+            prevState.grabbing))
+    }
+
+    private deselectLayers() {
+        this.setState(prevState => new State(
+            prevState.network.deselectLayers(),
+            prevState.translate,
+            prevState.scale,
+            prevState.grabbing))
+    }
+
     public render(): React.ReactNode {
         return (
             <div className="display-area">
@@ -138,6 +160,7 @@ export default class NetworkDisplayArea
                     onMouseDown={e => this.startGrabbing(e.clientX, e.clientY)}
                     onMouseMove={e => this.translate(e.clientX, e.clientY)}
                     onMouseUp={e => this.endGrabbing()}
+                    onClick={() => this.deselectLayers()}
                     style={{ cursor: this.state.grabbing.cursor }}></svg>
             </div>
         );
