@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Cortex.Services.Dtos;
 
 namespace Cortex.Web.Models.Shared
@@ -10,9 +7,12 @@ namespace Cortex.Web.Models.Shared
     {
         public UserDisplayModel(User user)
         {
+            Id = user.Id;
             Name = user.Name;
             UserName = user.UserName;
         }
+
+        public Guid Id { get; set; }
 
         public string Name { get; set; }
 

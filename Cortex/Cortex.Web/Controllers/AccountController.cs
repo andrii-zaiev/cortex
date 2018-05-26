@@ -32,6 +32,11 @@ namespace Cortex.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterModel registerModel)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Main");
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -68,6 +73,11 @@ namespace Cortex.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogIn(LogInModel logInModel, string returnUrl = null)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Main");
+            }
+
             SignInResult result = await _signInManager.PasswordSignInAsync(
                 logInModel.UserName,
                 logInModel.Password,

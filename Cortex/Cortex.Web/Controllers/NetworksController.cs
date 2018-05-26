@@ -101,8 +101,7 @@ namespace Cortex.Web.Controllers
         [HttpGet("/networks/shared")]
         public IActionResult GetSharedNetworks()
         {
-            var networks = new List<NetworkModel>();
-            return View(networks);
+            throw new NotImplementedException();
         }
 
         [HttpGet("/networks/{id:guid}/edit")]
@@ -115,13 +114,22 @@ namespace Cortex.Web.Controllers
                 return Forbid();
             }
 
-            var model = new NetworkEditModel(network);
+            List<Guid> permittedUserIds = network.ReadAccess.PermittedUsers
+                .Concat(network.WriteAccess.PermittedUsers)
+                .Distinct()
+                .ToList();
+
+            IList<User> permittedUsers = await _userService.GetUsersAsync(permittedUserIds);
+
+            Dictionary<Guid, User> usersMapping = permittedUsers.ToDictionary(u => u.Id);
+
+            var model = new NetworkEditModel(network, usersMapping);
 
             return View(model);
         }
 
         [HttpPost("/networks/edit")]
-        public async Task<IActionResult> Edit(NetworkEditModel model)
+        public async Task<IActionResult> Edit(NetworkUpdateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -135,7 +143,13 @@ namespace Cortex.Web.Controllers
                 return Forbid();
             }
 
-            var networkUpdate = new NetworkUpdate(model.Name, model.Description, model.ViewMode, model.EditMode);
+            var networkUpdate = new NetworkUpdate(
+                model.Name,
+                model.Description,
+                model.ViewMode,
+                model.EditMode,
+                model.ViewUsers ?? new List<Guid>(),
+                model.EditUsers ?? new List<Guid>());
 
             await _networkService.UpdateNetworkAsync(model.Id, networkUpdate);
 

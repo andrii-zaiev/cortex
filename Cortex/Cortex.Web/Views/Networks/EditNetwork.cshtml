@@ -1,4 +1,5 @@
-﻿@model Cortex.Web.Models.Networks.NetworkEditModel
+﻿@using Cortex.Web.Models.Shared
+@model Cortex.Web.Models.Networks.NetworkEditModel
 
 @{
     ViewBag.Title = $"Edit {Model.Name}";
@@ -19,7 +20,24 @@
 
     <div class="form-row">
         <label class="top-label">Access</label>
-        <div class="editor" id="access-editor" data-view-mode="@Model.ViewMode" data-edit-mode="@Model.EditMode"></div>
+        <div class="hidden" id="view-users">
+            @foreach (UserDisplayModel user in Model.ViewUsers)
+            {
+                <div data-id="@user.Id" data-user-name="@user.UserName.ToLower()" data-name="@user.Name"></div>
+            }
+        </div>
+        <div class="hidden" id="edit-users">
+            @foreach (UserDisplayModel user in Model.EditUsers)
+            {
+                <div data-id="@user.Id" data-user-name="@user.UserName.ToLower()" data-name="@user.Name"></div>
+            }
+        </div>
+        <div class="editor" 
+             id="access-editor"
+             data-view-mode="@Model.ViewMode"
+             data-edit-mode="@Model.EditMode"
+             data-view-users-id="view-users"
+             data-edit-users-id="edit-users"></div>
     </div>
 
     <div class="buttons-section">

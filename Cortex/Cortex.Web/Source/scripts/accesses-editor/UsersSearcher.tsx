@@ -30,13 +30,14 @@ class State {
         this.foundUsers = foundUsers;
     }
 
-    public static empty() {
-        return new State([], false, '', null, false, []);
+    public static init(users: User[]) {
+        return new State(users, false, '', null, false, []);
     }
 }
 
-export default class UsersSearcher extends React.Component<{}, State>{
+export default class UsersSearcher extends React.Component<{ users: User[], onUsersChanged: Function }, State>{
     private usersService: UsersService;
+    private onUsersChanged: Function;
 
     constructor(props) {
         super(props);
@@ -49,17 +50,20 @@ export default class UsersSearcher extends React.Component<{}, State>{
         this.findUsers = this.findUsers.bind(this);
         this.addUser = this.addUser.bind(this);
 
-        this.state = State.empty();
+        this.onUsersChanged = props.onUsersChanged;
+        this.state = State.init(props.users);
     }
 
     private removeUser(user: User): void {
-        this.setState(prevState => new State(
-            prevState.users.filter(u => u.id != user.id),
-            prevState.isListShown,
-            prevState.searchQuery,
-            prevState.searchTimer,
-            prevState.searching,
-            prevState.foundUsers));
+        this.setState(
+            prevState => new State(
+                prevState.users.filter(u => u.id != user.id),
+                prevState.isListShown,
+                prevState.searchQuery,
+                prevState.searchTimer,
+                prevState.searching,
+                prevState.foundUsers),
+            () => this.onUsersChanged(this.state.users));
     }
 
     private toggleDropdownList(event) {
@@ -125,13 +129,15 @@ export default class UsersSearcher extends React.Component<{}, State>{
     }
 
     private addUser(user: User) {
-        this.setState(prevState => new State(
-            prevState.users.concat([user]),
-            prevState.isListShown,
-            prevState.searchQuery,
-            prevState.searchTimer,
-            prevState.searching,
-            prevState.foundUsers));
+        this.setState(
+            prevState => new State(
+                prevState.users.concat([user]),
+                prevState.isListShown,
+                prevState.searchQuery,
+                prevState.searchTimer,
+                prevState.searching,
+                prevState.foundUsers),
+            () => this.onUsersChanged(this.state.users));
     }
 
     public render() {

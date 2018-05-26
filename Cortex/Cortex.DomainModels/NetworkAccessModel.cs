@@ -36,5 +36,14 @@ namespace Cortex.DomainModels
             AccessMode = accessMode;
             return this;
         }
+
+        public NetworkAccessModel UpdatePermittedUsers(IList<Guid> permittedUsers)
+        {
+            PermittedUsers = AccessMode == AccessMode.ByPermission
+                ? permittedUsers.Distinct().ToList()
+                : new List<Guid>();
+
+            return this;
+        }
     }
 }

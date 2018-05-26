@@ -71,20 +71,27 @@ namespace Cortex.Services
         {
             NetworkModel network = await _networkRepository.GetNetworkAsync(id);
 
+            List<Guid> readPermittedUsers = networkUpdate.ReadPermittedUsers.Concat(networkUpdate.WritePermittedUsers).ToList();
+
             network.UpdateName(networkUpdate.Name)
                    .UpdateDescription(networkUpdate.Description)
-                   .UpdateReadAccess(networkUpdate.ReadAccess)
-                   .UpdateWriteAccess(networkUpdate.WriteAccess);
+                   .UpdateReadAccess(networkUpdate.ReadAccess, readPermittedUsers)
+                   .UpdateWriteAccess(networkUpdate.WriteAccess, networkUpdate.WritePermittedUsers);
 
             await _networkRepository.UpdateNetworkAsync(network);
         }
 
         private static bool CanAccess(Guid userId, NetworkAccessModel access, Guid ownerId)
         {
+            if (ownerId == userId)
+            {
+                return true;
+            }
+
             switch (access.AccessMode)
             {
                 case AccessMode.Private:
-                    return ownerId == userId;
+                    return false;
                 case AccessMode.ByPermission:
                     return access.PermittedUsers.Contains(userId);
                 case AccessMode.Public:

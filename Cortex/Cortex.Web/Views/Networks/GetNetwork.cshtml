@@ -35,14 +35,9 @@
                     <span>@Model.ReadAccess</span>
                     @if (Model.ReadAccessUsers.Any())
                     {
-                        <span>
-                            @foreach (UserDisplayModel user in Model.ReadAccessUsers)
-                            {
-                                <span>
-                                    @user.Name &lt;@user.UserName.ToLower()&gt;
-                                </span>
-                            }
-                        </span>
+                        string users = String.Join(", ", Model.ReadAccessUsers.Select(u => $"{u.Name} <{u.UserName.ToLower()}>"));
+
+                        <span>(@users)</span>
                     }
                 </div>
             </div>
@@ -52,14 +47,9 @@
                     <span>@Model.WriteAccess</span>
                     @if (Model.WriteAccessUsers.Any())
                     {
-                        <span>
-                            @foreach (UserDisplayModel user in Model.ReadAccessUsers)
-                            {
-                                <span>
-                                    @user.Name &lt;@user.UserName.ToLower()&gt;
-                                </span>
-                            }
-                        </span>
+                        string users = String.Join(", ", Model.ReadAccessUsers.Select(u => $"{u.Name} <{u.UserName.ToLower()}>"));
+
+                        <span>(@users)</span>
                     }
                 </div>
             </div>

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Cortex.Services.Dtos;
+using Cortex.Web.Models.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cortex.Web.Models.Networks
@@ -11,13 +14,15 @@ namespace Cortex.Web.Models.Networks
         {
         }
 
-        public NetworkEditModel(Network network)
+        public NetworkEditModel(Network network, Dictionary<Guid, User> users)
         {
             Id = network.Id;
             Name = network.Name;
             Description = network.Description;
             ViewMode = (int)network.ReadAccess.AccessMode;
+            ViewUsers = network.ReadAccess.PermittedUsers.Select(id => new UserDisplayModel(users[id])).ToList();
             EditMode = (int)network.WriteAccess.AccessMode;
+            EditUsers = network.WriteAccess.PermittedUsers.Select(id => new UserDisplayModel(users[id])).ToList();
         }
 
         [HiddenInput]
@@ -38,5 +43,9 @@ namespace Cortex.Web.Models.Networks
 
         [Range(0, 2)]
         public int EditMode { get; set; }
+
+        public IList<UserDisplayModel> ViewUsers { get; set; }
+
+        public IList<UserDisplayModel> EditUsers { get; set; }
     }
 }

@@ -18,5 +18,7 @@ namespace Cortex.Repositories.Interfaces
         Task<UserModel> GetByEmailAsync(string email);
 
         Task<IList<UserModel>> GetUsersAsync(IList<Guid> ids);
+
+        Task<IList<UserModel>> FindUsersAsync(string query);
     }
 }

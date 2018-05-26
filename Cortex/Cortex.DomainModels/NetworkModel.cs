@@ -83,15 +83,15 @@ namespace Cortex.DomainModels
             return this;
         }
 
-        public NetworkModel UpdateReadAccess(AccessMode readAccess)
+        public NetworkModel UpdateReadAccess(AccessMode readAccess, IList<Guid> permittedUsers)
         {
-            ReadAccess.UpdateMode(readAccess);
+            ReadAccess.UpdateMode(readAccess).UpdatePermittedUsers(permittedUsers);
             return this;
         }
 
-        public NetworkModel UpdateWriteAccess(AccessMode writeAccess)
+        public NetworkModel UpdateWriteAccess(AccessMode writeAccess, IList<Guid> permittedUsers)
         {
-            WriteAccess.UpdateMode(writeAccess);
+            WriteAccess.UpdateMode(writeAccess).UpdatePermittedUsers(permittedUsers);
             return this;
         }
     }

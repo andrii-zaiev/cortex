@@ -20,6 +20,11 @@ namespace Cortex.Services
 
         public async Task<IList<User>> GetUsersAsync(IList<Guid> ids)
         {
+            if (ids.Count == 0)
+            {
+                return new List<User>();
+            }
+
             IList<UserModel> users = await _userRepository.GetUsersAsync(ids);
 
             return users.Select(u => new User(u)).ToList();
@@ -30,6 +35,13 @@ namespace Cortex.Services
             UserModel user = await _userRepository.GetByIdAsync(id);
 
             return new User(user);
+        }
+
+        public async Task<IList<User>> FindUsersAsync(string query)
+        {
+            IList<UserModel> users = await _userRepository.FindUsersAsync(query);
+
+            return users.Select(u => new User(u)).ToList();
         }
     }
 }

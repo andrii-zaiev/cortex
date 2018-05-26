@@ -114,7 +114,32 @@ namespace Cortex.Repositories.Implementation
 
             entity.AccessMode = networkAccess.AccessMode.ToEntity();
 
+            await UpdateUserAccessesAsync(networkAccess.Id, networkAccess.PermittedUsers);
+
             Context.Attach(entity);
+        }
+
+        private async Task UpdateUserAccessesAsync(Guid networkAccessId, IList<Guid> permittedUsers)
+        {
+            List<NetworkUserAccess> currentAccesses = await Context.NetworkUserAccesses
+                .Where(a => a.NetworkAccessId == networkAccessId)
+                .ToListAsync();
+
+            List<NetworkUserAccess> newUsers = permittedUsers
+                .Where(userId => currentAccesses.All(a => a.UserId != userId))
+                .Select(userId => new NetworkUserAccess
+                {
+                    Id = Guid.NewGuid(),
+                    NetworkAccessId = networkAccessId,
+                    UserId = userId
+                })
+                .ToList();
+            List<NetworkUserAccess> deletedUsers = currentAccesses
+                .Where(a => !permittedUsers.Contains(a.UserId))
+                .ToList();
+
+            Context.NetworkUserAccesses.AddRange(newUsers);
+            Context.NetworkUserAccesses.RemoveRange(deletedUsers);
         }
     }
 }
