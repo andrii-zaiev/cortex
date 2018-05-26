@@ -17,12 +17,4 @@ export default class Layer {
         this.x = x;
         this.y = y;
     }
-
-    public get width(): number {
-        return layerWidth;
-    }
-
-    public get height(): number {
-        return baseLayerHeight + this.neuronsNumber;
-    }
 }
