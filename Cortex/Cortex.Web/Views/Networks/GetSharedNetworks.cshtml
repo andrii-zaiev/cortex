@@ -1,9 +1,48 @@
-﻿@using Cortex.Web.Models
-@using Cortex.Web.Models.Networks
-@model List<Cortex.Web.Models.Networks.NetworkDetailsModel>
+﻿@using Cortex.Web.Models.Networks
+@model List<NetworkModel>
 
 @{
-    ViewBag.Title = "Shared with you";
+    ViewBag.Title = "Shared networks";
 }
 
 <h2>Shared with you</h2>
+
+@if (Model.Count > 0)
+{
+    <div class="networks-list">
+        @foreach (NetworkModel network in Model)
+        {
+            <div class="network-container">
+                <div class="network-heading">
+                    <a class="fs-3" asp-controller="Networks" asp-action="GetNetwork" asp-route-id="@network.Id">
+                        @network.Name
+                    </a>
+                    <small>
+                        <span>by</span>
+                        <span>
+                            @network.Author.Name &lt;@network.Author.UserName.ToLower()&gt;
+                        </span>
+                        <time datetime="@network.CreatedDate.ToString("o")" data-local></time>
+                    </small>
+                </div>
+
+                @if (String.IsNullOrEmpty(network.Description))
+                {
+                    <p class="empty-text">
+                        No description
+                    </p>
+                }
+                else
+                {
+                    <p class="truncated-text" title="@network.Description">@network.Description</p>
+                }
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>
+        No shared networks.
+    </p>
+}

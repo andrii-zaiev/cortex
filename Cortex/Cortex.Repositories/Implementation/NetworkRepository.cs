@@ -66,22 +66,7 @@ namespace Cortex.Repositories.Implementation
                 .Where(n => n.OwnerId == userId)
                 .ToListAsync();
 
-            List<Guid> accessIds = networks.SelectMany(n => new[] { n.ReadAccessId, n.WriteAccessId }).ToList();
-
-            List<NetworkUserAccess> userAccesses = await Context.NetworkUserAccesses
-                .Include(nameof(NetworkUserAccess.User))
-                .Where(n => accessIds.Contains(n.NetworkAccessId))
-                .ToListAsync();
-            ILookup<Guid, NetworkUserAccess> userAccessesMapping = userAccesses.ToLookup(a => a.NetworkAccessId);
-
-            return networks
-                .Select(n => new NetworkModel(
-                    n,
-                    n.ReadAccess,
-                    userAccessesMapping[n.ReadAccessId].ToList(),
-                    n.WriteAccess,
-                    userAccessesMapping[n.WriteAccessId].ToList()))
-                .ToList();
+            return await GetNetworkModelsAsync(networks);
         }
 
         public async Task UpdateNetworkAsync(NetworkModel network)
@@ -95,6 +80,22 @@ namespace Cortex.Repositories.Implementation
             await UpdateNetworkAccessAsync(network.WriteAccess);
 
             await UpdateAsync(entity);
+        }
+
+        public async Task<IList<NetworkModel>> GetUserSharedNetworksAsync(Guid userId)
+        {
+            List<Guid> accesses = await Context.NetworkUserAccesses
+                .Where(a => a.UserId == userId)
+                .Select(a => a.NetworkAccessId)
+                .ToListAsync();
+
+            List<Network> networks = await Context.Networks
+                .Include(nameof(Network.ReadAccess))
+                .Include(nameof(Network.WriteAccess))
+                .Where(n => accesses.Contains(n.ReadAccessId) || accesses.Contains(n.WriteAccessId))
+                .ToListAsync();
+
+            return await GetNetworkModelsAsync(networks);
         }
 
         private void CreateNetworkAccess(NetworkAccessModel networkAccess)
@@ -140,6 +141,26 @@ namespace Cortex.Repositories.Implementation
 
             Context.NetworkUserAccesses.AddRange(newUsers);
             Context.NetworkUserAccesses.RemoveRange(deletedUsers);
+        }
+
+        private async Task<IList<NetworkModel>> GetNetworkModelsAsync(IList<Network> networks)
+        {
+            List<Guid> accessIds = networks.SelectMany(n => new[] { n.ReadAccessId, n.WriteAccessId }).ToList();
+
+            List<NetworkUserAccess> userAccesses = await Context.NetworkUserAccesses
+                .Include(nameof(NetworkUserAccess.User))
+                .Where(n => accessIds.Contains(n.NetworkAccessId))
+                .ToListAsync();
+            ILookup<Guid, NetworkUserAccess> userAccessesMapping = userAccesses.ToLookup(a => a.NetworkAccessId);
+
+            return networks
+                .Select(n => new NetworkModel(
+                    n,
+                    n.ReadAccess,
+                    userAccessesMapping[n.ReadAccessId].ToList(),
+                    n.WriteAccess,
+                    userAccessesMapping[n.WriteAccessId].ToList()))
+                .ToList();
         }
     }
 }

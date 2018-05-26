@@ -20,5 +20,7 @@ namespace Cortex.Services.Interfaces
         Task<bool> CanEditNetworkAsync(Guid networkId, Guid userId);
 
         Task UpdateNetworkAsync(Guid id, NetworkUpdate networkUpdate);
+
+        Task<IList<Network>> GetUserSharedNetworksAsync(Guid userId);
     }
 }

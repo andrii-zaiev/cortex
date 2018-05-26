@@ -9,13 +9,21 @@ namespace Cortex.Web.Models.Networks
 {
     public class NetworkModel
     {
+        public NetworkModel(Network network)
+        {
+            Id = network.Id;
+            Name = network.Name;
+            Description = network.Description;
+            CreatedDate = network.CreatedDate;
+        }
+
         public NetworkModel(Network network, User owner)
         {
             Id = network.Id;
             Name = network.Name;
             Description = network.Description;
             CreatedDate = network.CreatedDate;
-            //Author = new UserDisplayModel(owner);
+            Author = new UserDisplayModel(owner);
         }
 
         public Guid Id { get; set; }

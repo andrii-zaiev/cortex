@@ -91,7 +91,7 @@ namespace Cortex.Web.Controllers
             IList<Network> networks =  await _networkService.GetUserNetworksAsync(User.GetId());
 
             List<NetworkModel> models = networks
-                .Select(n => new NetworkModel(n, null))
+                .Select(n => new NetworkModel(n))
                 .OrderBy(n => n.Name)
                 .ToList();
 
@@ -99,9 +99,19 @@ namespace Cortex.Web.Controllers
         }
 
         [HttpGet("/networks/shared")]
-        public IActionResult GetSharedNetworks()
+        public async Task<IActionResult> GetSharedNetworks()
         {
-            throw new NotImplementedException();
+            IList<Network> networks = await _networkService.GetUserSharedNetworksAsync(User.GetId());
+
+            List<Guid> authorIds = networks.Select(n => n.OwnerId).ToList();
+            Dictionary<Guid, User> authors = (await _userService.GetUsersAsync(authorIds)).ToDictionary(u => u.Id);
+
+            List<NetworkModel> models = networks
+                .Select(n => new NetworkModel(n, authors[n.OwnerId]))
+                .OrderBy(n => n.Name)
+                .ToList();
+
+            return View(models);
         }
 
         [HttpGet("/networks/{id:guid}/edit")]

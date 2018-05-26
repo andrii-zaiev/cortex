@@ -81,6 +81,13 @@ namespace Cortex.Services
             await _networkRepository.UpdateNetworkAsync(network);
         }
 
+        public async Task<IList<Network>> GetUserSharedNetworksAsync(Guid userId)
+        {
+            IList<NetworkModel> networks = await _networkRepository.GetUserSharedNetworksAsync(userId);
+
+            return networks.Select(n => new Network(n)).ToList();
+        }
+
         private static bool CanAccess(Guid userId, NetworkAccessModel access, Guid ownerId)
         {
             if (ownerId == userId)

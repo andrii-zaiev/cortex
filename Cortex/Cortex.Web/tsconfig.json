@@ -6,7 +6,9 @@
     "removeComments": false,
     "sourceMap": true,
     "target": "es6",
-    "jsx": "react"
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node"
   },
   "exclude": [
     "node_modules",

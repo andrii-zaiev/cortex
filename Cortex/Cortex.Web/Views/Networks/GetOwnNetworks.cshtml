@@ -13,10 +13,14 @@
         @foreach (NetworkModel network in Model)
         {
             <div class="network-container">
-                <a class="fs-3" asp-controller="Networks" asp-action="GetNetwork" asp-route-id="@network.Id">
-                    @network.Name
-                </a>
-                <small>@network.CreatedDate.ToString("dd-MMM-yyyy HH:mm 'UTC'")</small>
+                <div class="network-heading">
+                    <a class="fs-3" asp-controller="Networks" asp-action="GetNetwork" asp-route-id="@network.Id">
+                        @network.Name
+                    </a>
+                    <small>
+                        <time datetime="@network.CreatedDate.ToString("o")" data-local></time>
+                    </small>
+                </div>
                 @if (String.IsNullOrEmpty(network.Description))
                 {
                     <p class="empty-text">

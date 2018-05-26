@@ -4,6 +4,9 @@
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Source\scripts\local-datetime\init.ts" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
   </ItemGroup>
@@ -18,6 +21,9 @@
   <ItemGroup>
     <Folder Include="Controllers\Api\" />
     <Folder Include="Source\scripts\network-editor\dialogs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Source\scripts\local-datetime\init.ts" />
   </ItemGroup>
   <PropertyGroup>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
