@@ -61,12 +61,22 @@ namespace Cortex.Repositories.Implementation
         {
             User entity = await Context.Users.SingleOrDefaultAsync(user => user.UserName == userName);
 
+            if (entity == null)
+            {
+                return null;
+            }
+
             return new UserModel(entity);
         }
 
         public async Task<UserModel> GetByEmailAsync(string email)
         {
             User entity = await Context.Users.SingleOrDefaultAsync(user => user.Email == email);
+
+            if (entity == null)
+            {
+                return null;
+            }
 
             return new UserModel(entity);
         }
@@ -75,6 +85,16 @@ namespace Cortex.Repositories.Implementation
         {
             List<User> entities = await Context.Users
                 .Where(u => ids.Contains(u.Id))
+                .ToListAsync();
+
+            return entities.Select(u => new UserModel(u)).ToList();
+        }
+
+        public async Task<IList<UserModel>> FindUsersAsync(string query)
+        {
+            List<User> entities = await Context.Users
+                .Where(u => u.Name.Contains(query)
+                         || u.UserName.StartsWith(query))
                 .ToListAsync();
 
             return entities.Select(u => new UserModel(u)).ToList();
