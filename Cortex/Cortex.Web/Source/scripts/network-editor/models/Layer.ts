@@ -8,7 +8,6 @@ export default class Layer {
     public type: any;
     public x: number;
     public y: number;
-    public isSelected: boolean;
 
     constructor(id: number, name: string, neuronsNumber: number, type: any, x: number, y: number) {
         this.id = id;
@@ -17,7 +16,6 @@ export default class Layer {
         this.type = type;
         this.x = x;
         this.y = y;
-        this.isSelected = false;
     }
 
     public get width(): number {

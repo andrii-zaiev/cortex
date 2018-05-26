@@ -4,6 +4,8 @@ import * as d3 from 'd3';
 import Network from './models/Network';
 import { select, Selection, BaseType } from 'd3';
 import Layer from './models/Layer';
+import NetworkViewModel from './view-models/NetworkViewModel';
+import LayerViewModel from './view-models/LayerViewModel';
 
 const d3RootId: string = 'd3-root';
 
@@ -22,13 +24,13 @@ class GrabbingState {
 }
 
 class State {
-    public network: Network;
+    public network: NetworkViewModel;
     public translate: { x: number, y: number };
     public scale: number;
     public grabbing: GrabbingState;
 
     constructor(
-        network: Network,
+        network: NetworkViewModel,
         translate: { x: number, y: number },
         scale: number,
         grabbing: GrabbingState) {
@@ -39,7 +41,11 @@ class State {
     }
 
     public static createInitial(network: Network): State {
-        return new State(network, { x: 0, y: 0 }, 1, new GrabbingState(false, 0, 0, '-webkit-grab'));
+        return new State(
+            NetworkViewModel.fromModel(network),
+            { x: 0, y: 0 },
+            1,
+            new GrabbingState(false, 0, 0, '-webkit-grab'));
     }
 }
 
@@ -84,12 +90,12 @@ export default class NetworkDisplayArea
         rect.exit().remove();
     }
 
-    private updateLayers(layerRect: Selection<BaseType, Layer, BaseType, {}>) {
+    private updateLayers(layerRect: Selection<BaseType, LayerViewModel, BaseType, {}>) {
         return layerRect
             .attr('width', l => l.width * this.state.scale)
             .attr('height', l => l.height * this.state.scale)
-            .attr('x', l => l.x * this.state.scale + this.state.translate.x)
-            .attr('y', l => l.y * this.state.scale + this.state.translate.y)
+            .attr('x', l => l.model.x * this.state.scale + this.state.translate.x)
+            .attr('y', l => l.model.y * this.state.scale + this.state.translate.y)
             .style('fill', l => l.isSelected ? 'lightgray' : 'white')
             .style('cursor', l => l.isSelected ? 'move' : 'pointer');
     }
