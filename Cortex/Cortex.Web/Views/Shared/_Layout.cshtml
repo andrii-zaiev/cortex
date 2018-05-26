@@ -18,7 +18,7 @@
             @if (User.Identity.IsAuthenticated)
             {
                 <li class="navbar-item">
-                    <a href="#" class="fs-4">Account</a>
+                    <a href="#" class="fs-4">@User.Identity.Name.ToLower()</a>
                 </li>
                 <li class="navbar-item">
                     <form method="post" asp-controller="Account" asp-action="LogOut">
