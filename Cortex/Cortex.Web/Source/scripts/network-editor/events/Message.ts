@@ -1,5 +1,6 @@
 ﻿export enum MessageType {
-    NewLayer
+    NewLayer,
+    MoveLayer
 }
 
 export class Message<T> {

@@ -1,5 +1,7 @@
 ﻿import LayerViewModel from './LayerViewModel';
 import Network from '../models/Network';
+import EventBus from '../events/EventBus';
+import { Message, MessageType } from '../events/Message';
 
 export default class NetworkViewModel {
     public layers: LayerViewModel[];
@@ -23,6 +25,38 @@ export default class NetworkViewModel {
         const newLayers: LayerViewModel[] = [].concat(this.layers);
         for (let l of newLayers) {
             l.isSelected = false;
+        }
+
+        return new NetworkViewModel(newLayers, this.connections);
+    }
+
+    public startLayerDragging(layer: LayerViewModel) {
+        const newLayers: LayerViewModel[] = [].concat(this.layers);
+        for (let l of newLayers) {
+            l.isDragged = l.model.id == layer.model.id;
+        }
+
+        return new NetworkViewModel(newLayers, this.connections);
+    }
+
+    public dragLayer(layer: LayerViewModel, dx: number, dy: number) {
+        const newLayers: LayerViewModel[] = [].concat(this.layers);
+        for (let l of newLayers) {
+            if (l.model.id == layer.model.id) {
+                l.drag = { x: l.drag.x + dx, y: l.drag.y + dy };
+            }
+        }
+
+        return new NetworkViewModel(newLayers, this.connections);
+    }
+
+    public dropLayer(layer: LayerViewModel) {
+        const newLayers: LayerViewModel[] = [].concat(this.layers);
+        for (let l of newLayers) {
+            if (l.model.id == layer.model.id) {
+                l.isDragged = false;
+                EventBus.emit(new Message(MessageType.MoveLayer, { id: l.model.id, dx: l.drag.x, dy: l.drag.y }));
+            }
         }
 
         return new NetworkViewModel(newLayers, this.connections);

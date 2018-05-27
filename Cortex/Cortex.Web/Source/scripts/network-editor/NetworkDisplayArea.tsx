@@ -61,6 +61,9 @@ export default class NetworkDisplayArea
         this.endGrabbing = this.endGrabbing.bind(this);
         this.selectLayer = this.selectLayer.bind(this);
         this.deselectLayers = this.deselectLayers.bind(this);
+        this.startLayerDragging = this.startLayerDragging.bind(this);
+        this.dragLayer = this.dragLayer.bind(this);
+        this.dropLayer = this.dropLayer.bind(this);
 
         this.state = State.createInitial(props.network);
     }
@@ -82,9 +85,12 @@ export default class NetworkDisplayArea
     }
 
     private drawLayers(): void {
+        const svg = d3.select(`#${d3RootId}`)
+            .on('mousemove', this.dragLayer)
+            .on('mouseup', this.dropLayer);
+
         const rect = this.updateLayers(
-            d3.select(`#${d3RootId}`)
-                .selectAll('rect')
+            svg.selectAll('rect')
                 .data(this.state.network.layers));
 
         // Enter…
@@ -92,7 +98,8 @@ export default class NetworkDisplayArea
             rect.enter().append('rect')
                 .style('stroke', 'black')
                 .style('stroke-width', 2)
-                .on('click', l => this.selectLayer(l)));
+                .on('click', l => this.selectLayer(l))
+                .on('mousedown', l => this.startLayerDragging(l)));
 
         // Exit…
         rect.exit().remove();
@@ -102,8 +109,8 @@ export default class NetworkDisplayArea
         return layerRect
             .attr('width', l => l.width * this.state.scale)
             .attr('height', l => l.height * this.state.scale)
-            .attr('x', l => l.model.x * this.state.scale + this.state.translate.x)
-            .attr('y', l => l.model.y * this.state.scale + this.state.translate.y)
+            .attr('x', l => (l.model.x + l.drag.x) * this.state.scale + this.state.translate.x)
+            .attr('y', l => (l.model.y + l.drag.y) * this.state.scale + this.state.translate.y)
             .style('fill', l => l.isSelected ? 'lightgray' : 'white')
             .style('cursor', l => l.isSelected ? 'move' : 'pointer');
     }
@@ -164,6 +171,46 @@ export default class NetworkDisplayArea
             prevState.translate,
             prevState.scale,
             prevState.grabbing))
+    }
+
+    private startLayerDragging(layer: LayerViewModel) {
+        if (layer.isSelected) {
+            d3.event.stopPropagation();
+
+            this.setState(prevState => new State(
+                prevState.network.startLayerDragging(layer),
+                prevState.translate,
+                prevState.scale,
+                prevState.grabbing))
+        }
+    }
+
+    private dragLayer() {
+        const layer = this.state.network.layers.find(l => l.isDragged);
+
+        if (layer) {
+            d3.event.stopPropagation();
+
+            this.setState(prevState => new State(
+                prevState.network.dragLayer(layer, d3.event.movementX / prevState.scale, d3.event.movementY / prevState.scale),
+                prevState.translate,
+                prevState.scale,
+                prevState.grabbing))
+        }
+    }
+
+    private dropLayer() {
+        const layer = this.state.network.layers.find(l => l.isDragged);
+
+        if (layer) {
+            d3.event.stopPropagation();
+
+            this.setState(prevState => new State(
+                prevState.network.dropLayer(layer),
+                prevState.translate,
+                prevState.scale,
+                prevState.grabbing))
+        }
     }
 
     public render(): React.ReactNode {

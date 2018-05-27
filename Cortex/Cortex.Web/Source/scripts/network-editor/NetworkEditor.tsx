@@ -26,6 +26,7 @@ export default class NetworkEditor
         super(props);
 
         this.onLayerAdded = this.onLayerAdded.bind(this);
+        this.onLayerMoved = this.onLayerMoved.bind(this);
 
         const network = new Network([
             new Layer(1, 'Layer 1', 100, 0, 10, 10)
@@ -36,10 +37,12 @@ export default class NetworkEditor
 
     public componentDidMount() {
         EventBus.subscribe(MessageType.NewLayer, this.onLayerAdded);
+        EventBus.subscribe(MessageType.MoveLayer, this.onLayerMoved);
     }
 
     public componentWillUnmount() {
         EventBus.unsubscribe(MessageType.NewLayer, this.onLayerAdded);
+        EventBus.unsubscribe(MessageType.MoveLayer, this.onLayerMoved);
     }
 
     private onLayerAdded(layer: Layer) {
@@ -48,6 +51,24 @@ export default class NetworkEditor
                 prevState.network.layers.concat(layer),
                 prevState.network.connections)
         }));
+    }
+
+    private onLayerMoved(data) {
+        this.setState(prevState => {
+            const oldLayer = prevState.network.layers.find(l => l.id == data.id);
+            const newLayer = new Layer(
+                oldLayer.id,
+                oldLayer.name,
+                oldLayer.neuronsNumber,
+                oldLayer.type,
+                oldLayer.x + data.dx,
+                oldLayer.y + data.dy);
+            return {
+                network: new Network(
+                    prevState.network.layers.filter(l => l != oldLayer).concat(newLayer),
+                    prevState.network.connections)
+            }
+        });
     }
 
     public render(): React.ReactNode {
