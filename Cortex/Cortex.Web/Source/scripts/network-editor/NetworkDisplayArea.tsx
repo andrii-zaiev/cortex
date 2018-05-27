@@ -201,7 +201,10 @@ export default class NetworkDisplayArea
             prevState.grabbing));
     }
 
-    private updateScale(scrollAmount: number): void {
+    private updateScale(event): void {
+        event.stopPropagation();
+        event.preventDefault();
+        const scrollAmount = event.deltaY;
         const scaleUpdate = -scrollAmount / 1000;
         this.setState(prevState => new State(
             prevState.network,
@@ -303,7 +306,7 @@ export default class NetworkDisplayArea
         return (
             <div className="display-area">
                 <svg id={d3RootId}
-                    onWheel={e => this.updateScale(e.deltaY)}
+                    onWheel={e => this.updateScale(e)}
                     onMouseDown={e => this.startGrabbing(e.clientX, e.clientY)}
                     onMouseMove={e => this.translate(e.clientX, e.clientY)}
                     onMouseUp={e => this.endGrabbing()}

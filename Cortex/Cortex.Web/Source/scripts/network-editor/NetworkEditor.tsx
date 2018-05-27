@@ -9,6 +9,7 @@ import Layer from './models/Layer';
 import EventBus from './events/EventBus';
 import { MessageType } from './events/Message';
 import Connection from './models/Connection';
+import LayerDetails from './LayerDetails';
 
 class NetworkEditorProps {
     public networkId: string;
