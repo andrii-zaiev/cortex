@@ -24,8 +24,10 @@ export default class EventBus {
 
     public static emit<T>(message: Message<T>) {
         const functions = EventBus.listeners.get(message.type);
-        for (let f of functions) {
-            f(message.data);
+        if (functions) {
+            for (let f of functions) {
+                f(message.data);
+            }
         }
     }
 }

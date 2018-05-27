@@ -16,6 +16,11 @@
     flex-direction: column;
     flex: 1 1 auto;
     position: relative;
+
+    > button {
+        align-self: flex-start;
+        margin-bottom: 10px;
+    }
 }
 
 .toolbar {
@@ -28,6 +33,17 @@
 
 .toolbar-button {
     .button();
+
+    display: flex;
+    align-items: center;
+    border-top: none;
+    border-bottom: none;
+    border-left: none;
+    padding: 10px 15px;
+}
+
+.toolbar-button-primary {
+    .button-primary();
 
     display: flex;
     align-items: center;

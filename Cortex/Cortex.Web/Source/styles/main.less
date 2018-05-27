@@ -119,6 +119,10 @@ input[type="checkbox"] {
 }
 
 .button {
+    & > :not(:first-child) {
+        margin-left: 10px;
+    }
+
     &:disabled {
         background-color: initial;
     }

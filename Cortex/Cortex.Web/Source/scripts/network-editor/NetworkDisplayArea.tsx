@@ -31,31 +31,35 @@ class State {
     public translate: { x: number, y: number };
     public scale: number;
     public grabbing: GrabbingState;
+    public isEdit: boolean;
 
     constructor(
         network: NetworkViewModel,
         translate: { x: number, y: number },
         scale: number,
-        grabbing: GrabbingState) {
+        grabbing: GrabbingState,
+        isEdit: boolean) {
         this.network = network;
         this.translate = translate;
         this.scale = scale;
         this.grabbing = grabbing;
+        this.isEdit = isEdit;
     }
 
-    public static createInitial(network: Network): State {
+    public static createInitial(network: Network, isEdit: boolean): State {
         return new State(
             NetworkViewModel.fromModel(network),
             { x: 0, y: 0 },
             1,
-            new GrabbingState(false, 0, 0, '-webkit-grab'));
+            new GrabbingState(false, 0, 0, '-webkit-grab'),
+        isEdit);
     }
 }
 
 export default class NetworkDisplayArea
-    extends React.Component<{ network: Network }, State> {
+    extends React.Component<{ network: Network, isEdit: boolean }, State> {
 
-    constructor(props: { network: Network }) {
+    constructor(props: { network: Network, isEdit: boolean }) {
         super(props);
 
         this.updateScale = this.updateScale.bind(this);
@@ -69,7 +73,7 @@ export default class NetworkDisplayArea
         this.dropLayer = this.dropLayer.bind(this);
         this.selectConnection = this.selectConnection.bind(this);
 
-        this.state = State.createInitial(props.network);
+        this.state = State.createInitial(props.network, props.isEdit);
     }
 
     public static getDerivedStateFromProps(nextProps: { network: Network }, prevState: State) {
@@ -77,7 +81,8 @@ export default class NetworkDisplayArea
             NetworkViewModel.fromModel(nextProps.network),
             prevState.translate,
             prevState.scale,
-            prevState.grabbing);
+            prevState.grabbing,
+            prevState.isEdit);
     }
 
     componentDidMount() {
@@ -129,7 +134,7 @@ export default class NetworkDisplayArea
             .attr('x', l => this.convertX(l.x))
             .attr('y', l => this.convertY(l.y))
             .style('fill', l => l.isSelected ? 'lightgray' : 'white')
-            .style('cursor', l => l.isSelected ? 'move' : 'pointer');
+            .style('cursor', l => l.isSelected && this.state.isEdit ? 'move' : 'pointer');
     }
 
     private updateLayerLabels(layerLabel: Selection<BaseType, LayerViewModel, BaseType, {}>) {
@@ -198,7 +203,8 @@ export default class NetworkDisplayArea
             prevState.network.selectConnection(connection),
             prevState.translate,
             prevState.scale,
-            prevState.grabbing));
+            prevState.grabbing,
+            prevState.isEdit));
     }
 
     private updateScale(event): void {
@@ -212,7 +218,8 @@ export default class NetworkDisplayArea
             prevState.scale + scaleUpdate > 0
             ? prevState.scale + scaleUpdate
                 : 0.01,
-            prevState.grabbing));
+            prevState.grabbing,
+            prevState.isEdit));
     }
 
     private startGrabbing(x, y) {
@@ -220,7 +227,8 @@ export default class NetworkDisplayArea
             prevState.network,
             prevState.translate,
             prevState.scale,
-            new GrabbingState(true, x, y, '-webkit-grabbing')));
+            new GrabbingState(true, x, y, '-webkit-grabbing'),
+            prevState.isEdit));
     }
 
     private translate(newX, newY) {
@@ -232,7 +240,8 @@ export default class NetworkDisplayArea
                 prevState.network,
                 { x: prevState.translate.x + deltaX, y: prevState.translate.y + deltaY },
                 prevState.scale,
-                new GrabbingState(prevState.grabbing.isActive, newX, newY, prevState.grabbing.cursor)));
+                new GrabbingState(prevState.grabbing.isActive, newX, newY, prevState.grabbing.cursor),
+                prevState.isEdit));
         }
     }
 
@@ -241,7 +250,8 @@ export default class NetworkDisplayArea
             prevState.network,
             prevState.translate,
             prevState.scale,
-            new GrabbingState(false, 0, 0, '-webkit-grab')));
+            new GrabbingState(false, 0, 0, '-webkit-grab'),
+            prevState.isEdit));
     }
 
     private selectLayer(layer) {
@@ -251,7 +261,8 @@ export default class NetworkDisplayArea
             prevState.network.selectLayer(layer),
             prevState.translate,
             prevState.scale,
-            prevState.grabbing));
+            prevState.grabbing,
+            prevState.isEdit));
     }
 
     private deselectAll() {
@@ -259,18 +270,20 @@ export default class NetworkDisplayArea
             prevState.network.deselectAll(),
             prevState.translate,
             prevState.scale,
-            prevState.grabbing));
+            prevState.grabbing,
+            prevState.isEdit));
     }
 
     private startLayerDragging(layer: LayerViewModel) {
-        if (layer.isSelected) {
+        if (layer.isSelected && this.state.isEdit) {
             d3.event.stopPropagation();
 
             this.setState(prevState => new State(
                 prevState.network.startLayerDragging(layer),
                 prevState.translate,
                 prevState.scale,
-                prevState.grabbing))
+                prevState.grabbing,
+                prevState.isEdit))
         }
     }
 
@@ -284,7 +297,8 @@ export default class NetworkDisplayArea
                 prevState.network.dragLayer(layer, d3.event.movementX / prevState.scale, d3.event.movementY / prevState.scale),
                 prevState.translate,
                 prevState.scale,
-                prevState.grabbing))
+                prevState.grabbing,
+                prevState.isEdit))
         }
     }
 
@@ -298,13 +312,15 @@ export default class NetworkDisplayArea
                 prevState.network.dropLayer(layer),
                 prevState.translate,
                 prevState.scale,
-                prevState.grabbing))
+                prevState.grabbing,
+                prevState.isEdit))
         }
     }
 
     public render(): React.ReactNode {
         return (
-            <div className="display-area">
+            <div className="display-area"
+                style={{ borderTop: this.state.isEdit ? 'none' : '1px solid #BDBDBD' }}>
                 <svg id={d3RootId}
                     onWheel={e => this.updateScale(e)}
                     onMouseDown={e => this.startGrabbing(e.clientX, e.clientY)}

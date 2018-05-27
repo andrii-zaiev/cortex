@@ -19,10 +19,17 @@ class NetworkEditorProps {
 
 class NetworkEditorState {
     public network: Network;
+    public isEdit: boolean;
+
+    constructor(network: Network, isEdit: boolean) {
+        this.network = network;
+        this.isEdit = isEdit;
+    }
 }
 
 export default class NetworkEditor
     extends React.Component<NetworkEditorProps, NetworkEditorState> {
+    private isReadOnly: boolean;
 
     constructor(props: NetworkEditorProps) {
         super(props);
@@ -32,13 +39,15 @@ export default class NetworkEditor
         this.onConnectionAdded = this.onConnectionAdded.bind(this);
         this.deleteLayer = this.deleteLayer.bind(this);
         this.deleteConnection = this.deleteConnection.bind(this);
+        this.startEditing = this.startEditing.bind(this);
 
+        this.isReadOnly = props.isReadOnly;
         const network = new Network([
             new Layer(1, 'Layer 1', 100, 0, 10, 10),
             new Layer(2, 'Layer 2', 50, 0, 100, 10)
         ], [new Connection(1, 1, 2)]);
 
-        this.state = { network: network };
+        this.state = new NetworkEditorState(network, false);
     }
 
     public componentDidMount() {
@@ -107,11 +116,22 @@ export default class NetworkEditor
         }));
     }
 
+    private startEditing() {
+        this.setState(prevState => new NetworkEditorState(prevState.network, true));
+    }
+
     public render(): React.ReactNode {
         return (
             <div className="network-editor-container">
-                <EditorToolbar network={this.state.network} />
-                <NetworkDisplayArea network={this.state.network} />
+                {!this.isReadOnly && !this.state.isEdit &&
+                    <button className="button-primary" onClick={this.startEditing}>
+                        <i className="fa fa-edit" />
+                        <span>Edit</span>
+                    </button>}
+                {this.state.isEdit &&
+                    <EditorToolbar network={this.state.network} />}
+                
+                <NetworkDisplayArea network={this.state.network} isEdit={this.state.isEdit} />
             </div>
             );
     }
