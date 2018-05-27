@@ -28,6 +28,7 @@ export default class NetworkEditor
 
         this.onLayerAdded = this.onLayerAdded.bind(this);
         this.onLayerMoved = this.onLayerMoved.bind(this);
+        this.onConnectionAdded = this.onConnectionAdded.bind(this);
 
         const network = new Network([
             new Layer(1, 'Layer 1', 100, 0, 10, 10),
@@ -40,6 +41,7 @@ export default class NetworkEditor
     public componentDidMount() {
         EventBus.subscribe(MessageType.NewLayer, this.onLayerAdded);
         EventBus.subscribe(MessageType.MoveLayer, this.onLayerMoved);
+        EventBus.subscribe(MessageType.NewConnection, this.onConnectionAdded);
     }
 
     public componentWillUnmount() {
@@ -71,6 +73,14 @@ export default class NetworkEditor
                     prevState.network.connections)
             }
         });
+    }
+
+    private onConnectionAdded(connection: Connection) {
+        this.setState(prevState => ({
+            network: new Network(
+                prevState.network.layers,
+                prevState.network.connections.concat(connection))
+        }));
     }
 
     public render(): React.ReactNode {

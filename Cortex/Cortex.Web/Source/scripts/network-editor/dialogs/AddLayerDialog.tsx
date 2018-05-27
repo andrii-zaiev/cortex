@@ -9,6 +9,7 @@ import { Message, MessageType } from '../events/Message';
 
 export default class AddLayerDialog
     extends React.Component<{ isOpen: boolean, layerId: number }, { isOpen: boolean, layer: NewLayerViewModel, layerId: number }> {
+    private appElement = document.getElementById('network-editor');
 
     constructor(props) {
         super(props);
@@ -59,7 +60,7 @@ export default class AddLayerDialog
 
     public render() {
         return (
-            <Modal isOpen={this.state.isOpen}>
+            <Modal isOpen={this.state.isOpen} appElement={this.appElement}>
                 <div className="dialog-heading">
                     <h4>Add Layer</h4>
                 </div>

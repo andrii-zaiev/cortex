@@ -7,6 +7,7 @@ import Layer from './models/Layer';
 import NetworkViewModel from './view-models/NetworkViewModel';
 import LayerViewModel from './view-models/LayerViewModel';
 import ConnectionViewModel from './view-models/ConnectionViewModel';
+import Connection from './models/Connection';
 
 const d3RootId: string = 'd3-root';
 const labelFontSize = 15;
@@ -166,7 +167,7 @@ export default class NetworkDisplayArea
 
     private drawConnections(svg: Selection<BaseType, {}, HTMLElement, any>) {
         const line = this.updateLines(svg.selectAll('line')
-            .data(this.state.network.connections));
+            .data(this.state.network.connections, l => (l as ConnectionViewModel).model.id.toString()));
 
         this.updateLines(line.enter().append('line')
             .style('cursor', 'pointer')
