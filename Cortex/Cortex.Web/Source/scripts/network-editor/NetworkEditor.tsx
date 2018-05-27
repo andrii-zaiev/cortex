@@ -29,6 +29,8 @@ export default class NetworkEditor
         this.onLayerAdded = this.onLayerAdded.bind(this);
         this.onLayerMoved = this.onLayerMoved.bind(this);
         this.onConnectionAdded = this.onConnectionAdded.bind(this);
+        this.deleteLayer = this.deleteLayer.bind(this);
+        this.deleteConnection = this.deleteConnection.bind(this);
 
         const network = new Network([
             new Layer(1, 'Layer 1', 100, 0, 10, 10),
@@ -42,11 +44,16 @@ export default class NetworkEditor
         EventBus.subscribe(MessageType.NewLayer, this.onLayerAdded);
         EventBus.subscribe(MessageType.MoveLayer, this.onLayerMoved);
         EventBus.subscribe(MessageType.NewConnection, this.onConnectionAdded);
+        EventBus.subscribe(MessageType.DeleteLayer, this.deleteLayer);
+        EventBus.subscribe(MessageType.DeleteConnection, this.deleteConnection);
     }
 
     public componentWillUnmount() {
         EventBus.unsubscribe(MessageType.NewLayer, this.onLayerAdded);
         EventBus.unsubscribe(MessageType.MoveLayer, this.onLayerMoved);
+        EventBus.unsubscribe(MessageType.NewConnection, this.onConnectionAdded);
+        EventBus.unsubscribe(MessageType.DeleteLayer, this.onConnectionAdded);
+        EventBus.unsubscribe(MessageType.DeleteConnection, this.onConnectionAdded);
     }
 
     private onLayerAdded(layer: Layer) {
@@ -80,6 +87,22 @@ export default class NetworkEditor
             network: new Network(
                 prevState.network.layers,
                 prevState.network.connections.concat(connection))
+        }));
+    }
+
+    private deleteLayer(id: number) {
+        this.setState(prevState => ({
+            network: new Network(
+                prevState.network.layers.filter(l => l.id !== id),
+                prevState.network.connections.filter(c => c.fromId !== id && c.toId !== id))
+        }));
+    }
+
+    private deleteConnection(id: number) {
+        this.setState(prevState => ({
+            network: new Network(
+                prevState.network.layers,
+                prevState.network.connections.filter(c => c.id !== id))
         }));
     }
 

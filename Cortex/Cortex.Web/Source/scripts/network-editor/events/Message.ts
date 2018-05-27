@@ -3,7 +3,10 @@
     MoveLayer = 2,
     CloseAddDialog = 3,
     NewConnection = 4,
-    CloseAddConnectionDialog = 5
+    CloseAddConnectionDialog = 5,
+    ItemSelected = 6,
+    DeleteLayer = 7,
+    DeleteConnection = 8
 }
 
 export class Message<T> {

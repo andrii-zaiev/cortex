@@ -3,6 +3,7 @@ import Network from '../models/Network';
 import EventBus from '../events/EventBus';
 import { Message, MessageType } from '../events/Message';
 import ConnectionViewModel from './ConnectionViewModel';
+import { SelectedItem, ItemType } from '../models/SelectedItem';
 
 export default class NetworkViewModel {
     public layers: LayerViewModel[];
@@ -23,6 +24,8 @@ export default class NetworkViewModel {
             c.isSelected = false;
         }
 
+        EventBus.emit(new Message(MessageType.ItemSelected, new SelectedItem(layer.model.id, ItemType.Layer)));
+
         return new NetworkViewModel(newLayers, newConnections);
     }
 
@@ -36,6 +39,8 @@ export default class NetworkViewModel {
         for (let c of newConnections) {
             c.isSelected = false;
         }
+
+        EventBus.emit(new Message(MessageType.ItemSelected, null))
 
         return new NetworkViewModel(newLayers, newConnections);
     }
@@ -82,6 +87,9 @@ export default class NetworkViewModel {
         for (let c of newConnections) {
             c.isSelected = c.model.id == connection.model.id;
         }
+
+        EventBus.emit(new Message(MessageType.ItemSelected,
+            new SelectedItem(connection.model.id, ItemType.Connection)));
 
         return new NetworkViewModel(newLayers, newConnections);
     }
