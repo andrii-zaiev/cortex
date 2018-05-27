@@ -1,7 +1,4 @@
-﻿const layerWidth = 50;
-const baseLayerHeight = 100;
-
-export default class Layer {
+﻿export default class Layer {
     public id: number;
     public name: string;
     public neuronsNumber: number;

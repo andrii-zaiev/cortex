@@ -6,7 +6,8 @@
     CloseAddConnectionDialog = 5,
     ItemSelected = 6,
     DeleteLayer = 7,
-    DeleteConnection = 8
+    DeleteConnection = 8,
+    CloseSaveDialog = 9
 }
 
 export class Message<T> {

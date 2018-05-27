@@ -6,25 +6,71 @@ import LayerType from '../models/LayerType';
 import Layer from '../models/Layer';
 import EventBus from '../events/EventBus';
 import { Message, MessageType } from '../events/Message';
+import Network from '../models/Network';
+import VersionDto from '../services/dtos/VersionDto';
+import NetworkService from '../services/NetworkService';
 
 export default class SaveVersionDialog
-    extends React.Component<{ isOpen: boolean }, { isOpen: boolean }> {
+    extends React.Component<{ isOpen: boolean, network: Network, networkId: string, versionId: string },
+                            { isOpen: boolean, network: Network, comment: string, saving: boolean }> {
     private appElement = document.getElementById('network-editor');
+    private networkId: string;
+    private versionId: string;
+    private networkService: NetworkService = new NetworkService();
 
     constructor(props) {
         super(props);
+
+        this.networkId = props.networkId;
+        this.versionId = props.versionId;
+
+        this.closeDialog = this.closeDialog.bind(this);
+        this.save = this.save.bind(this);
+        this.updateComment = this.updateComment.bind(this);
+
+        this.state = {
+            isOpen: props.isOpen,
+            network: props.network,
+            comment: '',
+            saving: false
+        };
     }
 
-    //public static getDerivedStateFromProps(nextProps, prevState) {
-    //    return {
-    //        isOpen: nextProps.isOpen,
-    //        layer: prevState.layer,
-    //        layerId: nextProps.layerId
-    //    };
-    //}
+    public static getDerivedStateFromProps(nextProps, prevState) {
+        return {
+            isOpen: nextProps.isOpen,
+            network: nextProps.network,
+            comment: prevState.comment,
+            saving: prevState.saving
+        };
+    }
+
+    private updateComment(event) {
+        const comment = event.target.value;
+        this.setState(prevState => ({
+            isOpen: this.state.isOpen,
+            network: this.state.network,
+            comment: comment,
+            saving: prevState.saving
+        }));
+    }
 
     private closeDialog() {
-        EventBus.emit(new Message<void>(MessageType.CloseAddDialog, null));
+        EventBus.emit(new Message<void>(MessageType.CloseSaveDialog, null));
+    }
+
+    private save() {
+        const versionDto = new VersionDto(this.state.network, this.state.comment, this.versionId, this.networkId);
+        this.setState(prevState => ({
+            isOpen: this.state.isOpen,
+            network: this.state.network,
+            comment: this.state.comment,
+            saving: true
+        }));
+
+        this.networkService.saveVersion(versionDto)
+            .then(success => alert(success))
+            .catch(() => alert('error'));
     }
 
     public render() {
@@ -37,14 +83,18 @@ export default class SaveVersionDialog
                     <div className="form">
                         <div className="form-row">
                             <label className="top-label">Comment</label>
-                            <textarea></textarea>
+                            <textarea maxLength={200} value={this.state.comment} onChange={this.updateComment} ></textarea>
                         </div>
                     </div>
                 </div>
                 <div className="dialog-buttons">
                     <button className="button" onClick={this.closeDialog}>Cancel</button>
-                    <button className="button-primary">Save</button>
+                    <button className="button-primary" onClick={this.save}>Save</button>
                 </div>
+                {this.state.saving &&
+                    <div className="fade">
+                        <i className="fa fa-2x fa-spinner fa-spin spinner" />
+                    </div>}
             </Modal>
         );
     }

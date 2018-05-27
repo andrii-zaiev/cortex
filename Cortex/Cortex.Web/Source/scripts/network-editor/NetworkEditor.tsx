@@ -30,6 +30,8 @@ class NetworkEditorState {
 export default class NetworkEditor
     extends React.Component<NetworkEditorProps, NetworkEditorState> {
     private isReadOnly: boolean;
+    private networkId: string;
+    private versionId: string;
 
     constructor(props: NetworkEditorProps) {
         super(props);
@@ -42,6 +44,8 @@ export default class NetworkEditor
         this.startEditing = this.startEditing.bind(this);
 
         this.isReadOnly = props.isReadOnly;
+        this.networkId = props.networkId;
+        this.versionId = props.versionId;
         const network = new Network([
             new Layer(1, 'Layer 1', 100, 0, 10, 10),
             new Layer(2, 'Layer 2', 50, 0, 100, 10)
@@ -129,7 +133,7 @@ export default class NetworkEditor
                         <span>Edit</span>
                     </button>}
                 {this.state.isEdit &&
-                    <EditorToolbar network={this.state.network} />}
+                    <EditorToolbar network={this.state.network} networkId={this.networkId} versionId={this.versionId} />}
                 
                 <NetworkDisplayArea network={this.state.network} isEdit={this.state.isEdit} />
             </div>
