@@ -5,11 +5,22 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Source\scripts\local-datetime\init.ts" />
+    <None Remove="Source\scripts\network-editor\dialogs\AddConnectionDialog.tsx" />
     <None Remove="Source\scripts\network-editor\dialogs\AddLayerDialog.tsx" />
+    <None Remove="Source\scripts\network-editor\dialogs\SaveVersionDialog.tsx" />
+    <None Remove="Source\scripts\network-editor\events\EventBus.ts" />
+    <None Remove="Source\scripts\network-editor\events\Message.ts" />
+    <None Remove="Source\scripts\network-editor\LayerDetails.tsx" />
     <None Remove="Source\scripts\network-editor\models\LayerType.ts" />
+    <None Remove="Source\scripts\network-editor\models\SelectedItem.ts" />
+    <None Remove="Source\scripts\network-editor\services\dtos\VersionDto.ts" />
+    <None Remove="Source\scripts\network-editor\services\NetworkService.ts" />
+    <None Remove="Source\scripts\network-editor\view-models\ConnectionViewModel.ts" />
     <None Remove="Source\scripts\network-editor\view-models\LayerViewModel.ts" />
     <None Remove="Source\scripts\network-editor\view-models\NetworkViewModel.ts" />
+    <None Remove="Source\scripts\network-editor\view-models\NewConnectionViewModel.ts" />
     <None Remove="Source\scripts\network-editor\view-models\NewLayerViewModel.ts" />
+    <None Remove="Source\scripts\shared\BaseService.ts" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
@@ -24,15 +35,23 @@
     <ProjectReference Include="..\Cortex.VersionsStorage\Cortex.VersionsStorage.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\Api\" />
-  </ItemGroup>
-  <ItemGroup>
     <TypeScriptCompile Include="Source\scripts\local-datetime\init.ts" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\dialogs\AddConnectionDialog.tsx" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\dialogs\SaveVersionDialog.tsx" />
     <TypeScriptCompile Include="Source\scripts\network-editor\dialogs\AddLayerDialog.tsx" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\events\Message.ts" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\events\EventBus.ts" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\LayerDetails.tsx" />
     <TypeScriptCompile Include="Source\scripts\network-editor\models\LayerType.ts" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\models\SelectedItem.ts" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\services\dtos\VersionDto.ts" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\services\NetworkService.ts" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\view-models\ConnectionViewModel.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\view-models\LayerViewModel.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\view-models\NetworkViewModel.ts" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\view-models\NewConnectionViewModel.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\view-models\NewLayerViewModel.ts" />
+    <TypeScriptCompile Include="Source\scripts\shared\BaseService.ts" />
   </ItemGroup>
   <PropertyGroup>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>

@@ -8,6 +8,7 @@ using Cortex.Repositories.Interfaces;
 using Cortex.Services.Dtos;
 using Cortex.Services.Interfaces;
 using Cortex.VersionsStorage;
+using Newtonsoft.Json;
 
 namespace Cortex.Services
 {
@@ -39,6 +40,23 @@ namespace Cortex.Services
             NetworkChangesetModel changeset = await _changesetRepository.GetNewestNetworkChangesetAsync(networkId);
 
             return changeset != null ? new NetworkVersionMetadata(changeset) : null;
+        }
+
+        public async Task<Guid> SaveVersionAsync(NewNetworkVersion version)
+        {
+            string json = JsonConvert.SerializeObject(version.NetworkDiagram);
+
+            string sha = await _versionsStorage.SaveAsync(version.NetworkId, json);
+
+            NetworkChangesetModel newChangeset = NetworkChangesetModel.CreateNew(
+                version.NetworkId,
+                version.Comment,
+                version.AuthorId,
+                sha);
+
+            await _changesetRepository.CreateChangesetAsync(newChangeset);
+
+            return newChangeset.Id;
         }
     }
 }

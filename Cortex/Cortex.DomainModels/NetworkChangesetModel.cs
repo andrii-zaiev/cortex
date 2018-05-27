@@ -6,13 +6,24 @@ namespace Cortex.DomainModels
     public class NetworkChangesetModel
     {
         public NetworkChangesetModel(NetworkChangeset entity)
+            : this(entity.Id, entity.Comment, entity.NetworkId, entity.Date, entity.AuthorId, entity.Sha)
         {
-            Id = entity.Id;
-            Comment = entity.Comment;
-            NetworkId = entity.NetworkId;
-            Date = entity.Date;
-            AuthorId = entity.AuthorId;
-            Sha = entity.Sha;
+        }
+
+        private NetworkChangesetModel(
+            Guid id,
+            string comment,
+            Guid networkId,
+            DateTimeOffset date,
+            Guid authorId,
+            string sha)
+        {
+            Id = id;
+            Comment = comment;
+            NetworkId = networkId;
+            Date = date;
+            AuthorId = authorId;
+            Sha = sha;
         }
 
         public Guid Id { get; }
@@ -26,5 +37,10 @@ namespace Cortex.DomainModels
         public Guid AuthorId { get; }
 
         public string Sha { get; }
+
+        public static NetworkChangesetModel CreateNew(Guid networkId, string comment, Guid authorId, string sha)
+        {
+            return new NetworkChangesetModel(Guid.NewGuid(), comment, networkId, DateTimeOffset.UtcNow, authorId, sha);
+        }
     }
 }

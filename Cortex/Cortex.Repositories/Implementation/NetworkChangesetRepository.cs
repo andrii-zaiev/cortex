@@ -36,5 +36,22 @@ namespace Cortex.Repositories.Implementation
 
             return changeset != null ? new NetworkChangesetModel(changeset) : null;
         }
+
+        public async Task CreateChangesetAsync(NetworkChangesetModel newChangeset)
+        {
+            var entity = new NetworkChangeset
+            {
+                Id = newChangeset.Id,
+                AuthorId = newChangeset.AuthorId,
+                Comment = newChangeset.Comment,
+                Date = newChangeset.Date,
+                NetworkId = newChangeset.NetworkId,
+                Sha = newChangeset.Sha
+            };
+
+            Context.NetworkChangesets.Add(entity);
+
+            await Context.SaveChangesAsync();
+        }
     }
 }

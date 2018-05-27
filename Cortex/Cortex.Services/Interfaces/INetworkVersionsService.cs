@@ -10,5 +10,7 @@ namespace Cortex.Services.Interfaces
         Task<IList<NetworkVersionMetadata>> GetNetworkVersionsAsync(Guid networkId);
 
         Task<NetworkVersionMetadata> GetCurrentVersionAsync(Guid networkId);
+
+        Task<Guid> SaveVersionAsync(NewNetworkVersion version);
     }
 }
