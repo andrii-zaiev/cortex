@@ -8,6 +8,7 @@ import NetworkViewModel from './view-models/NetworkViewModel';
 import LayerViewModel from './view-models/LayerViewModel';
 
 const d3RootId: string = 'd3-root';
+const labelFontSize = 15;
 
 class GrabbingState {
     public isActive: boolean;
@@ -89,30 +90,62 @@ export default class NetworkDisplayArea
             .on('mousemove', this.dragLayer)
             .on('mouseup', this.dropLayer);
 
-        const rect = this.updateLayers(
-            svg.selectAll('rect')
-                .data(this.state.network.layers));
+        const layerGroup = svg.selectAll('g').data(this.state.network.layers, l => (l as LayerViewModel).model.id.toString());
+        const layerRect = this.updateLayers(layerGroup.select('rect'));
+        const layerLabel = this.updateLayerLabels(layerGroup.select('text'));
+        const layerNameLabel = this.updateNameLabels(layerLabel.select('tspan#name'));
+        const layerInfoLabel = this.updateInfoLabels(layerLabel.select('tspan#info'));
+        const layerSizeLabel = this.updateSizeLabels(layerLabel.select('tspan#size'));
 
         // Enter…
-        this.updateLayers(
-            rect.enter().append('rect')
-                .style('stroke', 'black')
-                .style('stroke-width', 2)
-                .on('click', l => this.selectLayer(l))
-                .on('mousedown', l => this.startLayerDragging(l)));
+        const groupEnter = layerGroup.enter().append('g');
+        this.updateLayers(groupEnter.append('rect')
+            .style('stroke', 'black')
+            .style('stroke-width', 2)
+            .on('click', l => this.selectLayer(l))
+            .on('mousedown', l => this.startLayerDragging(l)));
+        const layerEnter = this.updateLayerLabels(groupEnter.append('text'));
+        this.updateNameLabels(layerEnter.append('tspan').attr('id', 'name').attr('dy', '1.2em'));
+        this.updateInfoLabels(layerEnter.append('tspan').attr('id', 'info').attr('dy', '1.2em'));
+        this.updateSizeLabels(layerEnter.append('tspan').attr('id', 'size').attr('dy', '1.2em'));
 
         // Exit…
-        rect.exit().remove();
+        layerGroup.exit().remove();
     }
 
     private updateLayers(layerRect: Selection<BaseType, LayerViewModel, BaseType, {}>) {
         return layerRect
             .attr('width', l => l.width * this.state.scale)
             .attr('height', l => l.height * this.state.scale)
-            .attr('x', l => (l.model.x + l.drag.x) * this.state.scale + this.state.translate.x)
-            .attr('y', l => (l.model.y + l.drag.y) * this.state.scale + this.state.translate.y)
+            .attr('x', l => l.x * this.state.scale + this.state.translate.x)
+            .attr('y', l => l.y * this.state.scale + this.state.translate.y)
             .style('fill', l => l.isSelected ? 'lightgray' : 'white')
             .style('cursor', l => l.isSelected ? 'move' : 'pointer');
+    }
+
+    private updateLayerLabels(layerLabel: Selection<BaseType, LayerViewModel, BaseType, {}>) {
+        return layerLabel
+            .attr('x', l => l.x * this.state.scale + this.state.translate.x)
+            .attr('y', l => (l.y - 60) * this.state.scale + this.state.translate.y)
+            .attr('font-size', () => labelFontSize * this.state.scale);
+    }
+
+    private updateNameLabels(label: Selection<BaseType, LayerViewModel, BaseType, {}>) {
+        return label
+            .attr('x', l => l.x * this.state.scale + this.state.translate.x)
+            .text(l => l.model.name);
+    }
+
+    private updateInfoLabels(label: Selection<BaseType, LayerViewModel, BaseType, {}>) {
+        return label
+            .attr('x', l => l.x * this.state.scale + this.state.translate.x)
+            .text(l => l.info);
+    }
+
+    private updateSizeLabels(label: Selection<BaseType, LayerViewModel, BaseType, {}>) {
+        return label
+            .attr('x', l => l.x * this.state.scale + this.state.translate.x)
+            .text(l => l.size);
     }
 
     private updateScale(scrollAmount: number): void {

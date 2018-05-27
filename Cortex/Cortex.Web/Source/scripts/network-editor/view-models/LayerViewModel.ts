@@ -16,11 +16,28 @@ export default class LayerViewModel {
         this.drag = { x: 0, y: 0 };
     }
 
+    public get x(): number {
+        return this.model.x + this.drag.x;
+    }
+
+    public get y(): number {
+        return this.model.y + this.drag.y;
+    }
+
     public get width(): number {
         return layerWidth;
     }
 
     public get height(): number {
         return baseLayerHeight + this.model.neuronsNumber;
+    }
+
+    public get info(): string {
+        //return this.model.activation;
+        return 'ReLU';
+    }
+
+    public get size(): string {
+        return this.model.neuronsNumber.toString();
     }
 }
