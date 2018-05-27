@@ -39,9 +39,15 @@ export default class EditorToolbar
     public render(): React.ReactNode {
         return (
             <div className="toolbar">
-                <div className="toolbar-button" title="Add layer" onClick={this.openAddDialog}>
+                <button className="toolbar-button" title="Add layer" onClick={this.openAddDialog}>
                     <i className="fa fa-square" />
-                </div>
+                </button>
+                <button className="toolbar-button" title="Add connection" onClick={this.openAddDialog}>
+                    <i className="fa fa-minus" />
+                </button>
+                <button className="toolbar-button" title="Delete" onClick={this.openAddDialog} disabled={true}>
+                    <i className="fa fa-trash" />
+                </button>
                 <AddLayerDialog layerId={this.getNextLayerId()} isOpen={this.state.isAddOpen} />
             </div>
         );

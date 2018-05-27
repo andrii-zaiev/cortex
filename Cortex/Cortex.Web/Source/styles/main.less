@@ -118,6 +118,12 @@ input[type="checkbox"] {
     height: 20px;
 }
 
+.button {
+    &:disabled {
+        background-color: initial;
+    }
+}
+
 .button-primary {
     .button();
     background-color: @primary-color;
