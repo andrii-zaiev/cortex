@@ -3,45 +3,57 @@ import * as Modal from 'react-modal';
 
 import NewLayerViewModel from '../view-models/NewLayerViewModel';
 import LayerType from '../models/LayerType';
-
-Modal.setAppElement('#network-editor');
+import Layer from '../models/Layer';
+import EventBus from '../events/EventBus';
+import { Message, MessageType } from '../events/Message';
 
 export default class AddLayerDialog
-    extends React.Component<{ isOpen: boolean }, { isOpen: boolean, layer: NewLayerViewModel }> {
+    extends React.Component<{ isOpen: boolean, layerId: number }, { isOpen: boolean, layer: NewLayerViewModel, layerId: number }> {
+
     constructor(props) {
         super(props);
 
         this.closeDialog = this.closeDialog.bind(this);
-        this.updateName = this.updateName.bind(this);
-        this.updateType = this.updateType.bind(this);
+        this.update = this.update.bind(this);
+        this.updateNumber = this.updateNumber.bind(this);
+        this.updateValue = this.updateValue.bind(this);
+        this.addLayer = this.addLayer.bind(this);
 
-        this.state = { isOpen: props.isOpen, layer: NewLayerViewModel.init() };
+        this.state = { isOpen: props.isOpen, layer: NewLayerViewModel.init(), layerId: props.layerId };
     }
 
     public static getDerivedStateFromProps(nextProps, prevState) {
         return {
-            isOpen: nextProps.isOpen
+            isOpen: nextProps.isOpen,
+            layer: prevState.layer,
+            layerId: nextProps.layerId
         };
     }
 
     private closeDialog() {
-        this.setState(prevState => ({ isOpen: false, layer: prevState.layer }));
+        this.setState(prevState => ({ isOpen: false, layer: NewLayerViewModel.init() }));
     }
 
-    private updateName(event) {
-        const name = event.target.value;
+    private update(event, prop: string) {
+        const value = event.target.value;
+        this.updateValue(prop, value);
+    }
+
+    private updateNumber(event, prop: string) {
+        const value = Number(event.target.value);
+        this.updateValue(prop, value);
+    }
+
+    private updateValue(prop, value) {
         this.setState(prevState => ({
             isOpen: prevState.isOpen,
-            layer: new NewLayerViewModel(name, prevState.layer.type)
+            layer: prevState.layer.clone().with(prop, value)
         }));
     }
 
-    private updateType(event) {
-        const type = event.target.value;
-        this.setState(prevState => ({
-            isOpen: prevState.isOpen,
-            layer: new NewLayerViewModel(prevState.layer.name, type)
-        }));
+    private addLayer() {
+        const layer = this.state.layer.toModel(this.state.layerId);
+        EventBus.emit(new Message<Layer>(MessageType.NewLayer, layer));
     }
 
     public render() {
@@ -54,7 +66,7 @@ export default class AddLayerDialog
                     <div className="form">
                         <div className="form-row">
                             <label>Name</label>
-                            <input type="text" value={this.state.layer.name} onChange={this.updateName}/>
+                            <input type="text" value={this.state.layer.name} onChange={e => this.update(e, 'name')}/>
                         </div>
                         <div className="form-row">
                             <label className="top-label">Comment</label>
@@ -86,7 +98,7 @@ export default class AddLayerDialog
                         </div>
                         <div className="form-row">
                             <label>Type</label>
-                            <select value={this.state.layer.type} onChange={this.updateType}>
+                            <select value={this.state.layer.type} onChange={e => this.update(e, 'type')}>
                                 <option value={LayerType.Dense}> Dense</option>
                                 <option value={LayerType.Convolutional}>Convolutional</option>
                                 <option value={LayerType.Pooling}>Pooling</option>
@@ -97,7 +109,12 @@ export default class AddLayerDialog
                         <div>
                             <div className="form-row">
                                 <label>Neurons</label>
-                                <input type="number" min={1} max={100000} step={1} />
+                                <input type="number"
+                                    min={1}
+                                    max={100000}
+                                    step={1}
+                                    value={this.state.layer.neuronsNumber}
+                                    onChange={e => this.updateNumber(e, 'neuronsNumber')}/>
                             </div>
                             <div className="form-row">
                                 <label>Dropout</label>
@@ -110,7 +127,7 @@ export default class AddLayerDialog
                 </div>
                 <div className="dialog-buttons">
                     <button className="button" onClick={this.closeDialog}>Cancel</button>
-                    <button className="button-primary">Add</button>
+                    <button className="button-primary" onClick={this.addLayer}>Add</button>
                 </div>
             </Modal>
         );

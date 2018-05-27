@@ -65,6 +65,14 @@ export default class NetworkDisplayArea
         this.state = State.createInitial(props.network);
     }
 
+    public static getDerivedStateFromProps(nextProps: { network: Network }, prevState: State) {
+        return new State(
+            NetworkViewModel.fromModel(nextProps.network),
+            prevState.translate,
+            prevState.scale,
+            prevState.grabbing);
+    }
+
     componentDidMount() {
         this.drawLayers();
     }
