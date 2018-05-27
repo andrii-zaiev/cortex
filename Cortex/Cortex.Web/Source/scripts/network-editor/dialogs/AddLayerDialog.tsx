@@ -31,7 +31,7 @@ export default class AddLayerDialog
     }
 
     private closeDialog() {
-        this.setState(prevState => ({ isOpen: false, layer: NewLayerViewModel.init() }));
+        EventBus.emit(new Message<void>(MessageType.CloseAddDialog, null));
     }
 
     private update(event, prop: string) {
@@ -47,7 +47,8 @@ export default class AddLayerDialog
     private updateValue(prop, value) {
         this.setState(prevState => ({
             isOpen: prevState.isOpen,
-            layer: prevState.layer.clone().with(prop, value)
+            layer: prevState.layer.clone().with(prop, value),
+            layerId: prevState.layerId
         }));
     }
 

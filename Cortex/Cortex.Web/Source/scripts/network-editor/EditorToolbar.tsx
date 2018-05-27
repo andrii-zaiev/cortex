@@ -9,24 +9,26 @@ export default class EditorToolbar
     constructor(props) {
         super(props);
         this.openAddDialog = this.openAddDialog.bind(this);
-        this.onLayerAdded = this.onLayerAdded.bind(this);
+        this.closeAddDialog = this.closeAddDialog.bind(this);
         this.state = { isAddOpen: false, network: props.network };
     }
 
     public componentDidMount() {
-        EventBus.subscribe(MessageType.NewLayer, this.onLayerAdded);
+        EventBus.subscribe(MessageType.NewLayer, this.closeAddDialog);
+        EventBus.subscribe(MessageType.CloseAddDialog, this.closeAddDialog);
     }
 
     public componentWillUnmount() {
-        EventBus.unsubscribe(MessageType.NewLayer, this.onLayerAdded);
+        EventBus.unsubscribe(MessageType.NewLayer, this.closeAddDialog);
+        EventBus.subscribe(MessageType.CloseAddDialog, this.closeAddDialog);
     }
 
     private openAddDialog() {
-        this.setState(prevState => ({ isAddOpen: true }));
+        this.setState(prevState => ({ isAddOpen: true, network: prevState.network }));
     }
 
-    private onLayerAdded(layer) {
-        this.setState(prevState => ({ isAddOpen: false }));
+    private closeAddDialog() {
+        this.setState(prevState => ({ isAddOpen: false, network: prevState.network }));
     }
 
     private getNextLayerId() {
