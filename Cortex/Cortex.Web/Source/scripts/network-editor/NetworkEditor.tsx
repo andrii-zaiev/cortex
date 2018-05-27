@@ -8,6 +8,7 @@ import Network from './models/Network';
 import Layer from './models/Layer';
 import EventBus from './events/EventBus';
 import { MessageType } from './events/Message';
+import Connection from './models/Connection';
 
 class NetworkEditorProps {
     public networkId: string;
@@ -29,8 +30,9 @@ export default class NetworkEditor
         this.onLayerMoved = this.onLayerMoved.bind(this);
 
         const network = new Network([
-            new Layer(1, 'Layer 1', 100, 0, 10, 10)
-        ], []);
+            new Layer(1, 'Layer 1', 100, 0, 10, 10),
+            new Layer(2, 'Layer 2', 50, 0, 100, 10)
+        ], [new Connection(1, 1, 2)]);
 
         this.state = { network: network };
     }

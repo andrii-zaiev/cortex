@@ -2,12 +2,13 @@
 import Network from '../models/Network';
 import EventBus from '../events/EventBus';
 import { Message, MessageType } from '../events/Message';
+import ConnectionViewModel from './ConnectionViewModel';
 
 export default class NetworkViewModel {
     public layers: LayerViewModel[];
-    public connections: any[];
+    public connections: ConnectionViewModel[];
 
-    constructor(layers: LayerViewModel[], connections: any[]) {
+    constructor(layers: LayerViewModel[], connections: ConnectionViewModel[]) {
         this.layers = layers;
         this.connections = connections;
     }
@@ -17,17 +18,26 @@ export default class NetworkViewModel {
         for (let l of newLayers) {
             l.isSelected = l.model.id == layer.model.id;
         }
+        const newConnections: ConnectionViewModel[] = [].concat(this.connections);
+        for (let c of newConnections) {
+            c.isSelected = false;
+        }
 
-        return new NetworkViewModel(newLayers, this.connections);
+        return new NetworkViewModel(newLayers, newConnections);
     }
 
-    public deselectLayers() {
+    public deselectAll() {
         const newLayers: LayerViewModel[] = [].concat(this.layers);
         for (let l of newLayers) {
             l.isSelected = false;
         }
 
-        return new NetworkViewModel(newLayers, this.connections);
+        const newConnections: ConnectionViewModel[] = [].concat(this.connections);
+        for (let c of newConnections) {
+            c.isSelected = false;
+        }
+
+        return new NetworkViewModel(newLayers, newConnections);
     }
 
     public startLayerDragging(layer: LayerViewModel) {
@@ -62,9 +72,23 @@ export default class NetworkViewModel {
         return new NetworkViewModel(newLayers, this.connections);
     }
 
+    public selectConnection(connection: ConnectionViewModel) {
+        const newLayers: LayerViewModel[] = [].concat(this.layers);
+        for (let l of newLayers) {
+            l.isSelected = false;
+        }
+
+        const newConnections: ConnectionViewModel[] = [].concat(this.connections);
+        for (let c of newConnections) {
+            c.isSelected = c.model.id == connection.model.id;
+        }
+
+        return new NetworkViewModel(newLayers, newConnections);
+    }
+
     public static fromModel(network: Network) {
         return new NetworkViewModel(
             network.layers.map(l => new LayerViewModel(l)),
-            network.connections);
+            network.connections.map(c => new ConnectionViewModel(c)));
     }
 }

@@ -6,6 +6,7 @@ import { select, Selection, BaseType } from 'd3';
 import Layer from './models/Layer';
 import NetworkViewModel from './view-models/NetworkViewModel';
 import LayerViewModel from './view-models/LayerViewModel';
+import ConnectionViewModel from './view-models/ConnectionViewModel';
 
 const d3RootId: string = 'd3-root';
 const labelFontSize = 15;
@@ -61,10 +62,11 @@ export default class NetworkDisplayArea
         this.translate = this.translate.bind(this);
         this.endGrabbing = this.endGrabbing.bind(this);
         this.selectLayer = this.selectLayer.bind(this);
-        this.deselectLayers = this.deselectLayers.bind(this);
+        this.deselectAll = this.deselectAll.bind(this);
         this.startLayerDragging = this.startLayerDragging.bind(this);
         this.dragLayer = this.dragLayer.bind(this);
         this.dropLayer = this.dropLayer.bind(this);
+        this.selectConnection = this.selectConnection.bind(this);
 
         this.state = State.createInitial(props.network);
     }
@@ -78,19 +80,25 @@ export default class NetworkDisplayArea
     }
 
     componentDidMount() {
-        this.drawLayers();
+        this.draw();
     }
 
     componentDidUpdate() {
-        this.drawLayers();
+        this.draw();
     }
 
-    private drawLayers(): void {
+    private draw(): void {
         const svg = d3.select(`#${d3RootId}`)
             .on('mousemove', this.dragLayer)
             .on('mouseup', this.dropLayer);
 
-        const layerGroup = svg.selectAll('g').data(this.state.network.layers, l => (l as LayerViewModel).model.id.toString());
+        this.drawLayers(svg);
+        this.drawConnections(svg);
+    }
+
+    private drawLayers(svg: Selection<BaseType, {}, HTMLElement, any>) {
+        const layerGroup = svg.selectAll('g')
+            .data(this.state.network.layers, l => (l as LayerViewModel).model.id.toString());
         const layerRect = this.updateLayers(layerGroup.select('rect'));
         const layerLabel = this.updateLayerLabels(layerGroup.select('text'));
         const layerNameLabel = this.updateNameLabels(layerLabel.select('tspan#name'));
@@ -117,35 +125,79 @@ export default class NetworkDisplayArea
         return layerRect
             .attr('width', l => l.width * this.state.scale)
             .attr('height', l => l.height * this.state.scale)
-            .attr('x', l => l.x * this.state.scale + this.state.translate.x)
-            .attr('y', l => l.y * this.state.scale + this.state.translate.y)
+            .attr('x', l => this.convertX(l.x))
+            .attr('y', l => this.convertY(l.y))
             .style('fill', l => l.isSelected ? 'lightgray' : 'white')
             .style('cursor', l => l.isSelected ? 'move' : 'pointer');
     }
 
     private updateLayerLabels(layerLabel: Selection<BaseType, LayerViewModel, BaseType, {}>) {
         return layerLabel
-            .attr('x', l => l.x * this.state.scale + this.state.translate.x)
-            .attr('y', l => (l.y - 60) * this.state.scale + this.state.translate.y)
+            .attr('x', l => this.convertX(l.x))
+            .attr('y', l => this.convertY(l.y - 60))
             .attr('font-size', () => labelFontSize * this.state.scale);
+    }
+
+    private convertX(x: number) {
+        return x * this.state.scale + this.state.translate.x;
+    }
+
+    private convertY(y: number) {
+        return y * this.state.scale + this.state.translate.y;
     }
 
     private updateNameLabels(label: Selection<BaseType, LayerViewModel, BaseType, {}>) {
         return label
-            .attr('x', l => l.x * this.state.scale + this.state.translate.x)
+            .attr('x', l => this.convertX(l.x))
             .text(l => l.model.name);
     }
 
     private updateInfoLabels(label: Selection<BaseType, LayerViewModel, BaseType, {}>) {
         return label
-            .attr('x', l => l.x * this.state.scale + this.state.translate.x)
+            .attr('x', l => this.convertX(l.x))
             .text(l => l.info);
     }
 
     private updateSizeLabels(label: Selection<BaseType, LayerViewModel, BaseType, {}>) {
         return label
-            .attr('x', l => l.x * this.state.scale + this.state.translate.x)
+            .attr('x', l => this.convertX(l.x))
             .text(l => l.size);
+    }
+
+    private drawConnections(svg: Selection<BaseType, {}, HTMLElement, any>) {
+        const line = this.updateLines(svg.selectAll('line')
+            .data(this.state.network.connections));
+
+        this.updateLines(line.enter().append('line')
+            .style('cursor', 'pointer')
+            .on('click', c => this.selectConnection(c)));
+
+        line.exit().remove();
+    }
+
+    private updateLines(connection: Selection<BaseType, ConnectionViewModel, BaseType, {}>) {
+        const layersMap = new Map<number, LayerViewModel>();
+        for (let layer of this.state.network.layers) {
+            layersMap[layer.model.id] = layer;
+        }
+
+        return connection
+            .attr('x1', c => this.convertX(layersMap[c.model.fromId].x + layersMap[c.model.fromId].width))
+            .attr('y1', c => this.convertY(layersMap[c.model.fromId].y + layersMap[c.model.fromId].height / 2))
+            .attr('x2', c => this.convertX(layersMap[c.model.toId].x))
+            .attr('y2', c => this.convertY(layersMap[c.model.toId].y + layersMap[c.model.toId].height / 2))
+            .style('stroke', c => c.isSelected ? 'red' : 'black')
+            .style('stroke-width', 5)
+    }
+
+    private selectConnection(connection: ConnectionViewModel) {
+        d3.event.stopPropagation();
+
+        this.setState(prevState => new State(
+            prevState.network.selectConnection(connection),
+            prevState.translate,
+            prevState.scale,
+            prevState.grabbing));
     }
 
     private updateScale(scrollAmount: number): void {
@@ -195,15 +247,15 @@ export default class NetworkDisplayArea
             prevState.network.selectLayer(layer),
             prevState.translate,
             prevState.scale,
-            prevState.grabbing))
+            prevState.grabbing));
     }
 
-    private deselectLayers() {
+    private deselectAll() {
         this.setState(prevState => new State(
-            prevState.network.deselectLayers(),
+            prevState.network.deselectAll(),
             prevState.translate,
             prevState.scale,
-            prevState.grabbing))
+            prevState.grabbing));
     }
 
     private startLayerDragging(layer: LayerViewModel) {
@@ -254,7 +306,7 @@ export default class NetworkDisplayArea
                     onMouseDown={e => this.startGrabbing(e.clientX, e.clientY)}
                     onMouseMove={e => this.translate(e.clientX, e.clientY)}
                     onMouseUp={e => this.endGrabbing()}
-                    onClick={() => this.deselectLayers()}
+                    onClick={() => this.deselectAll()}
                     style={{ cursor: this.state.grabbing.cursor }}></svg>
             </div>
         );

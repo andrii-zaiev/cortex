@@ -2,7 +2,12 @@
 
 export default class Connection {
     public id: number;
-    public from: Layer;
-    public to: Layer;
-    public type: any;
+    public fromId: number;
+    public toId: number;
+
+    constructor(id: number, fromId: number, toId: number) {
+        this.id = id;
+        this.fromId = fromId;
+        this.toId = toId;
+    }
 }
