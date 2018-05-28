@@ -1,6 +1,12 @@
-﻿@{
+﻿@using Cortex.Auth
+@{
     ViewBag.Title = "Home";
 }
 
-<h2>Recent</h2>
-<h2>Popular public networks</h2>
+@if (User.Identity.IsAuthenticated)
+{
+    <h2>Recent</h2>
+    <div>
+        @await Component.InvokeAsync("RecentNetworks", new { userId = User.GetId() })
+    </div>
+}

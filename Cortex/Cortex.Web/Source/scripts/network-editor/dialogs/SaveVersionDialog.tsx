@@ -12,7 +12,7 @@ import NetworkService from '../services/NetworkService';
 
 export default class SaveVersionDialog
     extends React.Component<{ isOpen: boolean, network: Network, networkId: string, versionId: string },
-                            { isOpen: boolean, network: Network, comment: string, saving: boolean }> {
+                            { isOpen: boolean, network: Network, comment: string, saving: boolean, error: string }> {
     private appElement = document.getElementById('network-editor');
     private networkId: string;
     private versionId: string;
@@ -32,7 +32,8 @@ export default class SaveVersionDialog
             isOpen: props.isOpen,
             network: props.network,
             comment: '',
-            saving: false
+            saving: false,
+            error: ''
         };
     }
 
@@ -41,7 +42,8 @@ export default class SaveVersionDialog
             isOpen: nextProps.isOpen,
             network: nextProps.network,
             comment: prevState.comment,
-            saving: prevState.saving
+            saving: prevState.saving,
+            error: prevState.error
         };
     }
 
@@ -51,7 +53,8 @@ export default class SaveVersionDialog
             isOpen: this.state.isOpen,
             network: this.state.network,
             comment: comment,
-            saving: prevState.saving
+            saving: prevState.saving,
+            error: prevState.error
         }));
     }
 
@@ -65,12 +68,24 @@ export default class SaveVersionDialog
             isOpen: this.state.isOpen,
             network: this.state.network,
             comment: this.state.comment,
-            saving: true
+            saving: true,
+            error: prevState.error
         }));
 
         this.networkService.saveVersion(versionDto)
-            .then(success => alert(success))
-            .catch(() => alert('error'));
+            .then(id => {
+                const versionUrl = `${location.origin}/network/${this.networkId}/${id}`;
+                location.assign(versionUrl);
+            })
+            .catch(error => {
+                this.setState(prevState => ({
+                    isOpen: this.state.isOpen,
+                    network: this.state.network,
+                    comment: this.state.comment,
+                    saving: false,
+                    error: error
+                }));
+            });
     }
 
     public render() {
@@ -86,6 +101,10 @@ export default class SaveVersionDialog
                             <textarea maxLength={200} value={this.state.comment} onChange={this.updateComment} ></textarea>
                         </div>
                     </div>
+                    {this.state.error && 
+                        <div className="form-row">
+                            <label className="error-text">{this.state.error}</label>
+                        </div>}
                 </div>
                 <div className="dialog-buttons">
                     <button className="button" onClick={this.closeDialog}>Cancel</button>

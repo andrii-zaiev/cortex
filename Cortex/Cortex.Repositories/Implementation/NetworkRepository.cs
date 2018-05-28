@@ -98,6 +98,46 @@ namespace Cortex.Repositories.Implementation
             return await GetNetworkModelsAsync(networks);
         }
 
+        public async Task<IList<NetworkModel>> GetRecentNetworksAsync(Guid userId)
+        {
+            var recentCreatedNetworks = await Context.Networks
+                .Include(nameof(Network.ReadAccess))
+                .Include(nameof(Network.WriteAccess))
+                .Where(n => n.OwnerId == userId)
+                .OrderByDescending(n => n.CreatedDate)
+                .Take(5)
+                .Select(n => new
+                {
+                    Network = n,
+                    Date = n.CreatedDate
+                })
+                .ToListAsync();
+            var recentChangedNetworks = await Context.NetworkChangesets
+                .Include(nameof(NetworkChangeset.Network))
+                .Include($"{nameof(NetworkChangeset.Network)}.{nameof(Network.ReadAccess)}")
+                .Include($"{nameof(NetworkChangeset.Network)}.{nameof(Network.WriteAccess)}")
+                .Where(c => c.AuthorId == userId)
+                .OrderByDescending(n => n.Date)
+                .GroupBy(c => c.NetworkId)
+                .Select(g => new
+                {
+                    g.First().Network,
+                    Date = g.Max(c => c.Date)
+                })
+                .Take(5)
+                .ToListAsync();
+
+            List<Network> recentNetworks = recentChangedNetworks
+                .Concat(recentCreatedNetworks)
+                .OrderByDescending(n => n.Date)
+                .Select(n => n.Network)
+                .Distinct()
+                .Take(5)
+                .ToList();
+
+            return await GetNetworkModelsAsync(recentNetworks);
+        }
+
         private void CreateNetworkAccess(NetworkAccessModel networkAccess)
         {
             var entity = new NetworkAccess

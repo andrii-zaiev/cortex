@@ -9,8 +9,14 @@ export default class NetworkService extends BaseService {
         return network;
     }
 
-    public async saveVersion(version: VersionDto): Promise<boolean> {
+    public async saveVersion(version: VersionDto): Promise<string> {
         const response = await this.sendRequest('networks', 'POST', null, version);
-        return response.ok;
+        if (response.ok) {
+            return await response.json();
+        } else {
+            const errorMessage = await response.text();
+
+            throw new Error(errorMessage ? errorMessage : response.statusText);
+        }
     }
 }
