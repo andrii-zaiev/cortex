@@ -68,7 +68,16 @@ namespace Cortex.Web.Controllers
 
             var model = new NetworkVersionDetailsModel(version, network, author, canEdit, currentVersion.Id == versionId);
 
-            return View(model);
+            return View("GetVersion", model);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("/network/{networkId:guid}/current-version")]
+        public async Task<IActionResult> GetCurrentVersion(Guid networkId)
+        {
+            NetworkVersionMetadata currentVersion = await _networkVersionsService.GetCurrentVersionInfoAsync(networkId);
+
+            return await GetVersion(networkId, currentVersion.Id);
         }
     }
 }
