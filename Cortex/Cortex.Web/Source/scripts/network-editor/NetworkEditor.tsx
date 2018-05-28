@@ -101,7 +101,8 @@ export default class NetworkEditor
                 oldLayer.neuronsNumber,
                 oldLayer.type,
                 oldLayer.x + data.dx,
-                oldLayer.y + data.dy);
+                oldLayer.y + data.dy,
+                oldLayer.activation);
             return {
                 network: new Network(
                     prevState.network.layers.filter(l => l != oldLayer).concat(newLayer),

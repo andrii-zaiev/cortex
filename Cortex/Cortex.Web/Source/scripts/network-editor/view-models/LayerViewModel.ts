@@ -1,4 +1,5 @@
 ﻿import Layer from '../models/Layer';
+import ActivationType from '../models/ActivationType';
 
 const layerWidth = 50;
 const baseLayerHeight = 100;
@@ -33,8 +34,7 @@ export default class LayerViewModel {
     }
 
     public get info(): string {
-        //return this.model.activation;
-        return 'ReLU';
+        return ActivationType[this.model.activation];
     }
 
     public get size(): string {

@@ -6,6 +6,7 @@ import { MessageType } from './events/Message';
 import { SelectedItem, ItemType } from './models/SelectedItem';
 import Network from './models/Network';
 import LayerType from './models/LayerType';
+import ActivationType from './models/ActivationType';
 
 class Props {
     public isEdit: boolean;
@@ -89,18 +90,18 @@ export default class EditorToolbar
                             </div>
                             <div className="form-row">
                                 <label>Activation</label>
-                                <select>
-                                    <option value={LayerType.Dense}> Softmax</option>
-                                    <option value={LayerType.Convolutional}>ELU</option>
-                                    <option value={LayerType.Pooling}>SELU</option>
-                                    <option value={LayerType.Recurrent}>Softplus</option>
-                                    <option value={LayerType.Recurrent}>Softsign</option>
-                                    <option value={LayerType.Recurrent}>ReLU</option>
-                                    <option value={LayerType.Recurrent}>tanh</option>
-                                    <option value={LayerType.Recurrent}>Sigmoid</option>
-                                    <option value={LayerType.Recurrent}>Hard sigmoid</option>
-                                    <option value={LayerType.Recurrent}>Linear</option>
-                                    <option value={LayerType.Recurrent}>Other</option>
+                                <select value={this.state.layer.activation}>
+                                    <option value={ActivationType.Softmax}> Softmax</option>
+                                    <option value={ActivationType.ELU}>ELU</option>
+                                    <option value={ActivationType.SELU}>SELU</option>
+                                    <option value={ActivationType.Softplus}>Softplus</option>
+                                    <option value={ActivationType.Softsign}>Softsign</option>
+                                    <option value={ActivationType.ReLU}>ReLU</option>
+                                    <option value={ActivationType.tanh}>tanh</option>
+                                    <option value={ActivationType.Sigmoid}>Sigmoid</option>
+                                    <option value={ActivationType.HardSigmoid}>Hard sigmoid</option>
+                                    <option value={ActivationType.Linear}>Linear</option>
+                                    <option value={ActivationType.Other}>Other</option>
                                 </select>
                             </div>
                             <div className="form-row">
@@ -150,7 +151,7 @@ export default class EditorToolbar
                             </div>
                             <div className="form-row">
                                 <label>Activation</label>
-                                <span>ReLU</span>
+                                <span>{this.state.layer.activationName}</span>
                             </div>
                             <div className="form-row">
                                 <label>Is input</label>
