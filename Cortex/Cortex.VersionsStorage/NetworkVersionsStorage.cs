@@ -23,7 +23,7 @@ namespace Cortex.VersionsStorage
             Repository.Init(networkDirectoryPath);
         }
 
-        public async Task<string> SaveAsync(Guid networkId, string networkSnapshot)
+        public async Task<string> SaveAsync(Guid networkId, string comment, string networkSnapshot)
         {
             string snapshotFilePath = GetNetworkSnapshotPath(networkId);
 
@@ -34,8 +34,8 @@ namespace Cortex.VersionsStorage
             {
                 repository.Index.Add(SnapshotFileName);
 
-                var signature = new Signature("system", String.Empty, DateTimeOffset.UtcNow);
-                Commit commit = repository.Commit(String.Empty, signature, signature);
+                var signature = new Signature("system", "system@example.com", DateTimeOffset.UtcNow);
+                Commit commit = repository.Commit(comment, signature, signature);
 
                 return commit.Sha;
             }

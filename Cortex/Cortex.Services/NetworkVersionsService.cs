@@ -53,7 +53,7 @@ namespace Cortex.Services
         {
             string json = JsonConvert.SerializeObject(version.Diagram);
 
-            string sha = await _versionsStorage.SaveAsync(version.NetworkId, json);
+            string sha = await _versionsStorage.SaveAsync(version.NetworkId, version.Comment, json);
 
             NetworkChangesetModel newChangeset = NetworkChangesetModel.CreateNew(
                 version.NetworkId,

@@ -76,13 +76,13 @@ export default class NetworkDisplayArea
         this.state = State.createInitial(props.network, props.isEdit);
     }
 
-    public static getDerivedStateFromProps(nextProps: { network: Network }, prevState: State) {
+    public static getDerivedStateFromProps(nextProps: { network: Network, isEdit: boolean }, prevState: State) {
         return new State(
             NetworkViewModel.fromModel(nextProps.network),
             prevState.translate,
             prevState.scale,
             prevState.grabbing,
-            prevState.isEdit);
+            nextProps.isEdit);
     }
 
     componentDidMount() {

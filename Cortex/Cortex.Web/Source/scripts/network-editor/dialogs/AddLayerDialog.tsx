@@ -55,6 +55,11 @@ export default class AddLayerDialog
 
     private addLayer() {
         const layer = this.state.layer.toModel(this.state.layerId);
+        this.setState(prevState => ({
+            isOpen: prevState.isOpen,
+            layer: NewLayerViewModel.init(),
+            layerId: prevState.layerId
+        }));
         EventBus.emit(new Message<Layer>(MessageType.NewLayer, layer));
     }
 

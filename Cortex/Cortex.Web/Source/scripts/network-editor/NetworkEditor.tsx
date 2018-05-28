@@ -10,6 +10,8 @@ import EventBus from './events/EventBus';
 import { MessageType } from './events/Message';
 import Connection from './models/Connection';
 import LayerDetails from './LayerDetails';
+import NetworkService from './services/NetworkService';
+import { networkInterfaces } from 'os';
 
 class NetworkEditorProps {
     public networkId: string;
@@ -20,10 +22,12 @@ class NetworkEditorProps {
 class NetworkEditorState {
     public network: Network;
     public isEdit: boolean;
+    public isLoading: boolean;
 
-    constructor(network: Network, isEdit: boolean) {
+    constructor(network: Network, isEdit: boolean, isLoading: boolean) {
         this.network = network;
         this.isEdit = isEdit;
+        this.isLoading = isLoading;
     }
 }
 
@@ -32,6 +36,7 @@ export default class NetworkEditor
     private isReadOnly: boolean;
     private networkId: string;
     private versionId: string;
+    private networkService = new NetworkService();
 
     constructor(props: NetworkEditorProps) {
         super(props);
@@ -46,12 +51,9 @@ export default class NetworkEditor
         this.isReadOnly = props.isReadOnly;
         this.networkId = props.networkId;
         this.versionId = props.versionId;
-        const network = new Network([
-            new Layer(1, 'Layer 1', 100, 0, 10, 10),
-            new Layer(2, 'Layer 2', 50, 0, 100, 10)
-        ], [new Connection(1, 1, 2)]);
+        const network = new Network([], []);
 
-        this.state = new NetworkEditorState(network, false);
+        this.state = new NetworkEditorState(network, false, true);
     }
 
     public componentDidMount() {
@@ -60,6 +62,18 @@ export default class NetworkEditor
         EventBus.subscribe(MessageType.NewConnection, this.onConnectionAdded);
         EventBus.subscribe(MessageType.DeleteLayer, this.deleteLayer);
         EventBus.subscribe(MessageType.DeleteConnection, this.deleteConnection);
+
+        this.loadNetwork();
+    }
+
+    private loadNetwork() {
+        if (this.versionId) {
+            this.networkService.getVersion(this.versionId)
+                .then(network => this.setState(prevState => new NetworkEditorState(network, prevState.isEdit, false)))
+                .catch(() => alert('failed to load version'));
+        } else {
+            this.setState(prevState => new NetworkEditorState(prevState.network, prevState.isEdit, false));
+        }
     }
 
     public componentWillUnmount() {
@@ -121,7 +135,7 @@ export default class NetworkEditor
     }
 
     private startEditing() {
-        this.setState(prevState => new NetworkEditorState(prevState.network, true));
+        this.setState(prevState => new NetworkEditorState(prevState.network, true, prevState.isLoading));
     }
 
     public render(): React.ReactNode {
@@ -136,6 +150,10 @@ export default class NetworkEditor
                     <EditorToolbar network={this.state.network} networkId={this.networkId} versionId={this.versionId} />}
                 
                 <NetworkDisplayArea network={this.state.network} isEdit={this.state.isEdit} />
+                {this.state.isLoading &&
+                    <div className="fade">
+                        <i className="fa fa-2x fa-spinner fa-spin spinner" />
+                    </div>}
             </div>
             );
     }

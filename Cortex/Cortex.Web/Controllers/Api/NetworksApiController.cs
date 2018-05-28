@@ -24,7 +24,7 @@ namespace Cortex.Web.Controllers.Api
         }
 
         [HttpPost("api/networks")]
-        public async Task<IActionResult> SaveVersion(NetworkVersionInputModel networkVersion)
+        public async Task<IActionResult> SaveVersion([FromBody]NetworkVersionInputModel networkVersion)
         {
             bool canEdit = await _networkService.CanEditNetworkAsync(networkVersion.NetworkId, User.GetId());
             if (!canEdit)
@@ -35,7 +35,7 @@ namespace Cortex.Web.Controllers.Api
             NetworkVersionMetadata currentVersion =
                 await _networkVersionsService.GetCurrentVersionInfoAsync(networkVersion.NetworkId);
 
-            if (currentVersion.Id != networkVersion.BaseVersionId)
+            if (currentVersion?.Id != networkVersion.BaseVersionId)
             {
                 return BadRequest("Version is outdated");
             }

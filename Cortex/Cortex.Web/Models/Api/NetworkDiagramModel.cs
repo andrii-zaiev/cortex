@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Cortex.Services.Dtos;
+using Newtonsoft.Json;
 
 namespace Cortex.Web.Models.Api
 {
@@ -16,15 +17,15 @@ namespace Cortex.Web.Models.Api
             Connections = diagram.Connections.Select(c => new ConnectionModel(c)).ToList();
         }
 
-        public IList<LayerModel> Layers { get; }
+        public List<LayerModel> Layers { get; set; }
 
-        public IList<ConnectionModel> Connections { get; }
+        public List<ConnectionModel> Connections { get; set; }
 
         public NetworkDiagram ToDto()
         {
             return new NetworkDiagram(
-                Layers.Select(l => l.ToDto()).ToList(),
-                Connections.Select(c => c.ToDto()).ToList());
+                Layers?.Select(l => l.ToDto()).ToList() ?? new List<Layer>(),
+                Connections?.Select(c => c.ToDto()).ToList() ?? new List<Connection>());
         }
     }
 }

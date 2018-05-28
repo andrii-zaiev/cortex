@@ -22,17 +22,20 @@ export default class AddConnectionDialog
 
         this.state = {
             isOpen: props.isOpen,
-            connection: new NewConnectionViewModel(props.network.layers[0].id, props.network.layers[1].id),
+            connection: new NewConnectionViewModel(undefined, undefined),
             connectionId: props.connectionId,
             network: props.network
         };
     }
 
     public static getDerivedStateFromProps(nextProps, prevState) {
+        const firstLayer = nextProps.network.layers[0];
+        const secondLayer = nextProps.network.layers[1];
+
         return {
             isOpen: nextProps.isOpen,
-            layer: prevState.layer,
-            layerId: nextProps.layerId,
+            connection: new NewConnectionViewModel(firstLayer ? firstLayer.id : undefined, secondLayer ? secondLayer.id : undefined),
+            connectionId: nextProps.connectionId,
             network: nextProps.network
         };
     }

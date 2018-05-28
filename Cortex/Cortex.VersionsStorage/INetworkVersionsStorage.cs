@@ -7,7 +7,7 @@ namespace Cortex.VersionsStorage
     {
         void Init(Guid networkId);
 
-        Task<string> SaveAsync(Guid networkId, string networkSnapshot);
+        Task<string> SaveAsync(Guid networkId, string comment, string networkSnapshot);
 
         Task<string> GetSnapshotAsync(Guid networkId, string sha);
     }
