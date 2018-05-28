@@ -1,4 +1,6 @@
-﻿@using Cortex.Web.Models.Networks
+﻿@using Cortex.Auth
+@using Cortex.Web.Models.Networks
+@using Cortex.Web.Helpers
 @model List<NetworkModel>
 
 @if (Model.Count > 0)
@@ -13,9 +15,7 @@
                     </a>
                     <small>
                         <span>by</span>
-                        <span>
-                            @network.Author.Name &lt;@network.Author.UserName.ToLower()&gt;
-                        </span>
+                        @Html.DisplayForUser(network.Author, User.GetNullableId())
                         <time datetime="@network.CreatedDate.ToString("o")" data-local></time>
                     </small>
                 </div>

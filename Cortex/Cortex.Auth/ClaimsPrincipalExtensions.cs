@@ -6,6 +6,18 @@ namespace Cortex.Auth
     {
         public static Guid GetId(this ClaimsPrincipal principal)
         {
+            Guid? id = GetNullableId(principal);
+
+            if (id.HasValue)
+            {
+                return id.Value;
+            }
+
+            throw new InvalidOperationException("User Id not found in ClaimsPrincipal");
+        }
+
+        public static Guid? GetNullableId(this ClaimsPrincipal principal)
+        {
             string idString = principal.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (Guid.TryParse(idString, out Guid id))
@@ -13,7 +25,7 @@ namespace Cortex.Auth
                 return id;
             }
 
-            throw new InvalidOperationException("User Id not found in ClaimsPrincipal");
+            return null;
         }
     }
 }

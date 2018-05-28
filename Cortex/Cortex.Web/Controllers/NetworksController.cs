@@ -74,11 +74,17 @@ namespace Cortex.Web.Controllers
 
             Dictionary<Guid, User> users = (await _userService.GetUsersAsync(networkUserIds)).ToDictionary(u => u.Id);
 
-            Guid userId = User.GetId();
+            bool isOwner = false;
+            bool canEdit = false;
 
-            bool isOwner = userId == network.OwnerId;
-            bool canEdit = User.Identity.IsAuthenticated
-                        && await _networkService.CanEditNetworkAsync(id, userId);
+            if (User.Identity.IsAuthenticated)
+            {
+                Guid userId = User.GetId();
+
+                isOwner = userId == network.OwnerId;
+                canEdit = User.Identity.IsAuthenticated
+                       && await _networkService.CanEditNetworkAsync(id, userId);
+            }
 
             var model = new NetworkDetailsModel(network, users, isOwner, canEdit);
 

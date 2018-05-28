@@ -1,4 +1,5 @@
-﻿@using Cortex.Web.Models.NetworkVersions
+﻿@using Cortex.Auth
+@using Cortex.Web.Models.NetworkVersions
 @model List<NetworkVersionModel>
 
 @if (Model.Count == 0)
@@ -17,9 +18,7 @@ else
                            asp-action="GetVersion"
                            asp-route-networkId="@version.NetworkId"
                            asp-route-versionId="@version.Id">
-                            <span>
-                                @version.Author.Name &lt;@version.Author.UserName.ToLower()&gt;
-                            </span>
+                            @Html.DisplayForUser(version.Author, User.GetNullableId())
                             <time datetime="@version.Date.ToString("o")" data-local></time>
                         </a>
                     </small>

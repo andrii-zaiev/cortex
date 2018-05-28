@@ -1,4 +1,5 @@
-﻿@model Cortex.Web.Models.NetworkVersions.NetworkVersionDetailsModel
+﻿@using Cortex.Auth
+@model Cortex.Web.Models.NetworkVersions.NetworkVersionDetailsModel
 
 @{
     ViewBag.Title = "Version of " + Model.NetworkName;
@@ -13,9 +14,7 @@
 
 <small>
     <span>Version by</span>
-    <span>
-        @Model.Author.Name &lt;@Model.Author.UserName.ToLower()&gt;
-    </span>
+    @Html.DisplayForUser(Model.Author, User.GetNullableId())
     <time datetime="@Model.Date.ToString("o")" data-local></time>
 </small>
 
