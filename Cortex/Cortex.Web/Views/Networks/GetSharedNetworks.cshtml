@@ -12,8 +12,8 @@
     <div class="networks-list">
         @foreach (NetworkModel network in Model)
         {
-            <div class="network-container">
-                <div class="network-heading">
+            <div class="list-item-container">
+                <div class="list-item-heading">
                     <a class="fs-3" asp-controller="Networks" asp-action="GetNetwork" asp-route-id="@network.Id">
                         @network.Name
                     </a>

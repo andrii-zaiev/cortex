@@ -5,18 +5,23 @@
 }
 
 <div class="heading">
-    <span class="fs-2">@Model.NetworkName</span>
-    <small>
-        <span>Version by</span>
-        <span>
-            @Model.Author.Name &lt;@Model.Author.UserName.ToLower()&gt;
-        </span>
-        <time datetime="@Model.Date.ToString("o")" data-local></time>
-    </small>
-    <p>
-        @Model.Comment
-    </p>
+    <a class="fs-2" asp-controller="Networks" asp-action="GetNetwork" asp-route-id="@Model.NetworkId">
+        @Model.NetworkName
+    </a>
 </div>
+
+
+<small>
+    <span>Version by</span>
+    <span>
+        @Model.Author.Name &lt;@Model.Author.UserName.ToLower()&gt;
+    </span>
+    <time datetime="@Model.Date.ToString("o")" data-local></time>
+</small>
+
+<p>
+    @Model.Comment
+</p>
 
 <div id="network-editor"
      data-network-id="@Model.NetworkId"

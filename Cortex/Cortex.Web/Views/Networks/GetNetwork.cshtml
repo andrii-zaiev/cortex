@@ -88,6 +88,6 @@
         }
     </div>
     <div>
-        @await Component.InvokeAsync("NetworkVersions", new { Model.Id })
+        @await Component.InvokeAsync("NetworkVersions", new { networkId = Model.Id })
     </div>
 </div>

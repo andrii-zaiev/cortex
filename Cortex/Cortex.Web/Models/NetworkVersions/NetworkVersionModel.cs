@@ -9,6 +9,7 @@ namespace Cortex.Web.Models.NetworkVersions
         public NetworkVersionModel(NetworkVersionMetadata versionMetadata, User author)
         {
             Id = versionMetadata.Id;
+            NetworkId = versionMetadata.NetworkId;
             Comment = versionMetadata.Comment;
             Date = versionMetadata.Date;
 
@@ -16,6 +17,8 @@ namespace Cortex.Web.Models.NetworkVersions
         }
 
         public Guid Id { get; }
+
+        public Guid NetworkId { get; }
 
         public string Comment { get; }
 

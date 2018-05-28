@@ -7,5 +7,34 @@
 }
 else
 {
-
+    <div>
+        @foreach (NetworkVersionModel version in Model)
+        {
+            <div class="list-item-container">
+                <div class="list-item-heading">
+                    <small>
+                        <a asp-controller="NetworkVersions"
+                           asp-action="GetVersion"
+                           asp-route-networkId="@version.NetworkId"
+                           asp-route-versionId="@version.Id">
+                            <span>
+                                @version.Author.Name &lt;@version.Author.UserName.ToLower()&gt;
+                            </span>
+                            <time datetime="@version.Date.ToString("o")" data-local></time>
+                        </a>
+                    </small>
+                </div>
+                @if (String.IsNullOrEmpty(version.Comment))
+                {
+                    <p class="empty-text">
+                        No comment
+                    </p>
+                }
+                else
+                {
+                    <p class="truncated-text" title="@version.Comment">@version.Comment</p>
+                }
+            </div>
+        }
+    </div>
 }
