@@ -48,6 +48,7 @@ export default class EditorToolbar
         this.onItemSelected = this.onItemSelected.bind(this);
         this.openSaveDialog = this.openSaveDialog.bind(this);
         this.closeSaveDialog = this.closeSaveDialog.bind(this);
+        this.reloadNetwork = this.reloadNetwork.bind(this);
 
         this.state = new State(false, false, props.network, null, false);
     }
@@ -166,6 +167,10 @@ export default class EditorToolbar
             false));
     }
 
+    private reloadNetwork() {
+        location.reload(false);
+    }
+
     public render(): React.ReactNode {
         return (
             <div className="toolbar">
@@ -173,7 +178,7 @@ export default class EditorToolbar
                     <i className="fa fa-save" />
                     <span>Save</span>
                 </button>
-                <button className="toolbar-button" onClick={this.openAddDialog}>
+                <button className="toolbar-button" onClick={this.reloadNetwork}>
                     <i className="fa fa-close" />
                     <span>Cancel</span>
                 </button>
