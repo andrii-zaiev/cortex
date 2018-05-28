@@ -80,8 +80,8 @@ export default class NetworkEditor
         EventBus.unsubscribe(MessageType.NewLayer, this.onLayerAdded);
         EventBus.unsubscribe(MessageType.MoveLayer, this.onLayerMoved);
         EventBus.unsubscribe(MessageType.NewConnection, this.onConnectionAdded);
-        EventBus.unsubscribe(MessageType.DeleteLayer, this.onConnectionAdded);
-        EventBus.unsubscribe(MessageType.DeleteConnection, this.onConnectionAdded);
+        EventBus.unsubscribe(MessageType.DeleteLayer, this.deleteLayer);
+        EventBus.unsubscribe(MessageType.DeleteConnection, this.deleteConnection);
     }
 
     private onLayerAdded(layer: Layer) {
@@ -148,8 +148,12 @@ export default class NetworkEditor
                     </button>}
                 {this.state.isEdit &&
                     <EditorToolbar network={this.state.network} networkId={this.networkId} versionId={this.versionId} />}
-                
-                <NetworkDisplayArea network={this.state.network} isEdit={this.state.isEdit} />
+
+                <div className="display-area"
+                    style={{ borderTop: this.state.isEdit ? 'none' : '1px solid #BDBDBD' }}>
+                    <NetworkDisplayArea network={this.state.network} isEdit={this.state.isEdit} />
+                    <LayerDetails isEdit={this.state.isEdit} network={this.state.network} />
+                </div>
                 {this.state.isLoading &&
                     <div className="fade">
                         <i className="fa fa-2x fa-spinner fa-spin spinner" />

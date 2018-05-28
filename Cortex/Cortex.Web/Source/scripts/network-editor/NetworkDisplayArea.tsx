@@ -319,8 +319,6 @@ export default class NetworkDisplayArea
 
     public render(): React.ReactNode {
         return (
-            <div className="display-area"
-                style={{ borderTop: this.state.isEdit ? 'none' : '1px solid #BDBDBD' }}>
                 <svg id={d3RootId}
                     onWheel={e => this.updateScale(e)}
                     onMouseDown={e => this.startGrabbing(e.clientX, e.clientY)}
@@ -328,7 +326,6 @@ export default class NetworkDisplayArea
                     onMouseUp={e => this.endGrabbing()}
                     onClick={() => this.deselectAll()}
                     style={{ cursor: this.state.grabbing.cursor }}></svg>
-            </div>
         );
     }
 }

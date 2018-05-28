@@ -35,7 +35,8 @@
     > input,
     > textarea,
     > .editor {
-        flex-grow: 1;
+        flex: 1 1 0%;
+        width: 100%;
     }
 
     > input[type="checkbox"] {
@@ -47,6 +48,19 @@
         resize: vertical;
         min-height: 50px;
         max-height: 300px;
+    }
+}
+
+.form-dense {
+    .form();
+
+    .form-row,
+    .plain-form-row {
+        margin: 5px 0;
+
+        > .top-label {
+            margin-top: 0;
+        }
     }
 }
 
