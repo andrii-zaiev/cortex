@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Cortex.DataAccess;
 using Cortex.DataAccess.Entities;
 using Cortex.DomainModels;
+using Cortex.Exceptions;
 using Cortex.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -52,6 +53,18 @@ namespace Cortex.Repositories.Implementation
             Context.NetworkChangesets.Add(entity);
 
             await Context.SaveChangesAsync();
+        }
+
+        public async Task<NetworkChangesetModel> GetNetworkChangesetAsync(Guid changesetId)
+        {
+            NetworkChangeset entity = await GetByIdAsync(changesetId);
+
+            if (entity == null)
+            {
+                throw new EntityNotFoundException(typeof(NetworkChangeset), changesetId);
+            }
+
+            return new NetworkChangesetModel(entity);
         }
     }
 }

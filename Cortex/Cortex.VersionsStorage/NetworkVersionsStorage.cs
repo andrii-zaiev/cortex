@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using LibGit2Sharp;
 
@@ -37,6 +38,21 @@ namespace Cortex.VersionsStorage
                 Commit commit = repository.Commit(String.Empty, signature, signature);
 
                 return commit.Sha;
+            }
+        }
+
+        public async Task<string> GetSnapshotAsync(Guid networkId, string sha)
+        {
+            string repositoryPath = GetNetworkRepositoryPath(networkId);
+            using (var repository = new Repository(repositoryPath))
+            {
+                Commit commit = repository.Commits.Single(c => c.Sha == sha);
+                var snapshotBlob = (Blob) commit[SnapshotFileName].Target;
+
+                using (var snapshotReader = new StreamReader(snapshotBlob.GetContentStream()))
+                {
+                    return await snapshotReader.ReadToEndAsync();
+                }
             }
         }
 

@@ -21,7 +21,7 @@
     <span>
         @Model.Author.Name &lt;@Model.Author.UserName.ToLower()&gt;
     </span>
-    <span>@Model.CreatedDate.ToString("dd-MMM-yyyy HH:mm 'UTC'")</span>
+    <time datetime="@Model.CreatedDate.ToString("o")" data-local></time>
 </small>
 
 @if (Model.IsOwner)

@@ -6,7 +6,7 @@ namespace Cortex.Web.Models.Api
     {
         public Guid NetworkId { get; set; }
 
-        public Guid BaseVersionId { get; set; }
+        public Guid? BaseVersionId { get; set; }
 
         public string Comment { get; set; }
 

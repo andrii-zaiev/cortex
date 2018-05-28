@@ -1,0 +1,24 @@
+﻿@model Cortex.Web.Models.NetworkVersions.NetworkVersionDetailsModel
+
+@{
+    ViewBag.Title = "Version of " + Model.NetworkName;
+}
+
+<div class="heading">
+    <span class="fs-2">@Model.NetworkName</span>
+    <small>
+        <span>Version by</span>
+        <span>
+            @Model.Author.Name &lt;@Model.Author.UserName.ToLower()&gt;
+        </span>
+        <time datetime="@Model.Date.ToString("o")" data-local></time>
+    </small>
+    <p>
+        @Model.Comment
+    </p>
+</div>
+
+<div id="network-editor"
+     data-network-id="@Model.NetworkId"
+     data-version-id="@Model.Id"
+     data-is-read-only="@Model.IsReadOnly"></div>

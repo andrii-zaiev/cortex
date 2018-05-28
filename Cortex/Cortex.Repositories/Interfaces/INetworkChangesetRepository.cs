@@ -12,5 +12,7 @@ namespace Cortex.Repositories.Interfaces
         Task<NetworkChangesetModel> GetNewestNetworkChangesetAsync(Guid networkId);
 
         Task CreateChangesetAsync(NetworkChangesetModel newChangeset);
+
+        Task<NetworkChangesetModel> GetNetworkChangesetAsync(Guid changesetId);
     }
 }

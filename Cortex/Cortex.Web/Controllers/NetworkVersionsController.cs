@@ -15,16 +15,16 @@ namespace Cortex.Web.Controllers
     public class NetworkVersionsController : Controller
     {
         private readonly INetworkService _networkService;
-        private readonly INetworkVersionsService _networkVersions;
+        private readonly INetworkVersionsService _networkVersionsService;
         private readonly IUserService _userService;
 
         public NetworkVersionsController(
             INetworkService networkService,
-            INetworkVersionsService networkVersions,
+            INetworkVersionsService networkVersionsService,
             IUserService userService)
         {
             _networkService = networkService;
-            _networkVersions = networkVersions;
+            _networkVersionsService = networkVersionsService;
             _userService = userService;
         }
 
@@ -38,7 +38,7 @@ namespace Cortex.Web.Controllers
                 return Forbid();
             }
 
-            NetworkVersionMetadata currentVersion = await _networkVersions.GetCurrentVersionAsync(networkId);
+            NetworkVersionMetadata currentVersion = await _networkVersionsService.GetCurrentVersionInfoAsync(networkId);
             Network network = await _networkService.GetNetworkAsync(networkId);
 
             var model = new NewNetworkVersionModel(network, currentVersion?.Id);
@@ -59,7 +59,16 @@ namespace Cortex.Web.Controllers
                 return Forbid();
             }
 
-            return new EmptyResult();
+            NetworkVersionMetadata version = await _networkVersionsService.GetVersionInfoAsync(versionId);
+            NetworkVersionMetadata currentVersion = await _networkVersionsService.GetCurrentVersionInfoAsync(networkId);
+            Network network = await _networkService.GetNetworkAsync(networkId);
+            User author = await _userService.GetUserAsync(version.AuthorId);
+            bool canEdit = User.Identity.IsAuthenticated
+                        && await _networkService.CanEditNetworkAsync(networkId, User.GetId());
+
+            var model = new NetworkVersionDetailsModel(version, network, author, canEdit, currentVersion.Id == versionId);
+
+            return View(model);
         }
     }
 }

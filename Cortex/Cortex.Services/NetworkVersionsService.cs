@@ -35,16 +35,23 @@ namespace Cortex.Services
                 .ToList();
         }
 
-        public async Task<NetworkVersionMetadata> GetCurrentVersionAsync(Guid networkId)
+        public async Task<NetworkVersionMetadata> GetCurrentVersionInfoAsync(Guid networkId)
         {
             NetworkChangesetModel changeset = await _changesetRepository.GetNewestNetworkChangesetAsync(networkId);
 
             return changeset != null ? new NetworkVersionMetadata(changeset) : null;
         }
 
+        public async Task<NetworkVersionMetadata> GetVersionInfoAsync(Guid versionId)
+        {
+            NetworkChangesetModel changeset = await _changesetRepository.GetNetworkChangesetAsync(versionId);
+
+            return new NetworkVersionMetadata(changeset);
+        }
+
         public async Task<Guid> SaveVersionAsync(NewNetworkVersion version)
         {
-            string json = JsonConvert.SerializeObject(version.NetworkDiagram);
+            string json = JsonConvert.SerializeObject(version.Diagram);
 
             string sha = await _versionsStorage.SaveAsync(version.NetworkId, json);
 
@@ -57,6 +64,17 @@ namespace Cortex.Services
             await _changesetRepository.CreateChangesetAsync(newChangeset);
 
             return newChangeset.Id;
+        }
+
+        public async Task<NetworkVersion> GetVersionAsync(Guid versionId)
+        {
+            NetworkChangesetModel changeset = await _changesetRepository.GetNetworkChangesetAsync(versionId);
+
+            string snapshot = await _versionsStorage.GetSnapshotAsync(changeset.NetworkId, changeset.Sha);
+
+            var diagram = JsonConvert.DeserializeObject<NetworkDiagram>(snapshot);
+
+            return new NetworkVersion(changeset, diagram);
         }
     }
 }

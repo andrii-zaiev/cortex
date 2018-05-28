@@ -33,18 +33,42 @@ namespace Cortex.Web.Controllers.Api
             }
 
             NetworkVersionMetadata currentVersion =
-                await _networkVersionsService.GetCurrentVersionAsync(networkVersion.NetworkId);
+                await _networkVersionsService.GetCurrentVersionInfoAsync(networkVersion.NetworkId);
 
             if (currentVersion.Id != networkVersion.BaseVersionId)
             {
                 return BadRequest("Version is outdated");
             }
 
+            var versionDto = new NewNetworkVersion(
+                networkVersion.NetworkId,
+                networkVersion.Comment,
+                networkVersion.Network.ToDto(),
+                User.GetId());
 
-
-            Guid newVersionId = await _networkVersionsService.SaveVersionAsync(new NewNetworkVersion());
+            Guid newVersionId = await _networkVersionsService.SaveVersionAsync(versionDto);
 
             return Ok(newVersionId);
+        }
+
+        [HttpGet("api/networks/{versionId:guid}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetVersion(Guid versionId)
+        {
+            NetworkVersion version = await _networkVersionsService.GetVersionAsync(versionId);
+
+            bool canAccess = User.Identity.IsAuthenticated
+                ? await _networkService.CanAccessNetworkAsync(version.Metadata.NetworkId, User.GetId())
+                : await _networkService.CanAccessNetworkAnonymouslyAsync(version.Metadata.NetworkId);
+
+            if (!canAccess)
+            {
+                return Forbid();
+            }
+
+            var model = new NetworkDiagramModel(version.Diagram);
+
+            return Ok(model);
         }
     }
 }
