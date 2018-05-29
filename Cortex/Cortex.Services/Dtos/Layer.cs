@@ -13,5 +13,13 @@
         public double X { get; set; }
 
         public double Y { get; set; }
+
+        public int KernelsNumber { get; set; }
+
+        public int KernelWidth { get; set; }
+
+        public int KernelHeight { get; set; }
+
+        public int Activation { get; set; }
     }
 }

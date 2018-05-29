@@ -4,7 +4,7 @@ import LayerType from '../models/LayerType';
 
 const layerWidth = 50;
 const baseLayerHeight = 50;
-const sin45 = 0.85;
+const sin45 = 0.7;
 
 export default class LayerViewModel {
     public model: Layer;

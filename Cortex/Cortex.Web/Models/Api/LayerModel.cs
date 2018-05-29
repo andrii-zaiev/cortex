@@ -16,6 +16,10 @@ namespace Cortex.Web.Models.Api
             NeuronsNumber = layer.NeuronsNumber;
             X = layer.X;
             Y = layer.Y;
+            Activation = layer.Activation;
+            KernelsNumber = layer.KernelsNumber;
+            KernelWidth = layer.KernelWidth;
+            KernelHeight = layer.KernelHeight;
         }
 
         public int Id { get; set; }
@@ -26,9 +30,17 @@ namespace Cortex.Web.Models.Api
 
         public int NeuronsNumber { get; set; }
 
+        public int Activation { get; set; }
+
         public double X { get; set; }
 
         public double Y { get; set; }
+
+        public int KernelsNumber { get; set; }
+
+        public int KernelWidth { get; set; }
+
+        public int KernelHeight { get; set; }
 
         public Layer ToDto()
         {
@@ -39,7 +51,11 @@ namespace Cortex.Web.Models.Api
                 NeuronsNumber = NeuronsNumber,
                 Type = Type,
                 X = X,
-                Y = Y
+                Y = Y,
+                Activation = Activation,
+                KernelsNumber = KernelsNumber,
+                KernelWidth = KernelWidth,
+                KernelHeight = KernelHeight
             };
         }
     }

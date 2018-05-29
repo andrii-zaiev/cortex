@@ -11,11 +11,13 @@
     <None Remove="Source\scripts\network-editor\events\EventBus.ts" />
     <None Remove="Source\scripts\network-editor\events\Message.ts" />
     <None Remove="Source\scripts\network-editor\LayerDetails.tsx" />
+    <None Remove="Source\scripts\network-editor\models\ActivationType.ts" />
     <None Remove="Source\scripts\network-editor\models\LayerType.ts" />
     <None Remove="Source\scripts\network-editor\models\SelectedItem.ts" />
     <None Remove="Source\scripts\network-editor\services\dtos\VersionDto.ts" />
     <None Remove="Source\scripts\network-editor\services\NetworkService.ts" />
     <None Remove="Source\scripts\network-editor\view-models\ConnectionViewModel.ts" />
+    <None Remove="Source\scripts\network-editor\view-models\EditLayerViewModel.ts" />
     <None Remove="Source\scripts\network-editor\view-models\LayerViewModel.ts" />
     <None Remove="Source\scripts\network-editor\view-models\NetworkViewModel.ts" />
     <None Remove="Source\scripts\network-editor\view-models\NewConnectionViewModel.ts" />
@@ -42,11 +44,13 @@
     <TypeScriptCompile Include="Source\scripts\network-editor\events\Message.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\events\EventBus.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\LayerDetails.tsx" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\models\ActivationType.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\models\LayerType.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\models\SelectedItem.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\services\dtos\VersionDto.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\services\NetworkService.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\view-models\ConnectionViewModel.ts" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\view-models\EditLayerViewModel.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\view-models\LayerViewModel.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\view-models\NetworkViewModel.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\view-models\NewConnectionViewModel.ts" />
