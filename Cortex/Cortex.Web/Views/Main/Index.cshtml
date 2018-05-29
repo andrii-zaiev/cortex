@@ -1,6 +1,7 @@
 ﻿@using Cortex.Auth
 @{
     ViewBag.Title = "Home";
+    ViewBag.IsLanding = !User.Identity.IsAuthenticated;
 }
 
 @if (User.Identity.IsAuthenticated)
@@ -8,5 +9,39 @@
     <h2>Recent</h2>
     <div>
         @await Component.InvokeAsync("RecentNetworks", new { userId = User.GetId() })
+    </div>
+}
+else
+{
+    <div class="landing">
+        <div class="landing-shadow">
+            <div class="landing-content">
+                <div class="landing-description">
+                    <h1>
+                        Created for data scientists
+                    </h1>
+                    <h3>
+                        Cortex is a neural networks diagrams editor. From researches to business, you can create and version diagrams,
+                        manage neural network projects, and push data science forward alongside with other enthusiasts.
+                    </h3>
+                </div>
+                <div class="landing-registration">
+                    @await Component.InvokeAsync("Registration")
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="landing-details">
+        <div class="landing-tiles">
+            <div class="tile">
+                <img src="/images/flow-chart-64.png" />
+            </div>
+            <div class="tile">
+                <i class="fas fa-code-branch fa-10x"></i>
+            </div>
+            <div class="tile">
+                <i class="fas fa-users fa-10x"></i>
+            </div>
+        </div>
     </div>
 }

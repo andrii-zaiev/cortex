@@ -1,4 +1,8 @@
 ﻿@using Cortex.Auth
+@{
+    string bodyClass = ViewBag.IsLanding ? "body-landing" : String.Empty;
+}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Cortex</title>
 </head>
-<body>
+<body class="@bodyClass">
     <nav>
         <ul class="navbar">
             <li>
@@ -64,9 +68,18 @@
             </ul>
         }
         
-        <div class="body">
-            @RenderBody()
-        </div>
+        @if (ViewBag.IsLanding)
+        {
+            <div class="body">
+                @RenderBody()
+            </div>
+        }
+        else
+        {
+            <div class="body">
+                @RenderBody()
+            </div>
+        }
     </div>
 
     <environment include="Development">

@@ -1,0 +1,31 @@
+﻿@model Cortex.Web.Models.Account.RegisterModel
+
+<form class="form" method="post" asp-controller="Account" asp-action="Register" data-validate="">
+    @Html.AntiForgeryToken()
+
+    <div class="form-row">
+        <label asp-for="UserName"></label>
+        <input required="" maxlength="30" asp-for="UserName" />
+    </div>
+    <div class="form-row">
+        <label asp-for="Email"></label>
+        <input required="" maxlength="200" asp-for="Email" />
+    </div>
+    <div class="form-row">
+        <label asp-for="Name"></label>
+        <input required="" maxlength="200" asp-for="Name" />
+    </div>
+    <div class="form-row">
+        <label asp-for="Password"></label>
+        <input required="" maxlength="200" asp-for="Password" />
+    </div>
+    <div class="form-row">
+        <label asp-for="ConfirmPassword"></label>
+        <input required="" maxlength="200" asp-for="ConfirmPassword" />
+    </div>
+
+    <div class="buttons-section">
+        <a asp-controller="Account" asp-action="LogIn">Go to Log In</a>
+        <button type="submit" class="button-primary">Register</button>
+    </div>
+</form>
