@@ -8,6 +8,7 @@ import NetworkViewModel from './view-models/NetworkViewModel';
 import LayerViewModel from './view-models/LayerViewModel';
 import ConnectionViewModel from './view-models/ConnectionViewModel';
 import Connection from './models/Connection';
+import LayerType from './models/LayerType';
 
 const d3RootId: string = 'd3-root';
 const labelFontSize = 15;
@@ -105,7 +106,9 @@ export default class NetworkDisplayArea
     private drawLayers(svg: Selection<BaseType, {}, HTMLElement, any>) {
         const layerGroup = svg.selectAll('g')
             .data(this.state.network.layers, l => (l as LayerViewModel).model.id.toString());
-        const layerRect = this.updateLayers(layerGroup.select('rect'));
+        const layerRect = this.updateLayerRects(layerGroup.select('rect#front'));
+        const layerTopRect = this.updateConvLayerTop(layerGroup.select('polygon#top'));
+        const layerSideRect = this.updateConvLayerSide(layerGroup.select('polygon#side'));
         const layerLabel = this.updateLayerLabels(layerGroup.select('text'));
         const layerNameLabel = this.updateNameLabels(layerLabel.select('tspan#name'));
         const layerInfoLabel = this.updateInfoLabels(layerLabel.select('tspan#info'));
@@ -113,11 +116,27 @@ export default class NetworkDisplayArea
 
         // Enter…
         const groupEnter = layerGroup.enter().append('g');
-        this.updateLayers(groupEnter.append('rect')
+        this.updateLayerRects(groupEnter.append('rect')
+            .attr('id', 'front')
             .style('stroke', 'black')
             .style('stroke-width', 2)
             .on('click', l => this.selectLayer(l))
             .on('mousedown', l => this.startLayerDragging(l)));
+
+        const convGroupEnter = groupEnter.filter(l => l.model.type === LayerType.Convolutional);
+        this.updateConvLayerTop(convGroupEnter.append('polygon')
+            .attr('id', 'top')
+            .style('stroke', 'black')
+            .style('stroke-width', 2)
+            .on('click', l => this.selectLayer(l))
+            .on('mousedown', l => this.startLayerDragging(l)));
+        this.updateConvLayerSide(convGroupEnter.append('polygon')
+            .attr('id', 'side')
+            .style('stroke', 'black')
+            .style('stroke-width', 2)
+            .on('click', l => this.selectLayer(l))
+            .on('mousedown', l => this.startLayerDragging(l)));
+
         const layerEnter = this.updateLayerLabels(groupEnter.append('text'));
         this.updateNameLabels(layerEnter.append('tspan').attr('id', 'name').attr('dy', '1.2em'));
         this.updateInfoLabels(layerEnter.append('tspan').attr('id', 'info').attr('dy', '1.2em'));
@@ -127,7 +146,7 @@ export default class NetworkDisplayArea
         layerGroup.exit().remove();
     }
 
-    private updateLayers(layerRect: Selection<BaseType, LayerViewModel, BaseType, {}>) {
+    private updateLayerRects(layerRect: Selection<BaseType, LayerViewModel, BaseType, {}>) {
         return layerRect
             .attr('width', l => l.width * this.state.scale)
             .attr('height', l => l.height * this.state.scale)
@@ -137,10 +156,46 @@ export default class NetworkDisplayArea
             .style('cursor', l => l.isSelected && this.state.isEdit ? 'move' : 'pointer');
     }
 
+    private updateConvLayerTop(polygon: Selection<BaseType, LayerViewModel, BaseType, {}>) {
+        return polygon
+            .attr('points', l => {
+                const points = [
+                    `${this.convertX(l.x)},${this.convertY(l.y)}`,
+                    `${this.convertX(l.x + l.width)},${this.convertY(l.y)}`,
+                    `${this.convertX(l.x + l.width + l.depth)},${this.convertY(l.y - l.depth)}`,
+                    `${this.convertX(l.x + l.depth)},${this.convertY(l.y - l.depth)}`
+                ];
+
+                return points.join(' ');
+            })
+            .style('fill', l => l.isSelected ? 'lightgray' : 'white')
+            .style('cursor', l => l.isSelected && this.state.isEdit ? 'move' : 'pointer');
+    }
+
+    private updateConvLayerSide(polygon: Selection<BaseType, LayerViewModel, BaseType, {}>) {
+        return polygon
+            .attr('points', l => {
+                const points = [
+                    `${this.convertX(l.x + l.width)},${this.convertY(l.y)}`,
+                    `${this.convertX(l.x + l.width)},${this.convertY(l.y + l.height)}`,
+                    `${this.convertX(l.x + l.width + l.depth)},${this.convertY(l.y + l.height - l.depth)}`,
+                    `${this.convertX(l.x + l.width + l.depth)},${this.convertY(l.y - l.depth)}`
+                ];
+
+                return points.join(' ');
+            })
+            .style('fill', l => l.isSelected ? 'lightgray' : 'white')
+            .style('cursor', l => l.isSelected && this.state.isEdit ? 'move' : 'pointer');
+    }
+
     private updateLayerLabels(layerLabel: Selection<BaseType, LayerViewModel, BaseType, {}>) {
         return layerLabel
-            .attr('x', l => this.convertX(l.x))
-            .attr('y', l => this.convertY(l.y - 60))
+            .attr('x', l => l.model.type === LayerType.Convolutional
+                ? this.convertX(l.x + l.depth)
+                : this.convertX(l.x))
+            .attr('y', l => l.model.type === LayerType.Convolutional
+                ? this.convertY(l.y - l.depth - 60)
+                : this.convertY(l.y - 60))
             .attr('font-size', () => labelFontSize * this.state.scale);
     }
 
@@ -154,19 +209,25 @@ export default class NetworkDisplayArea
 
     private updateNameLabels(label: Selection<BaseType, LayerViewModel, BaseType, {}>) {
         return label
-            .attr('x', l => this.convertX(l.x))
+            .attr('x', l => l.model.type === LayerType.Convolutional
+                ? this.convertX(l.x + l.depth)
+                : this.convertX(l.x))
             .text(l => l.model.name);
     }
 
     private updateInfoLabels(label: Selection<BaseType, LayerViewModel, BaseType, {}>) {
         return label
-            .attr('x', l => this.convertX(l.x))
+            .attr('x', l => l.model.type === LayerType.Convolutional
+                ? this.convertX(l.x + l.depth)
+                : this.convertX(l.x))
             .text(l => l.info);
     }
 
     private updateSizeLabels(label: Selection<BaseType, LayerViewModel, BaseType, {}>) {
         return label
-            .attr('x', l => this.convertX(l.x))
+            .attr('x', l => l.model.type === LayerType.Convolutional
+                ? this.convertX(l.x + l.depth)
+                : this.convertX(l.x))
             .text(l => l.size);
     }
 

@@ -102,7 +102,10 @@ export default class NetworkEditor
                 oldLayer.type,
                 oldLayer.x + data.dx,
                 oldLayer.y + data.dy,
-                oldLayer.activation);
+                oldLayer.activation,
+                oldLayer.kernelsNumber,
+                oldLayer.kernelWidth,
+                oldLayer.kernelHeight);
             return {
                 network: new Network(
                     prevState.network.layers.filter(l => l != oldLayer).concat(newLayer),

@@ -106,7 +106,7 @@ export default class AddLayerDialog
                         </div>
                         <div className="form-row">
                             <label>Type</label>
-                            <select value={this.state.layer.type} onChange={e => this.update(e, 'type')}>
+                            <select value={this.state.layer.type} onChange={e => this.updateNumber(e, 'type')}>
                                 <option value={LayerType.Dense}> Dense</option>
                                 <option value={LayerType.Convolutional}>Convolutional</option>
                                 <option value={LayerType.Pooling}>Pooling</option>
@@ -130,6 +130,37 @@ export default class AddLayerDialog
                                 <input type="number" min={0} max={1} step={0.05} />
                             </div>
                         </div>
+                        }
+                        {this.state.layer.type == LayerType.Convolutional &&
+                            <div>
+                                <div className="form-row">
+                                    <label>Kernels</label>
+                                <input type="number"
+                                    min={1}
+                                    max={100000}
+                                    step={1}
+                                    value={this.state.layer.kernelsNumber}
+                                    onChange={e => this.updateNumber(e, 'kernelsNumber')}/>
+                                </div>
+                                <div className="form-row">
+                                    <label>Width</label>
+                                    <input type="number"
+                                        min={1}
+                                        max={1000}
+                                        step={1}
+                                        value={this.state.layer.kernelWidth}
+                                    onChange={e => this.updateNumber(e, 'kernelWidth')} />
+                                </div>
+                                <div className="form-row">
+                                    <label>Height</label>
+                                    <input type="number"
+                                        min={1}
+                                        max={1000}
+                                        step={1}
+                                        value={this.state.layer.kernelHeight}
+                                        onChange={e => this.updateNumber(e, 'kernelHeight')} />
+                                </div>
+                            </div>
                         }
                     </div>
                 </div>

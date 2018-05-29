@@ -1,8 +1,10 @@
 ﻿import Layer from '../models/Layer';
 import ActivationType from '../models/ActivationType';
+import LayerType from '../models/LayerType';
 
 const layerWidth = 50;
-const baseLayerHeight = 100;
+const baseLayerHeight = 50;
+const sin45 = 0.85;
 
 export default class LayerViewModel {
     public model: Layer;
@@ -26,11 +28,28 @@ export default class LayerViewModel {
     }
 
     public get width(): number {
+        if (this.model.type === LayerType.Convolutional) {
+            return layerWidth + this.model.kernelsNumber;
+        }
+
         return layerWidth;
     }
 
     public get height(): number {
+        if (this.model.type === LayerType.Convolutional) {
+            return baseLayerHeight + this.model.kernelHeight;
+        }
+
         return baseLayerHeight + this.model.neuronsNumber;
+    }
+
+    public get depth(): number {
+        if (this.model.type !== LayerType.Convolutional) {
+            throw new Error('Unexpected depth calculations');
+        }
+
+        const h = baseLayerHeight + this.model.kernelWidth;
+        return h * sin45;
     }
 
     public get info(): string {
@@ -38,6 +57,10 @@ export default class LayerViewModel {
     }
 
     public get size(): string {
+        if (this.model.type === LayerType.Convolutional) {
+            return `${this.model.kernelWidth}x${this.model.kernelHeight}x${this.model.kernelsNumber}`;
+        }
+
         return this.model.neuronsNumber.toString();
     }
 }

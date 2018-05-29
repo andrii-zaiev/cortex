@@ -9,6 +9,9 @@ export default class Layer {
     public x: number;
     public y: number;
     public activation: ActivationType;
+    public kernelsNumber: number;
+    public kernelWidth: number;
+    public kernelHeight: number;
 
     constructor(id: number,
         name: string,
@@ -16,7 +19,10 @@ export default class Layer {
         type: LayerType,
         x: number,
         y: number,
-        activation: ActivationType) {
+        activation: ActivationType,
+        kernelsNumber: number,
+        kernelWidth: number,
+        kernelHeight: number) {
         this.id = id;
         this.name = name;
         this.neuronsNumber = neuronsNumber;
@@ -24,5 +30,8 @@ export default class Layer {
         this.x = x;
         this.y = y;
         this.activation = activation;
+        this.kernelsNumber = kernelsNumber;
+        this.kernelWidth = kernelWidth;
+        this.kernelHeight = kernelHeight;
     }
 }
