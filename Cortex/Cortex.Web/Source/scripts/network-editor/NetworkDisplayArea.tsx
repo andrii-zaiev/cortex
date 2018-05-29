@@ -245,14 +245,24 @@ export default class NetworkDisplayArea
     private updateLines(connection: Selection<BaseType, ConnectionViewModel, BaseType, {}>) {
         const layersMap = new Map<number, LayerViewModel>();
         for (let layer of this.state.network.layers) {
-            layersMap[layer.model.id] = layer;
+            layersMap.set(layer.model.id, layer);
         }
 
         return connection
-            .attr('x1', c => this.convertX(layersMap[c.model.fromId].x + layersMap[c.model.fromId].width))
-            .attr('y1', c => this.convertY(layersMap[c.model.fromId].y + layersMap[c.model.fromId].height / 2))
-            .attr('x2', c => this.convertX(layersMap[c.model.toId].x))
-            .attr('y2', c => this.convertY(layersMap[c.model.toId].y + layersMap[c.model.toId].height / 2))
+            .attr('x1', c => {
+                const from = layersMap.get(c.model.fromId);
+                return from.model.type === LayerType.Convolutional
+                    ? this.convertX(from.x + from.width + from.depth / 2)
+                    : this.convertX(from.x + from.width);
+            })
+            .attr('y1', c => {
+                const from = layersMap.get(c.model.fromId);
+                return from.model.type === LayerType.Convolutional
+                    ? this.convertY(from.y + from.height / 2 - from.depth / 2)
+                    : this.convertY(from.y + from.height / 2);
+            })
+            .attr('x2', c => this.convertX(layersMap.get(c.model.toId).x))
+            .attr('y2', c => this.convertY(layersMap.get(c.model.toId).y + layersMap.get(c.model.toId).height / 2))
             .style('stroke', c => c.isSelected ? 'red' : 'black')
             .style('stroke-width', 5)
     }
