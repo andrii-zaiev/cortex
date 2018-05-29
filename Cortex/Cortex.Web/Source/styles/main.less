@@ -119,12 +119,18 @@ input[type="checkbox"] {
 }
 
 .button {
+    border-radius: 20px;
+
     & > :not(:first-child) {
         margin-left: 5px;
     }
 
     &:disabled {
         background-color: initial;
+    }
+
+    &:focus {
+        outline: none;
     }
 }
 
@@ -148,7 +154,7 @@ input[type="checkbox"] {
 }
 
 .button-small {
-    padding: 5px 5px;
+    padding: 5px 10px;
 }
 
 .empty-text {
