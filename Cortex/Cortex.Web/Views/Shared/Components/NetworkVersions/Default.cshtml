@@ -1,18 +1,18 @@
 ﻿@using Cortex.Auth
 @using Cortex.Web.Models.NetworkVersions
-@model List<NetworkVersionModel>
+@model NetworkVersionsListModel
 
-@if (Model.Count == 0)
+@if (Model.Versions.Count == 0)
 {
     <span class="empty-text">No versions yet</span>
 }
 else
 {
     <div>
-        @foreach (NetworkVersionModel version in Model)
+        @foreach (NetworkVersionModel version in Model.Versions)
         {
             <div class="list-item-container">
-                <div class="list-item-heading">
+                <div class="list-item-row-heading">
                     <small>
                         <a asp-controller="NetworkVersions"
                            asp-action="GetVersion"
@@ -22,6 +22,23 @@ else
                             <time datetime="@version.Date.ToString("o")" data-local></time>
                         </a>
                     </small>
+                    
+                    @if (Model.CanEdit)
+                    {
+                        <a title="Revert"
+                           class="button-primary button-icon"
+                           asp-controller="Networks"
+                           asp-action="EditNetwork">
+                            <i class="fa fa-undo"></i>
+                        </a>
+
+                        <a title="Reset to"
+                           class="button-primary button-icon"
+                           asp-controller="Networks"
+                           asp-action="EditNetwork">
+                            <i class="fa fa-arrow-left"></i>
+                        </a>
+                    }
                 </div>
                 @if (String.IsNullOrEmpty(version.Comment))
                 {

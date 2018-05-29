@@ -13,16 +13,19 @@ namespace Cortex.Web.ViewComponents
     {
         private readonly INetworkVersionsService _versionsService;
         private readonly IUserService _userService;
+        private readonly INetworkService _networkService;
 
         public NetworkVersionsViewComponent(
             INetworkVersionsService versionsService,
-            IUserService userService)
+            IUserService userService,
+            INetworkService networkService)
         {
             _versionsService = versionsService;
             _userService = userService;
+            _networkService = networkService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(Guid networkId)
+        public async Task<IViewComponentResult> InvokeAsync(Guid networkId, Guid? userId)
         {
             IList<NetworkVersionMetadata> versions = await _versionsService.GetNetworkVersionsAsync(networkId);
 
@@ -30,13 +33,16 @@ namespace Cortex.Web.ViewComponents
 
             Dictionary<Guid, User> authors = (await _userService.GetUsersAsync(authorIds))
                 .ToDictionary(u => u.Id);
+            bool canEdit = userId.HasValue && await _networkService.CanEditNetworkAsync(networkId, userId.Value);
 
-            List<NetworkVersionModel> models = versions
+            List<NetworkVersionModel> versionModels = versions
                 .OrderByDescending(v => v.Date)
                 .Select(v => new NetworkVersionModel(v, authors[v.AuthorId]))
                 .ToList();
 
-            return View(models);
+            var model = new NetworkVersionsListModel(versionModels, canEdit);
+
+            return View(model);
         }
     }
 }

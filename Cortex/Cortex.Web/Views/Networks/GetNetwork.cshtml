@@ -91,6 +91,6 @@
         }
     </div>
     <div>
-        @await Component.InvokeAsync("NetworkVersions", new { networkId = Model.Id })
+        @await Component.InvokeAsync("NetworkVersions", new { networkId = Model.Id, userId = User.GetNullableId() })
     </div>
 </div>
