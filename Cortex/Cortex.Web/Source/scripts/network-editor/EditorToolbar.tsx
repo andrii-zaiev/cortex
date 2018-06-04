@@ -2,8 +2,8 @@
 
 import AddLayerDialog from './dialogs/AddLayerDialog';
 import Network from './models/Network';
-import EventBus from './events/EventBus';
-import { MessageType, Message } from './events/Message';
+import EventBus from '../shared/events/EventBus';
+import { MessageType, Message } from '../shared/events/Message';
 import AddConnectionDialog from './dialogs/AddConnectionDialog';
 import { SelectedItem, ItemType } from './models/SelectedItem';
 import SaveVersionDialog from './dialogs/SaveVersionDialog';

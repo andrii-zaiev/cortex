@@ -8,3 +8,4 @@ import './scripts/validation/init-validation';
 import './scripts/accesses-editor/init';
 import './scripts/network-editor/init';
 import './scripts/local-datetime/init';
+import './scripts/confirmation/init';

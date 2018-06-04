@@ -1,7 +1,7 @@
 ﻿import LayerViewModel from './LayerViewModel';
 import Network from '../models/Network';
-import EventBus from '../events/EventBus';
-import { Message, MessageType } from '../events/Message';
+import EventBus from '../../shared/events/EventBus';
+import { Message, MessageType } from '../../shared/events/Message';
 import ConnectionViewModel from './ConnectionViewModel';
 import { SelectedItem, ItemType } from '../models/SelectedItem';
 

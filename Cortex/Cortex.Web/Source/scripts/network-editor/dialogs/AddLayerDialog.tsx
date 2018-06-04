@@ -4,8 +4,8 @@ import * as Modal from 'react-modal';
 import NewLayerViewModel from '../view-models/NewLayerViewModel';
 import LayerType from '../models/LayerType';
 import Layer from '../models/Layer';
-import EventBus from '../events/EventBus';
-import { Message, MessageType } from '../events/Message';
+import EventBus from '../../shared/events/EventBus';
+import { Message, MessageType } from '../../shared/events/Message';
 import ActivationType from '../models/ActivationType';
 
 export default class AddLayerDialog

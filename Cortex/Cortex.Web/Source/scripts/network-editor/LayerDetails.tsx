@@ -1,8 +1,8 @@
 ﻿import * as React from 'react';
 
 import EditLayerViewModel from './view-models/EditLayerViewModel';
-import EventBus from './events/EventBus';
-import { MessageType } from './events/Message';
+import EventBus from '../shared/events/EventBus';
+import { MessageType } from '../shared/events/Message';
 import { SelectedItem, ItemType } from './models/SelectedItem';
 import Network from './models/Network';
 import LayerType from './models/LayerType';

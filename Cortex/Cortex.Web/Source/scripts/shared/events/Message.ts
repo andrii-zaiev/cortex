@@ -7,7 +7,8 @@
     ItemSelected = 6,
     DeleteLayer = 7,
     DeleteConnection = 8,
-    CloseSaveDialog = 9
+    CloseSaveDialog = 9,
+    ShowConfirmation = 10
 }
 
 export class Message<T> {

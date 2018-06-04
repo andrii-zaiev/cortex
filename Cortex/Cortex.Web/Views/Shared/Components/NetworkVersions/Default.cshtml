@@ -23,21 +23,23 @@ else
                         </a>
                     </small>
                     
-                    @if (false && Model.CanEdit)
+                    @if (Model.CanEdit)
                     {
-                        <a title="Revert"
-                           class="button-primary button-icon"
-                           asp-controller="Networks"
-                           asp-action="EditNetwork">
+                        <button title="Revert"
+                                class="button-primary button-icon"
+                                data-confirmation=""
+                                data-confirmation-text="Are you sure you want to revert this version?"
+                                data-confirmation-url="@Url.Action("RevertVersion", "NetworkVersions", new { versionId = version.Id })">
                             <i class="fa fa-undo"></i>
-                        </a>
+                        </button>
 
-                        <a title="Reset to"
-                           class="button-primary button-icon"
-                           asp-controller="Networks"
-                           asp-action="EditNetwork">
+                        <button title="Reset to"
+                                class="button-primary button-icon"
+                                data-confirmation=""
+                                data-confirmation-text="Are you sure you want to reset to this version? WARNING: all newer versions will be deleted."
+                                data-confirmation-url="@Url.Action("ResetToVersion", "NetworkVersions", new { versionId = version.Id })">
                             <i class="fa fa-arrow-left"></i>
-                        </a>
+                        </button>
                     }
                 </div>
                 @if (String.IsNullOrEmpty(version.Comment))

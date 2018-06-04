@@ -1,8 +1,8 @@
 ﻿import * as React from 'react';
 import * as Modal from 'react-modal';
 
-import EventBus from '../events/EventBus';
-import { Message, MessageType } from '../events/Message';
+import EventBus from '../../shared/events/EventBus';
+import { Message, MessageType } from '../../shared/events/Message';
 import NewConnectionViewModel from '../view-models/NewConnectionViewModel';
 import Network from '../models/Network';
 import Connection from '../models/Connection';

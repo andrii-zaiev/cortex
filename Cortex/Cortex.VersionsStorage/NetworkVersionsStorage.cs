@@ -64,6 +64,7 @@ namespace Cortex.VersionsStorage
             string repositoryPath = GetNetworkRepositoryPath(networkId);
             using (var repository = new Repository(repositoryPath))
             {
+                repository.Reset(ResetMode.Hard);
                 Commit commit = repository.Commits.Single(c => c.Sha == sha);
                 var signature = new Signature(SystemUserName, SystemUserEmail, DateTimeOffset.UtcNow);
                 var options = new RevertOptions { CommitOnSuccess = true, MergeFileFavor = MergeFileFavor.Ours };
