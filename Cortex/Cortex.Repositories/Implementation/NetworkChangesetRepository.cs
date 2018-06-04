@@ -66,5 +66,17 @@ namespace Cortex.Repositories.Implementation
 
             return new NetworkChangesetModel(entity);
         }
+
+        public async Task DeleteChangesetsAsync(IList<NetworkChangesetModel> changesets)
+        {
+            List<Guid> changesetIds = changesets.Select(c => c.Id).ToList();
+
+            List<NetworkChangeset> entities = await Context.NetworkChangesets
+                .Where(c => changesetIds.Contains(c.Id))
+                .ToListAsync();
+
+            Context.NetworkChangesets.RemoveRange(entities);
+            await Context.SaveChangesAsync();
+        }
     }
 }

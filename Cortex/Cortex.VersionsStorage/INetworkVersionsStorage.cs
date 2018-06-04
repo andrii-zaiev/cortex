@@ -10,5 +10,9 @@ namespace Cortex.VersionsStorage
         Task<string> SaveAsync(Guid networkId, string comment, string networkSnapshot);
 
         Task<string> GetSnapshotAsync(Guid networkId, string sha);
+
+        string RevertVersion(Guid networkId, string sha);
+
+        void ResetToVersion(Guid networkId, string sha);
     }
 }

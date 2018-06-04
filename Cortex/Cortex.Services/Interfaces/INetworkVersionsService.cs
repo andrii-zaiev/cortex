@@ -16,5 +16,9 @@ namespace Cortex.Services.Interfaces
         Task<Guid> SaveVersionAsync(NewNetworkVersion version);
 
         Task<NetworkVersion> GetVersionAsync(Guid versionId);
+
+        Task RevertVersionAsync(Guid versionId, Guid userId);
+
+        Task ResetToVersionAsync(Guid versionId);
     }
 }

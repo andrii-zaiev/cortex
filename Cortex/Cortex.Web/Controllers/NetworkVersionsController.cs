@@ -79,5 +79,37 @@ namespace Cortex.Web.Controllers
 
             return await GetVersion(networkId, currentVersion.Id);
         }
+
+        [HttpPost("/version/{versionId:guid}/revert")]
+        public async Task<IActionResult> RevertVersion(Guid versionId)
+        {
+            NetworkVersionMetadata version = await _networkVersionsService.GetVersionInfoAsync(versionId);
+            bool canEdit = await _networkService.CanEditNetworkAsync(version.NetworkId, User.GetId());
+
+            if (!canEdit)
+            {
+                return Forbid();
+            }
+
+            await _networkVersionsService.RevertVersionAsync(versionId, User.GetId());
+
+            return RedirectToAction(nameof(NetworksController.GetNetwork), "Networks", new { id = version.NetworkId });
+        }
+
+        [HttpPost("/version/{versionId:guid}/reset")]
+        public async Task<IActionResult> ResetToVersion(Guid versionId)
+        {
+            NetworkVersionMetadata version = await _networkVersionsService.GetVersionInfoAsync(versionId);
+            bool canEdit = await _networkService.CanEditNetworkAsync(version.NetworkId, User.GetId());
+
+            if (!canEdit)
+            {
+                return Forbid();
+            }
+
+            await _networkVersionsService.ResetToVersionAsync(versionId);
+
+            return RedirectToAction(nameof(NetworksController.GetNetwork), "Networks", new { id = version.NetworkId });
+        }
     }
 }

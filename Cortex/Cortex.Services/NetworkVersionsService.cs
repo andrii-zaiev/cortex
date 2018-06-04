@@ -76,5 +76,34 @@ namespace Cortex.Services
 
             return new NetworkVersion(changeset, diagram);
         }
+
+        public async Task RevertVersionAsync(Guid versionId, Guid userId)
+        {
+            NetworkChangesetModel changeset = await _changesetRepository.GetNetworkChangesetAsync(versionId);
+
+            string revertSha = _versionsStorage.RevertVersion(changeset.NetworkId, changeset.Sha);
+
+            NetworkChangesetModel revertChangeset = NetworkChangesetModel.CreateNew(
+                changeset.NetworkId,
+                $"Reverts \"{changeset.Comment}\"",
+                userId,
+                revertSha);
+
+            await _changesetRepository.CreateChangesetAsync(revertChangeset);
+        }
+
+        public async Task ResetToVersionAsync(Guid versionId)
+        {
+            NetworkChangesetModel changeset = await _changesetRepository.GetNetworkChangesetAsync(versionId);
+            IList<NetworkChangesetModel> allChangesets = await _changesetRepository.GetNetworkChangesetsAsync(changeset.NetworkId);
+
+            List<NetworkChangesetModel> deletedChangesets = allChangesets
+                .Where(c => c.Id != changeset.Id && c.Date > changeset.Date)
+                .ToList();
+
+            await _changesetRepository.DeleteChangesetsAsync(deletedChangesets);
+
+            _versionsStorage.ResetToVersion(changeset.NetworkId, changeset.Sha);
+        }
     }
 }

@@ -59,6 +59,29 @@ namespace Cortex.VersionsStorage
             }
         }
 
+        public string RevertVersion(Guid networkId, string sha)
+        {
+            string repositoryPath = GetNetworkRepositoryPath(networkId);
+            using (var repository = new Repository(repositoryPath))
+            {
+                Commit commit = repository.Commits.Single(c => c.Sha == sha);
+                var signature = new Signature(SystemUserName, SystemUserEmail, DateTimeOffset.UtcNow);
+                var options = new RevertOptions { CommitOnSuccess = true, MergeFileFavor = MergeFileFavor.Ours };
+                RevertResult result = repository.Revert(commit, signature, options);
+                return result.Commit.Sha;
+            }
+        }
+
+        public void ResetToVersion(Guid networkId, string sha)
+        {
+            string repositoryPath = GetNetworkRepositoryPath(networkId);
+            using (var repository = new Repository(repositoryPath))
+            {
+                Commit commit = repository.Commits.Single(c => c.Sha == sha);
+                repository.Reset(ResetMode.Hard, commit);
+            }
+        }
+
         private static string GetNetworkSnapshotPath(Guid networkId)
         {
             return Path.Combine(GetNetworkPath(networkId), SnapshotFileName);
