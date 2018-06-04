@@ -20,6 +20,7 @@ namespace Cortex.Web.Models.Api
             KernelsNumber = layer.KernelsNumber;
             KernelWidth = layer.KernelWidth;
             KernelHeight = layer.KernelHeight;
+            PoolingMode = layer.PoolingMode;
         }
 
         public int Id { get; set; }
@@ -42,6 +43,8 @@ namespace Cortex.Web.Models.Api
 
         public int KernelHeight { get; set; }
 
+        public int PoolingMode { get; set; }
+
         public Layer ToDto()
         {
             return new Layer
@@ -55,7 +58,8 @@ namespace Cortex.Web.Models.Api
                 Activation = Activation,
                 KernelsNumber = KernelsNumber,
                 KernelWidth = KernelWidth,
-                KernelHeight = KernelHeight
+                KernelHeight = KernelHeight,
+                PoolingMode = PoolingMode
             };
         }
     }

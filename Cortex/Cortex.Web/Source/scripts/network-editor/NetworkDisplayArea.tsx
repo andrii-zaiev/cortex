@@ -107,8 +107,8 @@ export default class NetworkDisplayArea
         const layerGroup = svg.selectAll('g')
             .data(this.state.network.layers, l => (l as LayerViewModel).model.id.toString());
         const layerRect = this.updateLayerRects(layerGroup.select('rect#front'));
-        const layerTopRect = this.updateConvLayerTop(layerGroup.select('polygon#top'));
-        const layerSideRect = this.updateConvLayerSide(layerGroup.select('polygon#side'));
+        const layerTopRect = this.update2dLayerTop(layerGroup.select('polygon#top'));
+        const layerSideRect = this.update2dLayerSide(layerGroup.select('polygon#side'));
         const layerLabel = this.updateLayerLabels(layerGroup.select('text'));
         const layerNameLabel = this.updateNameLabels(layerLabel.select('tspan#name'));
         const layerInfoLabel = this.updateInfoLabels(layerLabel.select('tspan#info'));
@@ -123,14 +123,15 @@ export default class NetworkDisplayArea
             .on('click', l => this.selectLayer(l))
             .on('mousedown', l => this.startLayerDragging(l)));
 
-        const convGroupEnter = groupEnter.filter(l => l.model.type === LayerType.Convolutional);
-        this.updateConvLayerTop(convGroupEnter.append('polygon')
+        const layer2dGroupEnter = groupEnter.filter(l => l.model.type === LayerType.Convolutional
+                                                      || l.model.type == LayerType.Pooling);
+        this.update2dLayerTop(layer2dGroupEnter.append('polygon')
             .attr('id', 'top')
             .style('stroke', 'black')
             .style('stroke-width', 2)
             .on('click', l => this.selectLayer(l))
             .on('mousedown', l => this.startLayerDragging(l)));
-        this.updateConvLayerSide(convGroupEnter.append('polygon')
+        this.update2dLayerSide(layer2dGroupEnter.append('polygon')
             .attr('id', 'side')
             .style('stroke', 'black')
             .style('stroke-width', 2)
@@ -156,7 +157,7 @@ export default class NetworkDisplayArea
             .style('cursor', l => l.isSelected && this.state.isEdit ? 'move' : 'pointer');
     }
 
-    private updateConvLayerTop(polygon: Selection<BaseType, LayerViewModel, BaseType, {}>) {
+    private update2dLayerTop(polygon: Selection<BaseType, LayerViewModel, BaseType, {}>) {
         return polygon
             .attr('points', l => {
                 const points = [
@@ -172,7 +173,7 @@ export default class NetworkDisplayArea
             .style('cursor', l => l.isSelected && this.state.isEdit ? 'move' : 'pointer');
     }
 
-    private updateConvLayerSide(polygon: Selection<BaseType, LayerViewModel, BaseType, {}>) {
+    private update2dLayerSide(polygon: Selection<BaseType, LayerViewModel, BaseType, {}>) {
         return polygon
             .attr('points', l => {
                 const points = [
@@ -190,10 +191,10 @@ export default class NetworkDisplayArea
 
     private updateLayerLabels(layerLabel: Selection<BaseType, LayerViewModel, BaseType, {}>) {
         return layerLabel
-            .attr('x', l => l.model.type === LayerType.Convolutional
+            .attr('x', l => l.is2d
                 ? this.convertX(l.x + l.depth)
                 : this.convertX(l.x))
-            .attr('y', l => l.model.type === LayerType.Convolutional
+            .attr('y', l => l.is2d
                 ? this.convertY(l.y - l.depth - 60)
                 : this.convertY(l.y - 60))
             .attr('font-size', () => labelFontSize * this.state.scale);
@@ -209,7 +210,7 @@ export default class NetworkDisplayArea
 
     private updateNameLabels(label: Selection<BaseType, LayerViewModel, BaseType, {}>) {
         return label
-            .attr('x', l => l.model.type === LayerType.Convolutional
+            .attr('x', l => l.is2d
                 ? this.convertX(l.x + l.depth)
                 : this.convertX(l.x))
             .text(l => l.model.name);
@@ -217,7 +218,7 @@ export default class NetworkDisplayArea
 
     private updateInfoLabels(label: Selection<BaseType, LayerViewModel, BaseType, {}>) {
         return label
-            .attr('x', l => l.model.type === LayerType.Convolutional
+            .attr('x', l => l.is2d
                 ? this.convertX(l.x + l.depth)
                 : this.convertX(l.x))
             .text(l => l.info);
@@ -225,7 +226,7 @@ export default class NetworkDisplayArea
 
     private updateSizeLabels(label: Selection<BaseType, LayerViewModel, BaseType, {}>) {
         return label
-            .attr('x', l => l.model.type === LayerType.Convolutional
+            .attr('x', l => l.is2d
                 ? this.convertX(l.x + l.depth)
                 : this.convertX(l.x))
             .text(l => l.size);
@@ -251,13 +252,13 @@ export default class NetworkDisplayArea
         return connection
             .attr('x1', c => {
                 const from = layersMap.get(c.model.fromId);
-                return from.model.type === LayerType.Convolutional
+                return from.is2d
                     ? this.convertX(from.x + from.width + from.depth / 2)
                     : this.convertX(from.x + from.width);
             })
             .attr('y1', c => {
                 const from = layersMap.get(c.model.fromId);
-                return from.model.type === LayerType.Convolutional
+                return from.is2d
                     ? this.convertY(from.y + from.height / 2 - from.depth / 2)
                     : this.convertY(from.y + from.height / 2);
             })

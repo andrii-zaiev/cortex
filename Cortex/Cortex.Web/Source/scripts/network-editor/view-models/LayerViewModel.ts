@@ -1,6 +1,7 @@
 ﻿import Layer from '../models/Layer';
 import ActivationType from '../models/ActivationType';
 import LayerType from '../models/LayerType';
+import PoolingMode from '../models/PoolingMode';
 
 const layerWidth = 50;
 const baseLayerHeight = 50;
@@ -33,11 +34,16 @@ export default class LayerViewModel {
             return widthPerKernel * this.model.kernelsNumber;
         }
 
+        if (this.model.type === LayerType.Pooling) {
+            return widthPerKernel;
+        }
+
         return layerWidth;
     }
 
     public get height(): number {
-        if (this.model.type === LayerType.Convolutional) {
+        if (this.model.type === LayerType.Convolutional
+         || this.model.type === LayerType.Pooling) {
             return baseLayerHeight + this.model.kernelHeight;
         }
 
@@ -45,7 +51,7 @@ export default class LayerViewModel {
     }
 
     public get depth(): number {
-        if (this.model.type !== LayerType.Convolutional) {
+        if (!this.is2d) {
             throw new Error('Unexpected depth calculations');
         }
 
@@ -54,6 +60,10 @@ export default class LayerViewModel {
     }
 
     public get info(): string {
+        if (this.model.type === LayerType.Pooling) {
+            return `${PoolingMode[this.model.poolingMode]} pooling`;
+        }
+
         return ActivationType[this.model.activation];
     }
 
@@ -62,6 +72,14 @@ export default class LayerViewModel {
             return `${this.model.kernelWidth}x${this.model.kernelHeight}x${this.model.kernelsNumber}`;
         }
 
+        if (this.model.type === LayerType.Pooling) {
+            return `${this.model.kernelWidth}x${this.model.kernelHeight}`;
+        }
+
         return this.model.neuronsNumber.toString();
+    }
+
+    public get is2d(): boolean {
+        return this.model.type === LayerType.Convolutional || this.model.type === LayerType.Pooling;
     }
 }

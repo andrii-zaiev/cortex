@@ -25,6 +25,10 @@ export default class EditLayerViewModel {
         return LayerType[this.initial.type];
     }
 
+    public get type() {
+        return this.initial.type;
+    }
+
     public get activationName() {
         return ActivationType[this.activation];
     }

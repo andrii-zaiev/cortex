@@ -21,5 +21,7 @@
         public int KernelHeight { get; set; }
 
         public int Activation { get; set; }
+
+        public int PoolingMode { get; set; }
     }
 }

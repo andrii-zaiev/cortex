@@ -7,6 +7,7 @@ import Layer from '../models/Layer';
 import EventBus from '../../shared/events/EventBus';
 import { Message, MessageType } from '../../shared/events/Message';
 import ActivationType from '../models/ActivationType';
+import PoolingMode from '../models/PoolingMode';
 
 export default class AddLayerDialog
     extends React.Component<{ isOpen: boolean, layerId: number }, { isOpen: boolean, layer: NewLayerViewModel, layerId: number }> {
@@ -80,22 +81,24 @@ export default class AddLayerDialog
                             <label className="top-label">Comment</label>
                             <textarea></textarea>
                         </div>
-                        <div className="form-row">
-                            <label>Activation</label>
-                            <select value={this.state.layer.activation} onChange={e => this.update(e, 'activation')}>
-                                <option value={ActivationType.Softmax}> Softmax</option>
-                                <option value={ActivationType.ELU}>ELU</option>
-                                <option value={ActivationType.SELU}>SELU</option>
-                                <option value={ActivationType.Softplus}>Softplus</option>
-                                <option value={ActivationType.Softsign}>Softsign</option>
-                                <option value={ActivationType.ReLU}>ReLU</option>
-                                <option value={ActivationType.tanh}>tanh</option>
-                                <option value={ActivationType.Sigmoid}>Sigmoid</option>
-                                <option value={ActivationType.HardSigmoid}>Hard sigmoid</option>
-                                <option value={ActivationType.Linear}>Linear</option>
-                                <option value={ActivationType.Other}>Other</option>
-                            </select>
-                        </div>
+                        {this.state.layer.type !== LayerType.Pooling &&
+                            <div className="form-row">
+                                <label>Activation</label>
+                                <select value={this.state.layer.activation} onChange={e => this.update(e, 'activation')}>
+                                    <option value={ActivationType.Softmax}> Softmax</option>
+                                    <option value={ActivationType.ELU}>ELU</option>
+                                    <option value={ActivationType.SELU}>SELU</option>
+                                    <option value={ActivationType.Softplus}>Softplus</option>
+                                    <option value={ActivationType.Softsign}>Softsign</option>
+                                    <option value={ActivationType.ReLU}>ReLU</option>
+                                    <option value={ActivationType.tanh}>tanh</option>
+                                    <option value={ActivationType.Sigmoid}>Sigmoid</option>
+                                    <option value={ActivationType.HardSigmoid}>Hard sigmoid</option>
+                                    <option value={ActivationType.Linear}>Linear</option>
+                                    <option value={ActivationType.Other}>Other</option>
+                                </select>
+                            </div>
+                        }
                         <div className="form-row">
                             <label>Is input</label>
                             <input type="checkbox" />
@@ -150,6 +153,35 @@ export default class AddLayerDialog
                                         step={1}
                                         value={this.state.layer.kernelWidth}
                                     onChange={e => this.updateNumber(e, 'kernelWidth')} />
+                                </div>
+                                <div className="form-row">
+                                    <label>Height</label>
+                                    <input type="number"
+                                        min={1}
+                                        max={1000}
+                                        step={1}
+                                        value={this.state.layer.kernelHeight}
+                                        onChange={e => this.updateNumber(e, 'kernelHeight')} />
+                                </div>
+                            </div>
+                        }
+                        {this.state.layer.type == LayerType.Pooling &&
+                            <div>
+                                <div className="form-row">
+                                    <label>Mode</label>
+                                    <select value={this.state.layer.poolingMode} onChange={e => this.updateNumber(e, 'poolingMode')}>
+                                        <option value={PoolingMode.Max}>Max</option>
+                                        <option value={PoolingMode.Average}>Average</option>
+                                    </select>
+                                </div>
+                                <div className="form-row">
+                                    <label>Width</label>
+                                    <input type="number"
+                                        min={1}
+                                        max={1000}
+                                        step={1}
+                                        value={this.state.layer.kernelWidth}
+                                        onChange={e => this.updateNumber(e, 'kernelWidth')} />
                                 </div>
                                 <div className="form-row">
                                     <label>Height</label>

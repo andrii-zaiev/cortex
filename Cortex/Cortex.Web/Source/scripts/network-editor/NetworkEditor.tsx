@@ -94,17 +94,8 @@ export default class NetworkEditor
     private onLayerMoved(data) {
         this.setState(prevState => {
             const oldLayer = prevState.network.layers.find(l => l.id == data.id);
-            const newLayer = new Layer(
-                oldLayer.id,
-                oldLayer.name,
-                oldLayer.neuronsNumber,
-                oldLayer.type,
-                oldLayer.x + data.dx,
-                oldLayer.y + data.dy,
-                oldLayer.activation,
-                oldLayer.kernelsNumber,
-                oldLayer.kernelWidth,
-                oldLayer.kernelHeight);
+            const newLayer = oldLayer.move(data.dx, data.dy);
+
             return {
                 network: new Network(
                     prevState.network.layers.filter(l => l != oldLayer).concat(newLayer),

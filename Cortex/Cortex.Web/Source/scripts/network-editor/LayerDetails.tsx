@@ -88,22 +88,24 @@ export default class EditorToolbar
                                 <label className="top-label">Comment</label>
                                 <textarea></textarea>
                             </div>
-                            <div className="form-row">
-                                <label>Activation</label>
-                                <select value={this.state.layer.activation}>
-                                    <option value={ActivationType.Softmax}> Softmax</option>
-                                    <option value={ActivationType.ELU}>ELU</option>
-                                    <option value={ActivationType.SELU}>SELU</option>
-                                    <option value={ActivationType.Softplus}>Softplus</option>
-                                    <option value={ActivationType.Softsign}>Softsign</option>
-                                    <option value={ActivationType.ReLU}>ReLU</option>
-                                    <option value={ActivationType.tanh}>tanh</option>
-                                    <option value={ActivationType.Sigmoid}>Sigmoid</option>
-                                    <option value={ActivationType.HardSigmoid}>Hard sigmoid</option>
-                                    <option value={ActivationType.Linear}>Linear</option>
-                                    <option value={ActivationType.Other}>Other</option>
-                                </select>
-                            </div>
+                            {this.state.layer.type !== LayerType.Pooling &&
+                                <div className="form-row">
+                                    <label>Activation</label>
+                                    <select value={this.state.layer.activation}>
+                                        <option value={ActivationType.Softmax}> Softmax</option>
+                                        <option value={ActivationType.ELU}>ELU</option>
+                                        <option value={ActivationType.SELU}>SELU</option>
+                                        <option value={ActivationType.Softplus}>Softplus</option>
+                                        <option value={ActivationType.Softsign}>Softsign</option>
+                                        <option value={ActivationType.ReLU}>ReLU</option>
+                                        <option value={ActivationType.tanh}>tanh</option>
+                                        <option value={ActivationType.Sigmoid}>Sigmoid</option>
+                                        <option value={ActivationType.HardSigmoid}>Hard sigmoid</option>
+                                        <option value={ActivationType.Linear}>Linear</option>
+                                        <option value={ActivationType.Other}>Other</option>
+                                    </select>
+                                </div>
+                            }
                             <div className="form-row">
                                 <label>Is input</label>
                                 <input type="checkbox" />
@@ -149,10 +151,12 @@ export default class EditorToolbar
                                 <label className="top-label">Comment</label>
                                 <p></p>
                             </div>
-                            <div className="form-row">
-                                <label>Activation</label>
-                                <span>{this.state.layer.activationName}</span>
-                            </div>
+                            {this.state.layer.type !== LayerType.Pooling &&
+                                <div className="form-row">
+                                    <label>Activation</label>
+                                    <span>{this.state.layer.activationName}</span>
+                                </div>
+                            }
                             <div className="form-row">
                                 <label>Is input</label>
                                 <span>No</span>
