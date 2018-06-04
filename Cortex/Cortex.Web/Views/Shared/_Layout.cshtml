@@ -1,5 +1,10 @@
 ﻿@using Cortex.Auth
 @{
+    if (ViewBag.IsLanding == null)
+    {
+        ViewBag.IsLanding = false;
+    }
+
     string bodyClass = ViewBag.IsLanding ? "body-landing" : String.Empty;
 }
 
@@ -22,7 +27,7 @@
             @if (User.Identity.IsAuthenticated)
             {
                 <li class="navbar-item">
-                    <a href="#" class="fs-4">@User.Identity.Name.ToLower()</a>
+                    <a id="user-name-label" href="#" class="fs-4">@User.Identity.Name.ToLower()</a>
                 </li>
                 <li class="navbar-item">
                     <form method="post" asp-controller="Account" asp-action="LogOut">

@@ -4,6 +4,7 @@ import LayerType from '../models/LayerType';
 
 const layerWidth = 50;
 const baseLayerHeight = 50;
+const widthPerKernel = 10;
 const sin45 = 0.7;
 
 export default class LayerViewModel {
@@ -29,7 +30,7 @@ export default class LayerViewModel {
 
     public get width(): number {
         if (this.model.type === LayerType.Convolutional) {
-            return layerWidth + this.model.kernelsNumber;
+            return widthPerKernel * this.model.kernelsNumber;
         }
 
         return layerWidth;

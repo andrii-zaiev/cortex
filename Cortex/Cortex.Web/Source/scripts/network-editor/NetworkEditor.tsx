@@ -11,7 +11,6 @@ import { MessageType } from './events/Message';
 import Connection from './models/Connection';
 import LayerDetails from './LayerDetails';
 import NetworkService from './services/NetworkService';
-import { networkInterfaces } from 'os';
 
 class NetworkEditorProps {
     public networkId: string;

@@ -23,7 +23,10 @@ namespace Cortex.Services
 
         public async Task<Guid> CreateNetworkAsync(NewNetwork newNetwork)
         {
-            NetworkModel network = NetworkModel.CreateNew(newNetwork.Name, newNetwork.Description, newNetwork.OwnerId);
+            NetworkModel network = NetworkModel.CreateNew(
+                newNetwork.Name,
+                newNetwork.Description,
+                newNetwork.OwnerId);
 
             await _networkRepository.CreateNetworkAsync(network);
 

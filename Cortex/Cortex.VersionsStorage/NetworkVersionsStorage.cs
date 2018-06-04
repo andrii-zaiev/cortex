@@ -11,6 +11,9 @@ namespace Cortex.VersionsStorage
         // TODO: move to configuration
         private const string StoragePath = @"D:/Cortex.VersionsStorage";
         private const string SnapshotFileName = "snapshot.json";
+        private const string SystemUserName = "system";
+        private const string SystemUserEmail = "system@example.com";
+        private const string GitFolderName = ".git";
 
         public void Init(Guid networkId)
         {
@@ -34,7 +37,7 @@ namespace Cortex.VersionsStorage
             {
                 repository.Index.Add(SnapshotFileName);
 
-                var signature = new Signature("system", "system@example.com", DateTimeOffset.UtcNow);
+                var signature = new Signature(SystemUserName, SystemUserEmail, DateTimeOffset.UtcNow);
                 Commit commit = repository.Commit(comment, signature, signature);
 
                 return commit.Sha;
@@ -63,7 +66,7 @@ namespace Cortex.VersionsStorage
 
         private static string GetNetworkRepositoryPath(Guid networkId)
         {
-            return Path.Combine(GetNetworkPath(networkId), ".git");
+            return Path.Combine(GetNetworkPath(networkId), GitFolderName);
         }
 
         private static string GetNetworkPath(Guid networkId)

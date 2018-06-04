@@ -13,7 +13,8 @@ namespace Cortex.Web.Models.Networks
             Network network,
             Dictionary<Guid, User> users,
             bool isOwner,
-            bool canEdit)
+            bool canEdit,
+            bool hasVersions)
         {
             IsOwner = isOwner;
             Id = network.Id;
@@ -30,6 +31,7 @@ namespace Cortex.Web.Models.Networks
                 .Select(id => new UserDisplayModel(users[id]))
                 .ToList();
             CanEdit = canEdit;
+            HasVersions = hasVersions;
         }
 
         public Guid Id { get; }
@@ -53,6 +55,8 @@ namespace Cortex.Web.Models.Networks
         public List<UserDisplayModel> WriteAccessUsers { get; }
 
         public bool CanEdit { get; }
+
+        public bool HasVersions { get; set; }
 
         private static string ConvertAccessModeToString(AccessMode mode)
         {

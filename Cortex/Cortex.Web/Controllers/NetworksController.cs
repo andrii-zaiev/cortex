@@ -15,11 +15,13 @@ namespace Cortex.Web.Controllers
     public class NetworksController : Controller
     {
         private readonly INetworkService _networkService;
+        private readonly INetworkVersionsService _networkVersionsService;
         private readonly IUserService _userService;
 
-        public NetworksController(INetworkService networkService, IUserService userService)
+        public NetworksController(INetworkService networkService, INetworkVersionsService networkVersionsService, IUserService userService)
         {
             _networkService = networkService;
+            _networkVersionsService = networkVersionsService;
             _userService = userService;
         }
 
@@ -86,7 +88,9 @@ namespace Cortex.Web.Controllers
                        && await _networkService.CanEditNetworkAsync(id, userId);
             }
 
-            var model = new NetworkDetailsModel(network, users, isOwner, canEdit);
+            NetworkVersionMetadata currentVersion = await _networkVersionsService.GetCurrentVersionInfoAsync(id);
+
+            var model = new NetworkDetailsModel(network, users, isOwner, canEdit, currentVersion != null);
 
             return View(model);
         }

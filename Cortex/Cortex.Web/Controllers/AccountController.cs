@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Cortex.Web.Models.Account;
 using Microsoft.AspNetCore.Authorization;
@@ -59,7 +61,9 @@ namespace Cortex.Web.Controllers
                 return RedirectToAction("Index", "Main");
             }
 
-            return BadRequest();
+            List<string> errors = result.Errors.Select(e => e.Description).ToList();
+
+            return BadRequest(errors);
         }
 
         [HttpGet("/log-in")]
