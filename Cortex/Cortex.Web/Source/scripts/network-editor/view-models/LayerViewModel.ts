@@ -24,8 +24,6 @@ export default class LayerViewModel {
     public update(layer: Layer) {
         const newLayer = new LayerViewModel(layer);
         newLayer.isSelected = this.isSelected;
-        newLayer.isDragged = this.isDragged;
-        newLayer.drag = this.drag;
         return newLayer;
     }
 

@@ -104,7 +104,7 @@ export default class NetworkEditor
     private onLayerMoved(data) {
         this.setState(prevState => {
             const oldLayer = prevState.network.layers.find(l => l.id == data.id);
-            const newLayer = oldLayer.move(data.dx, data.dy);
+            const newLayer = Layer.move(oldLayer, data.dx, data.dy);
 
             return {
                 network: new Network(

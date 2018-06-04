@@ -1,6 +1,7 @@
 ﻿import Layer from "../models/Layer";
 import LayerType from "../models/LayerType";
 import ActivationType from "../models/ActivationType";
+import PoolingMode from "../models/PoolingMode";
 
 export default class EditLayerViewModel {
     public id: number;
@@ -9,6 +10,10 @@ export default class EditLayerViewModel {
     public neuronsNumber: number;
     public activation: ActivationType;
     public comment: string;
+    public kernelsNumber: number;
+    public kernelWidth: number;
+    public kernelHeight: number;
+    public poolingMode: PoolingMode;
 
     constructor(
         id: number,
@@ -16,13 +21,21 @@ export default class EditLayerViewModel {
         initial: Layer,
         neuronsNumber: number,
         activation: ActivationType,
-        comment: string) {
+        comment: string,
+        kernelsNumber: number,
+        kernelWidth: number,
+        kernelHeight: number,
+        poolingMode: PoolingMode) {
         this.id = id;
         this.name = name;
         this.initial = initial;
         this.neuronsNumber = neuronsNumber;
         this.activation = activation;
         this.comment = comment;
+        this.kernelsNumber = kernelsNumber;
+        this.kernelWidth = kernelWidth;
+        this.kernelHeight = kernelHeight;
+        this.poolingMode = poolingMode;
     }
 
     public static fromModel(layer: Layer): EditLayerViewModel {
@@ -32,7 +45,11 @@ export default class EditLayerViewModel {
             layer,
             layer.neuronsNumber,
             layer.activation,
-            layer.comment);
+            layer.comment,
+            layer.kernelsNumber,
+            layer.kernelWidth,
+            layer.kernelHeight,
+            layer.poolingMode);
     }
 
     public get typeName() {
@@ -47,6 +64,10 @@ export default class EditLayerViewModel {
         return ActivationType[this.activation];
     }
 
+    public get poolingModeName() {
+        return PoolingMode[this.poolingMode];
+    }
+
     public clone() {
         return new EditLayerViewModel(
             this.id,
@@ -54,7 +75,11 @@ export default class EditLayerViewModel {
             this.initial,
             this.neuronsNumber,
             this.activation,
-            this.comment);
+            this.comment,
+            this.kernelsNumber,
+            this.kernelWidth,
+            this.kernelHeight,
+            this.poolingMode);
     }
 
     public with(prop: string, value: any) {
@@ -69,7 +94,11 @@ export default class EditLayerViewModel {
             this.initial,
             this.initial.neuronsNumber,
             this.initial.activation,
-            this.initial.comment);
+            this.initial.comment,
+            this.initial.kernelsNumber,
+            this.initial.kernelWidth,
+            this.initial.kernelHeight,
+            this.initial.poolingMode);
     }
 
 
@@ -82,10 +111,10 @@ export default class EditLayerViewModel {
             this.initial.x,
             this.initial.y,
             this.activation,
-            this.initial.kernelsNumber,
-            this.initial.kernelWidth,
-            this.initial.kernelHeight,
-            this.initial.poolingMode,
+            this.kernelsNumber,
+            this.kernelWidth,
+            this.kernelHeight,
+            this.poolingMode,
             this.comment);
     }
 }

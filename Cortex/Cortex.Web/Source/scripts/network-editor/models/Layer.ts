@@ -42,19 +42,19 @@ export default class Layer {
         this.comment = comment;
     }
 
-    public move(dx: number, dy: number): Layer {
+    public static move(layer: Layer, dx: number, dy: number): Layer {
         return new Layer(
-            this.id,
-            this.name,
-            this.neuronsNumber,
-            this.type,
-            this.x + dx,
-            this.y + dy,
-            this.activation,
-            this.kernelsNumber,
-            this.kernelWidth,
-            this.kernelHeight,
-            this.poolingMode,
-            this.comment)
+            layer.id,
+            layer.name,
+            layer.neuronsNumber,
+            layer.type,
+            layer.x + dx,
+            layer.y + dy,
+            layer.activation,
+            layer.kernelsNumber,
+            layer.kernelWidth,
+            layer.kernelHeight,
+            layer.poolingMode,
+            layer.comment)
     }
 }

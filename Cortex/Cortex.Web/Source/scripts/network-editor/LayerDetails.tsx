@@ -8,6 +8,7 @@ import Network from './models/Network';
 import LayerType from './models/LayerType';
 import ActivationType from './models/ActivationType';
 import Layer from './models/Layer';
+import PoolingMode from './models/PoolingMode';
 
 class Props {
     public isEdit: boolean;
@@ -195,6 +196,66 @@ export default class EditorToolbar
                                     </div>
                                 </div>
                             }
+                            {this.state.layer.type == LayerType.Convolutional &&
+                                <div>
+                                    <div className="form-row">
+                                        <label>Kernels</label>
+                                        <input type="number"
+                                            min={1}
+                                            max={100000}
+                                            step={1}
+                                            value={this.state.layer.kernelsNumber}
+                                            onChange={e => this.updateNumber(e, 'kernelsNumber')} />
+                                    </div>
+                                    <div className="form-row">
+                                        <label>Width</label>
+                                        <input type="number"
+                                            min={1}
+                                            max={1000}
+                                            step={1}
+                                            value={this.state.layer.kernelWidth}
+                                            onChange={e => this.updateNumber(e, 'kernelWidth')} />
+                                    </div>
+                                    <div className="form-row">
+                                        <label>Height</label>
+                                        <input type="number"
+                                            min={1}
+                                            max={1000}
+                                            step={1}
+                                            value={this.state.layer.kernelHeight}
+                                            onChange={e => this.updateNumber(e, 'kernelHeight')} />
+                                    </div>
+                                </div>
+                            }
+                            {this.state.layer.type == LayerType.Pooling &&
+                                <div>
+                                    <div className="form-row">
+                                        <label>Mode</label>
+                                        <select value={this.state.layer.poolingMode} onChange={e => this.updateNumber(e, 'poolingMode')}>
+                                            <option value={PoolingMode.Max}>Max</option>
+                                            <option value={PoolingMode.Average}>Average</option>
+                                        </select>
+                                    </div>
+                                    <div className="form-row">
+                                        <label>Width</label>
+                                        <input type="number"
+                                            min={1}
+                                            max={1000}
+                                            step={1}
+                                            value={this.state.layer.kernelWidth}
+                                            onChange={e => this.updateNumber(e, 'kernelWidth')} />
+                                    </div>
+                                    <div className="form-row">
+                                        <label>Height</label>
+                                        <input type="number"
+                                            min={1}
+                                            max={1000}
+                                            step={1}
+                                            value={this.state.layer.kernelHeight}
+                                            onChange={e => this.updateNumber(e, 'kernelHeight')} />
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 );
@@ -238,6 +299,38 @@ export default class EditorToolbar
                                     <div className="form-row">
                                         <label>Dropout</label>
                                         <span>No</span>
+                                    </div>
+                                </div>
+                            }
+                            {this.state.layer.type == LayerType.Convolutional &&
+                                <div>
+                                    <div className="form-row">
+                                        <label>Kernels</label>
+                                        <span>{this.state.layer.kernelsNumber}</span>
+                                    </div>
+                                    <div className="form-row">
+                                        <label>Width</label>
+                                        <span>{this.state.layer.kernelWidth}</span>
+                                    </div>
+                                    <div className="form-row">
+                                        <label>Height</label>
+                                        <span>{this.state.layer.kernelHeight}</span>
+                                    </div>
+                                </div>
+                            }
+                            {this.state.layer.type == LayerType.Pooling &&
+                                <div>
+                                    <div className="form-row">
+                                        <label>Mode</label>
+                                        <span>{this.state.layer.poolingModeName}</span>
+                                    </div>
+                                    <div className="form-row">
+                                        <label>Width</label>
+                                        <span>{this.state.layer.kernelWidth}</span>
+                                    </div>
+                                    <div className="form-row">
+                                        <label>Height</label>
+                                        <span>{this.state.layer.kernelHeight}</span>
                                     </div>
                                 </div>
                             }
