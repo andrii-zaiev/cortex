@@ -84,6 +84,13 @@ export default class NetworkEditor
     }
 
     private onLayerAdded(layer: Layer) {
+        if (this.state.network.layers.length > 0) {
+            const maxX = Math.max(...this.state.network.layers.map(l => l.x));
+            const lastY = this.state.network.layers.find(l => l.x === maxX).y;
+            layer.x = maxX + 100;
+            layer.y = lastY;
+        }
+
         this.setState(prevState => ({
             network: new Network(
                 prevState.network.layers.concat(layer),
