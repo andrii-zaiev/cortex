@@ -14,6 +14,7 @@ export default class Layer {
     public kernelWidth: number;
     public kernelHeight: number;
     public poolingMode: PoolingMode;
+    public comment: string;
 
     constructor(id: number,
         name: string,
@@ -25,7 +26,8 @@ export default class Layer {
         kernelsNumber: number,
         kernelWidth: number,
         kernelHeight: number,
-        poolingMode: PoolingMode) {
+        poolingMode: PoolingMode,
+        comment: string) {
         this.id = id;
         this.name = name;
         this.neuronsNumber = neuronsNumber;
@@ -37,6 +39,7 @@ export default class Layer {
         this.kernelWidth = kernelWidth;
         this.kernelHeight = kernelHeight;
         this.poolingMode = poolingMode;
+        this.comment = comment;
     }
 
     public move(dx: number, dy: number): Layer {
@@ -51,6 +54,7 @@ export default class Layer {
             this.kernelsNumber,
             this.kernelWidth,
             this.kernelHeight,
-            this.poolingMode)
+            this.poolingMode,
+            this.comment)
     }
 }

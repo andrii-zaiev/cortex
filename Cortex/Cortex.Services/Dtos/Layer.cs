@@ -23,5 +23,7 @@
         public int Activation { get; set; }
 
         public int PoolingMode { get; set; }
+
+        public string Comment { get; set; }
     }
 }

@@ -12,6 +12,7 @@ export default class NewLayerViewModel {
     public kernelWidth: number;
     public kernelHeight: number;
     public poolingMode: PoolingMode;
+    public comment: string;
 
     constructor(name: string,
         type: LayerType,
@@ -20,7 +21,8 @@ export default class NewLayerViewModel {
         kernelsNumber: number,
         kernelWidth: number,
         kernelHeight: number,
-        poolingMode: PoolingMode) {
+        poolingMode: PoolingMode,
+        comment: string) {
         this.name = name;
         this.type = type;
         this.neuronsNumber = neuronsNumber;
@@ -32,7 +34,7 @@ export default class NewLayerViewModel {
     }
 
     public static init() {
-        return new NewLayerViewModel('', LayerType.Dense, 1, ActivationType.Sigmoid, 1, 1, 1, PoolingMode.Max);
+        return new NewLayerViewModel('', LayerType.Dense, 1, ActivationType.Sigmoid, 1, 1, 1, PoolingMode.Max, '');
     }
 
     public clone() {
@@ -44,7 +46,8 @@ export default class NewLayerViewModel {
             this.kernelsNumber,
             this.kernelWidth,
             this.kernelHeight,
-            this.poolingMode);
+            this.poolingMode,
+            this.comment);
     }
 
     public with(prop: string, value: any) {
@@ -64,6 +67,7 @@ export default class NewLayerViewModel {
             this.kernelsNumber,
             this.kernelWidth,
             this.kernelHeight,
-            this.poolingMode);
+            this.poolingMode,
+            this.comment);
     }
 }

@@ -8,17 +8,31 @@ export default class EditLayerViewModel {
     public initial: Layer;
     public neuronsNumber: number;
     public activation: ActivationType;
+    public comment: string;
 
-    constructor(id: number, name: string, initial: Layer, neuronsNumber: number, activation: ActivationType) {
+    constructor(
+        id: number,
+        name: string,
+        initial: Layer,
+        neuronsNumber: number,
+        activation: ActivationType,
+        comment: string) {
         this.id = id;
         this.name = name;
         this.initial = initial;
         this.neuronsNumber = neuronsNumber;
         this.activation = activation;
+        this.comment = comment;
     }
 
     public static fromModel(layer: Layer): EditLayerViewModel {
-        return new EditLayerViewModel(layer.id, layer.name, layer, layer.neuronsNumber, layer.activation);
+        return new EditLayerViewModel(
+            layer.id,
+            layer.name,
+            layer,
+            layer.neuronsNumber,
+            layer.activation,
+            layer.comment);
     }
 
     public get typeName() {
@@ -34,7 +48,13 @@ export default class EditLayerViewModel {
     }
 
     public clone() {
-        return new EditLayerViewModel(this.id, this.name, this.initial, this.neuronsNumber, this.activation);
+        return new EditLayerViewModel(
+            this.id,
+            this.name,
+            this.initial,
+            this.neuronsNumber,
+            this.activation,
+            this.comment);
     }
 
     public with(prop: string, value: any) {
@@ -48,7 +68,8 @@ export default class EditLayerViewModel {
             this.initial.name,
             this.initial,
             this.initial.neuronsNumber,
-            this.initial.activation);
+            this.initial.activation,
+            this.initial.comment);
     }
 
 
@@ -64,6 +85,7 @@ export default class EditLayerViewModel {
             this.initial.kernelsNumber,
             this.initial.kernelWidth,
             this.initial.kernelHeight,
-            this.initial.poolingMode);
+            this.initial.poolingMode,
+            this.comment);
     }
 }

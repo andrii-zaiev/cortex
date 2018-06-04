@@ -141,7 +141,7 @@ export default class EditorToolbar
                         <div className="form-dense">
                             <div className="form-row">
                                 <label>Name</label>
-                                <input value={this.state.layer.name} onChange={e => this.update(e, 'name')} />
+                                <input type="text" value={this.state.layer.name} onChange={e => this.update(e, 'name')} />
                             </div>
                             <div className="form-row">
                                 <label>Type</label>
@@ -149,12 +149,12 @@ export default class EditorToolbar
                             </div>
                             <div className="form-row">
                                 <label className="top-label">Comment</label>
-                                <textarea></textarea>
+                                <textarea value={this.state.layer.comment} onChange={e => this.update(e, 'comment')}></textarea>
                             </div>
                             {this.state.layer.type !== LayerType.Pooling &&
                                 <div className="form-row">
                                     <label>Activation</label>
-                                <select value={this.state.layer.activation} onChange={e => this.updateNumber(e, 'activation')}>
+                                    <select value={this.state.layer.activation} onChange={e => this.updateNumber(e, 'activation')}>
                                         <option value={ActivationType.Softmax}> Softmax</option>
                                         <option value={ActivationType.ELU}>ELU</option>
                                         <option value={ActivationType.SELU}>SELU</option>
@@ -213,7 +213,7 @@ export default class EditorToolbar
                             </div>
                             <div className="form-row">
                                 <label className="top-label">Comment</label>
-                                <p></p>
+                                <div>{this.state.layer.comment}</div>
                             </div>
                             {this.state.layer.type !== LayerType.Pooling &&
                                 <div className="form-row">

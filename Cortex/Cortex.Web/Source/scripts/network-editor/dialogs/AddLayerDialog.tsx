@@ -79,7 +79,7 @@ export default class AddLayerDialog
                         </div>
                         <div className="form-row">
                             <label className="top-label">Comment</label>
-                            <textarea></textarea>
+                            <textarea value={this.state.layer.comment} onChange={e => this.update(e, 'comment')}></textarea>
                         </div>
                         {this.state.layer.type !== LayerType.Pooling &&
                             <div className="form-row">
