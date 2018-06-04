@@ -99,4 +99,20 @@ export default class NetworkViewModel {
             network.layers.map(l => new LayerViewModel(l)),
             network.connections.map(c => new ConnectionViewModel(c)));
     }
+
+    public update(network: Network) {
+        const currentLayers = new Map<number, LayerViewModel>(
+            this.layers.map(l => [l.model.id, l] as [number, LayerViewModel]));
+
+        return new NetworkViewModel(
+            network.layers.map(l => {
+                const old = currentLayers.get(l.id);
+                if (old) {
+                    return old.update(l);
+                }
+
+                return new LayerViewModel(l);
+            }),
+            network.connections.map(c => new ConnectionViewModel(c)));
+    }
 }

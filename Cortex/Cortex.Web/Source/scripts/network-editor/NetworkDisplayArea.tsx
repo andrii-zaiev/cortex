@@ -79,7 +79,7 @@ export default class NetworkDisplayArea
 
     public static getDerivedStateFromProps(nextProps: { network: Network, isEdit: boolean }, prevState: State) {
         return new State(
-            NetworkViewModel.fromModel(nextProps.network),
+            prevState.network.update(nextProps.network),
             prevState.translate,
             prevState.scale,
             prevState.grabbing,

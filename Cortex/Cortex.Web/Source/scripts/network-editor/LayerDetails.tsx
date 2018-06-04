@@ -2,11 +2,12 @@
 
 import EditLayerViewModel from './view-models/EditLayerViewModel';
 import EventBus from '../shared/events/EventBus';
-import { MessageType } from '../shared/events/Message';
+import { MessageType, Message } from '../shared/events/Message';
 import { SelectedItem, ItemType } from './models/SelectedItem';
 import Network from './models/Network';
 import LayerType from './models/LayerType';
 import ActivationType from './models/ActivationType';
+import Layer from './models/Layer';
 
 class Props {
     public isEdit: boolean;
@@ -18,12 +19,14 @@ class State {
     public isEdit: boolean;
     public layer: EditLayerViewModel;
     public network: Network;
+    public isModified: boolean;
 
-    constructor(isVisible: boolean, isEdit: boolean, layer: EditLayerViewModel, network: Network) {
+    constructor(isVisible: boolean, isEdit: boolean, layer: EditLayerViewModel, network: Network, isModified: boolean) {
         this.isVisible = isVisible;
         this.isEdit = isEdit;
         this.layer = layer;
         this.network = network;
+        this.isModified = isModified;
     }
 }
 
@@ -34,8 +37,10 @@ export default class EditorToolbar
 
         this.onItemSelected = this.onItemSelected.bind(this);
         this.onLayerDeleted = this.onLayerDeleted.bind(this);
+        this.cancelChanges = this.cancelChanges.bind(this);
+        this.saveChanges = this.saveChanges.bind(this);
 
-        this.state = new State(false, props.isEdit, null, props.network);
+        this.state = new State(false, props.isEdit, null, props.network, false);
     }
 
     public componentDidMount() {
@@ -49,7 +54,7 @@ export default class EditorToolbar
     }
 
     public static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-        return new State(prevState.isVisible, nextProps.isEdit, prevState.layer, nextProps.network);
+        return new State(prevState.isVisible, nextProps.isEdit, prevState.layer, nextProps.network, prevState.isModified);
     }
 
     private onItemSelected(item: SelectedItem) {
@@ -60,13 +65,55 @@ export default class EditorToolbar
             layer = EditLayerViewModel.fromModel(this.state.network.layers.find(l => l.id === item.id));
         }
 
-        this.setState(prevState => new State(isVisible, prevState.isEdit, layer, prevState.network));
+        this.setState(prevState => new State(isVisible, prevState.isEdit, layer, prevState.network, false));
     }
 
     private onLayerDeleted(id: number) {
         if (this.state.isVisible && this.state.layer.id === id) {
-            this.setState(prevState => new State(false, prevState.isEdit, null, prevState.network));
+            this.setState(prevState => new State(false, prevState.isEdit, null, prevState.network, false));
         }
+    }
+
+    private update(event, prop: string) {
+        const value = event.target.value;
+        this.updateValue(prop, value);
+    }
+
+    private updateNumber(event, prop: string) {
+        const value = Number(event.target.value);
+        this.updateValue(prop, value);
+    }
+
+    private updateValue(prop, value) {
+        this.setState(prevState => new State(
+            prevState.isVisible,
+            prevState.isEdit,
+            prevState.layer.clone().with(prop, value),
+            prevState.network,
+            true));
+    }
+
+    private cancelChanges() {
+        this.setState(prevState => new State(
+            prevState.isVisible,
+            prevState.isEdit,
+            prevState.layer.restoreInitial(),
+            prevState.network,
+            false
+        ));
+    }
+
+    private saveChanges() {
+        const layer = this.state.layer.toModel();
+
+        this.setState(prevState => new State(
+            prevState.isVisible,
+            prevState.isEdit,
+            EditLayerViewModel.fromModel(layer),
+            prevState.network,
+            false));
+
+        EventBus.emit(new Message<Layer>(MessageType.UpdateLayer, layer));
     }
 
     public render(): React.ReactNode {
@@ -74,11 +121,27 @@ export default class EditorToolbar
             if (this.state.isEdit) {
                 return (
                     <div className="panel">
-                        <h5>Layer Details</h5>
+                        <div className="details-heading">
+                            <h5>Layer Details</h5>
+                            {this.state.isEdit && this.state.isModified &&
+                                <div className="details-heading-buttons">
+                                    <button title="Cancel"
+                                        className="button-light button-icon"
+                                        onClick={this.cancelChanges}>
+                                        <i className="fa fa-close"></i>
+                                    </button>
+                                    <button title="Save"
+                                        className="button-primary button-icon"
+                                        onClick={this.saveChanges}>
+                                        <i className="fa fa-save"></i>
+                                    </button>
+                                </div>
+                            }
+                        </div>
                         <div className="form-dense">
                             <div className="form-row">
                                 <label>Name</label>
-                                <input value={this.state.layer.name} />
+                                <input value={this.state.layer.name} onChange={e => this.update(e, 'name')} />
                             </div>
                             <div className="form-row">
                                 <label>Type</label>
@@ -91,7 +154,7 @@ export default class EditorToolbar
                             {this.state.layer.type !== LayerType.Pooling &&
                                 <div className="form-row">
                                     <label>Activation</label>
-                                    <select value={this.state.layer.activation}>
+                                <select value={this.state.layer.activation} onChange={e => this.updateNumber(e, 'activation')}>
                                         <option value={ActivationType.Softmax}> Softmax</option>
                                         <option value={ActivationType.ELU}>ELU</option>
                                         <option value={ActivationType.SELU}>SELU</option>
@@ -122,7 +185,8 @@ export default class EditorToolbar
                                             min={1}
                                             max={100000}
                                             step={1}
-                                            value={this.state.layer.neuronsNumber} />
+                                            value={this.state.layer.neuronsNumber}
+                                            onChange={e => this.updateNumber(e, 'neuronsNumber')}/>
                                     </div>
                                     <div className="form-row">
                                         <label>Dropout</label>

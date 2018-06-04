@@ -8,7 +8,8 @@
     DeleteLayer = 7,
     DeleteConnection = 8,
     CloseSaveDialog = 9,
-    ShowConfirmation = 10
+    ShowConfirmation = 10,
+    UpdateLayer = 11
 }
 
 export class Message<T> {

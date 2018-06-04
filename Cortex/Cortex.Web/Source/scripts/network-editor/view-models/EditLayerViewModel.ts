@@ -32,4 +32,38 @@ export default class EditLayerViewModel {
     public get activationName() {
         return ActivationType[this.activation];
     }
+
+    public clone() {
+        return new EditLayerViewModel(this.id, this.name, this.initial, this.neuronsNumber, this.activation);
+    }
+
+    public with(prop: string, value: any) {
+        this[prop] = value;
+        return this;
+    }
+
+    public restoreInitial() {
+        return new EditLayerViewModel(
+            this.id,
+            this.initial.name,
+            this.initial,
+            this.initial.neuronsNumber,
+            this.initial.activation);
+    }
+
+
+    public toModel(): Layer {
+        return new Layer(
+            this.initial.id,
+            this.name,
+            this.neuronsNumber,
+            this.initial.type,
+            this.initial.x,
+            this.initial.y,
+            this.activation,
+            this.initial.kernelsNumber,
+            this.initial.kernelWidth,
+            this.initial.kernelHeight,
+            this.initial.poolingMode);
+    }
 }

@@ -46,6 +46,7 @@ export default class NetworkEditor
         this.deleteLayer = this.deleteLayer.bind(this);
         this.deleteConnection = this.deleteConnection.bind(this);
         this.startEditing = this.startEditing.bind(this);
+        this.updateLayer = this.updateLayer.bind(this);
 
         this.isReadOnly = props.isReadOnly;
         this.networkId = props.networkId;
@@ -61,6 +62,7 @@ export default class NetworkEditor
         EventBus.subscribe(MessageType.NewConnection, this.onConnectionAdded);
         EventBus.subscribe(MessageType.DeleteLayer, this.deleteLayer);
         EventBus.subscribe(MessageType.DeleteConnection, this.deleteConnection);
+        EventBus.subscribe(MessageType.UpdateLayer, this.updateLayer);
 
         this.loadNetwork();
     }
@@ -81,6 +83,7 @@ export default class NetworkEditor
         EventBus.unsubscribe(MessageType.NewConnection, this.onConnectionAdded);
         EventBus.unsubscribe(MessageType.DeleteLayer, this.deleteLayer);
         EventBus.unsubscribe(MessageType.DeleteConnection, this.deleteConnection);
+        EventBus.unsubscribe(MessageType.UpdateLayer, this.updateLayer);
     }
 
     private onLayerAdded(layer: Layer) {
@@ -124,6 +127,14 @@ export default class NetworkEditor
             network: new Network(
                 prevState.network.layers.filter(l => l.id !== id),
                 prevState.network.connections.filter(c => c.fromId !== id && c.toId !== id))
+        }));
+    }
+
+    private updateLayer(layer: Layer) {
+        this.setState(prevState => ({
+            network: new Network(
+                prevState.network.layers.filter(l => l.id !== layer.id).concat(layer),
+                prevState.network.connections)
         }));
     }
 

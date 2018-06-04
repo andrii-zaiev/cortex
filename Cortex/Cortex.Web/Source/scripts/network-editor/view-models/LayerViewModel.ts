@@ -21,6 +21,14 @@ export default class LayerViewModel {
         this.drag = { x: 0, y: 0 };
     }
 
+    public update(layer: Layer) {
+        const newLayer = new LayerViewModel(layer);
+        newLayer.isSelected = this.isSelected;
+        newLayer.isDragged = this.isDragged;
+        newLayer.drag = this.drag;
+        return newLayer;
+    }
+
     public get x(): number {
         return this.model.x + this.drag.x;
     }
