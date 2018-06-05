@@ -85,6 +85,11 @@ export default class EditorToolbar
         this.updateValue(prop, value);
     }
 
+    private updateBoolean(event, prop: string) {
+        const checked = event.target.checked;
+        this.updateValue(prop, checked);
+    }
+
     private updateValue(prop, value) {
         this.setState(prevState => new State(
             prevState.isVisible,
@@ -172,11 +177,15 @@ export default class EditorToolbar
                             }
                             <div className="form-row">
                                 <label>Is input</label>
-                                <input type="checkbox" />
+                                <input type="checkbox"
+                                    checked={this.state.layer.isInput}
+                                    onChange={e => this.updateBoolean(e, 'isInput')} />
                             </div>
                             <div className="form-row">
                                 <label>Is output</label>
-                                <input type="checkbox" />
+                                <input type="checkbox"
+                                    checked={this.state.layer.isOutput}
+                                    onChange={e => this.updateBoolean(e, 'isOutput')} />
                             </div>
                             {this.state.layer.initial.type == LayerType.Dense &&
                                 <div>
@@ -284,11 +293,11 @@ export default class EditorToolbar
                             }
                             <div className="form-row">
                                 <label>Is input</label>
-                                <span>No</span>
+                                <span>{this.state.layer.isInput ? 'Yes' : 'No'}</span>
                             </div>
                             <div className="form-row">
                                 <label>Is output</label>
-                                <span>No</span>
+                                <span>{this.state.layer.isOutput ? 'Yes' : 'No'}</span>
                             </div>
                             {this.state.layer.initial.type == LayerType.Dense &&
                                 <div>

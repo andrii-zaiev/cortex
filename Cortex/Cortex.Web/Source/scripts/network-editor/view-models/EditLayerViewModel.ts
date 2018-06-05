@@ -14,6 +14,8 @@ export default class EditLayerViewModel {
     public kernelWidth: number;
     public kernelHeight: number;
     public poolingMode: PoolingMode;
+    public isInput: boolean;
+    public isOutput: boolean;
 
     constructor(
         id: number,
@@ -25,7 +27,9 @@ export default class EditLayerViewModel {
         kernelsNumber: number,
         kernelWidth: number,
         kernelHeight: number,
-        poolingMode: PoolingMode) {
+        poolingMode: PoolingMode,
+        isInput: boolean,
+        isOutput: boolean) {
         this.id = id;
         this.name = name;
         this.initial = initial;
@@ -36,6 +40,8 @@ export default class EditLayerViewModel {
         this.kernelWidth = kernelWidth;
         this.kernelHeight = kernelHeight;
         this.poolingMode = poolingMode;
+        this.isInput = isInput;
+        this.isOutput = isOutput;
     }
 
     public static fromModel(layer: Layer): EditLayerViewModel {
@@ -49,14 +55,24 @@ export default class EditLayerViewModel {
             layer.kernelsNumber,
             layer.kernelWidth,
             layer.kernelHeight,
-            layer.poolingMode);
+            layer.poolingMode,
+            layer.isInput,
+            layer.isOutput);
     }
 
     public get typeName() {
+        if (!this.initial) {
+            return '';
+        }
+
         return LayerType[this.initial.type];
     }
 
     public get type() {
+        if (!this.initial) {
+            return LayerType.Dense;
+        }
+
         return this.initial.type;
     }
 
@@ -79,7 +95,9 @@ export default class EditLayerViewModel {
             this.kernelsNumber,
             this.kernelWidth,
             this.kernelHeight,
-            this.poolingMode);
+            this.poolingMode,
+            this.isInput,
+            this.isOutput);
     }
 
     public with(prop: string, value: any) {
@@ -98,9 +116,10 @@ export default class EditLayerViewModel {
             this.initial.kernelsNumber,
             this.initial.kernelWidth,
             this.initial.kernelHeight,
-            this.initial.poolingMode);
+            this.initial.poolingMode,
+            this.initial.isInput,
+            this.initial.isOutput);
     }
-
 
     public toModel(): Layer {
         return new Layer(
@@ -115,6 +134,8 @@ export default class EditLayerViewModel {
             this.kernelWidth,
             this.kernelHeight,
             this.poolingMode,
-            this.comment);
+            this.comment,
+            this.isInput,
+            this.isOutput);
     }
 }

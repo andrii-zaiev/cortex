@@ -47,6 +47,11 @@ export default class AddLayerDialog
         this.updateValue(prop, value);
     }
 
+    private updateBoolean(event, prop: string) {
+        const checked = event.target.checked;
+        this.updateValue(prop, checked);
+    }
+
     private updateValue(prop, value) {
         this.setState(prevState => ({
             isOpen: prevState.isOpen,
@@ -101,11 +106,15 @@ export default class AddLayerDialog
                         }
                         <div className="form-row">
                             <label>Is input</label>
-                            <input type="checkbox" />
+                            <input type="checkbox"
+                                checked={this.state.layer.isInput}
+                                onChange={e => this.updateBoolean(e, 'isInput')} />
                         </div>
                         <div className="form-row">
                             <label>Is output</label>
-                            <input type="checkbox" />
+                            <input type="checkbox"
+                                checked={this.state.layer.isOutput}
+                                onChange={e => this.updateBoolean(e, 'isOutput')} />
                         </div>
                         <div className="form-row">
                             <label>Type</label>

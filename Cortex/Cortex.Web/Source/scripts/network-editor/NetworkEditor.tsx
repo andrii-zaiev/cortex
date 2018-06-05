@@ -16,6 +16,7 @@ class NetworkEditorProps {
     public networkId: string;
     public versionId: string;
     public isReadOnly: boolean;
+    public isEdit: boolean;
 }
 
 class NetworkEditorState {
@@ -53,7 +54,7 @@ export default class NetworkEditor
         this.versionId = props.versionId;
         const network = new Network([], []);
 
-        this.state = new NetworkEditorState(network, false, true);
+        this.state = new NetworkEditorState(network, props.isEdit, true);
     }
 
     public componentDidMount() {

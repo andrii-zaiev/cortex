@@ -71,8 +71,10 @@ export default class AddConnectionDialog
 
     public render() {
         const fromOptions = this.state.network.layers
+            .filter(l => !l.isOutput)
             .map(l => <option key={l.id} value={l.id} >{l.name}</ option>);
         const toOptions = this.state.network.layers
+            .filter(l => !l.isInput)
             .map(l => <option key={l.id} value={l.id} >{l.name}</ option>);
         const connectionExists = this.state.network.connections
             .some(c => c.fromId == this.state.connection.fromId
