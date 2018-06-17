@@ -53,7 +53,7 @@
                     <span>@Model.WriteAccess</span>
                     @if (Model.WriteAccessUsers.Any())
                     {
-                        string users = String.Join(", ", Model.ReadAccessUsers.Select(u => $"{u.Name} <{u.UserName.ToLower()}>"));
+                        string users = String.Join(", ", Model.WriteAccessUsers.Select(u => $"{u.Name} <{u.UserName.ToLower()}>"));
 
                         <span>(@users)</span>
                     }

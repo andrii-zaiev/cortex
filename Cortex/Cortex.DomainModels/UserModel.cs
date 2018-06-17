@@ -31,10 +31,10 @@ namespace Cortex.DomainModels
 
         public string PasswordHash { get; private set; }
 
-        public static UserModel CreateNew(string name, string userName, string email, string passwordHash)
+        public static UserModel CreateNew(Guid id, string name, string userName, string email, string passwordHash)
         {
             return new UserModel(
-                Guid.NewGuid(),
+                id,
                 name,
                 userName?.ToUpper(),
                 email?.ToUpper(),

@@ -10,6 +10,7 @@
     <None Remove="Source\scripts\network-editor\dialogs\AddConnectionDialog.tsx" />
     <None Remove="Source\scripts\network-editor\dialogs\AddLayerDialog.tsx" />
     <None Remove="Source\scripts\network-editor\dialogs\SaveVersionDialog.tsx" />
+    <None Remove="Source\scripts\network-editor\models\PoolingMode.ts" />
     <None Remove="Source\scripts\shared\events\EventBus.ts" />
     <None Remove="Source\scripts\shared\events\Message.ts" />
     <None Remove="Source\scripts\network-editor\LayerDetails.tsx" />
@@ -45,6 +46,7 @@
     <TypeScriptCompile Include="Source\scripts\network-editor\dialogs\AddConnectionDialog.tsx" />
     <TypeScriptCompile Include="Source\scripts\network-editor\dialogs\SaveVersionDialog.tsx" />
     <TypeScriptCompile Include="Source\scripts\network-editor\dialogs\AddLayerDialog.tsx" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\models\PoolingMode.ts" />
     <TypeScriptCompile Include="Source\scripts\shared\events\Message.ts" />
     <TypeScriptCompile Include="Source\scripts\shared\events\EventBus.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\LayerDetails.tsx" />

@@ -96,7 +96,7 @@ export default class NetworkViewModel {
 
     public static fromModel(network: Network) {
         return new NetworkViewModel(
-            network.layers.map(l => new LayerViewModel(l)),
+            network.layers.map(l => new LayerViewModel(l)).sort((a, b) => a.x - b.x),
             network.connections.map(c => new ConnectionViewModel(c)));
     }
 
@@ -112,7 +112,7 @@ export default class NetworkViewModel {
                 }
 
                 return new LayerViewModel(l);
-            }),
+            }).sort((a, b) => a.x - b.x),
             network.connections.map(c => new ConnectionViewModel(c)));
     }
 }

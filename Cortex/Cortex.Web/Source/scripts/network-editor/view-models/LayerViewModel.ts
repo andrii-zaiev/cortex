@@ -3,9 +3,10 @@ import ActivationType from '../models/ActivationType';
 import LayerType from '../models/LayerType';
 import PoolingMode from '../models/PoolingMode';
 
-const layerWidth = 50;
+const layerWidth = 25;
 const baseLayerHeight = 50;
 const widthPerKernel = 10;
+const heightPerNeuron = 10;
 const sin45 = 0.7;
 
 export default class LayerViewModel {
@@ -37,7 +38,8 @@ export default class LayerViewModel {
 
     public get width(): number {
         if (this.model.type === LayerType.Convolutional) {
-            return widthPerKernel * this.model.kernelsNumber;
+            const multiplier = Math.log(this.model.kernelsNumber);
+            return widthPerKernel * (multiplier > 1 ? multiplier : 1);
         }
 
         if (this.model.type === LayerType.Pooling) {
@@ -53,7 +55,8 @@ export default class LayerViewModel {
             return baseLayerHeight + this.model.kernelHeight;
         }
 
-        return baseLayerHeight + this.model.neuronsNumber;
+        const multiplier = Math.log(this.model.neuronsNumber);
+        return baseLayerHeight + heightPerNeuron * (multiplier > 1 ? multiplier : 1);
     }
 
     public get depth(): number {
@@ -67,7 +70,7 @@ export default class LayerViewModel {
 
     public get info(): string {
         if (this.model.type === LayerType.Pooling) {
-            return `${PoolingMode[this.model.poolingMode]} pooling`;
+            return `${PoolingMode[this.model.poolingMode]}`;
         }
 
         return ActivationType[this.model.activation];

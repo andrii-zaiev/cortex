@@ -48,7 +48,7 @@ namespace Cortex.Auth
 
         public async Task<IdentityResult> CreateAsync(IdentityUser user, CancellationToken cancellationToken)
         {
-            UserModel userModel = UserModel.CreateNew(user.Name, user.UserName, user.Email, user.PasswordHash);
+            UserModel userModel = UserModel.CreateNew(user.Id, user.Name, user.UserName, user.Email, user.PasswordHash);
 
             await _userRepository.CreateAsync(userModel);
 
