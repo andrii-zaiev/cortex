@@ -1,7 +1,7 @@
 ﻿import { combineReducers } from 'redux';
 import { Map, Record, Seq } from 'immutable';
-import { Actions, ActionType } from '../actions';
-import { Layer, Connection, SelectedItem, LayerUpdate } from '../models';
+import { Actions, ActionType, DeleteLayerAction, DeleteConnectionAction } from '../actions';
+import { Layer, Connection, SelectedItem, LayerUpdate, ItemType } from '../models';
 
 function noop<T>(def: T) {
     return (state: T = def, action: Actions) => state;
@@ -86,12 +86,26 @@ function connections(state: Map<number, Connection> = Map(), action: Actions): M
     }
 }
 
+function handleSelectedItemDeletion(
+    state: SelectedItem,
+    action: DeleteLayerAction | DeleteConnectionAction,
+    expectedType: ItemType): SelectedItem {
+    if (state != null && state.type === expectedType && state.id === action.id) {
+        return null;
+    }
+    return state;
+}
+
 function selectedItem(state: SelectedItem = null, action: Actions): SelectedItem {
     switch (action.type) {
         case ActionType.SELECT_ITEM:
             return action.item;
         case ActionType.DESELECT_ITEM:
             return null;
+        case ActionType.DELETE_LAYER:
+            return handleSelectedItemDeletion(state, action, ItemType.Layer);
+        case ActionType.DELETE_CONNECTION:
+            return handleSelectedItemDeletion(state, action, ItemType.Connection);
         default:
             return state;
     }
