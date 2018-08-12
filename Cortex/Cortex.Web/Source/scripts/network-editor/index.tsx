@@ -4,7 +4,7 @@ import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import rootReducer from './reducers'
 import thunkMiddleware from 'redux-thunk';
-import NetworkEditorApp from './components/NetworkEditorApp';
+import NetworkEditorApp from './containers/NetworkEditorApp';
 
 const element = document.getElementById('network-editor');
 

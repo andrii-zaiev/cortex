@@ -31,6 +31,15 @@ function isSaving(state: boolean = false, action: Actions): boolean {
     }
 }
 
+function isEdit(state: boolean = false, action: Actions): boolean {
+    switch (action.type) {
+        case ActionType.START_EDITING:
+            return true;
+        default:
+            return state;
+    }
+}
+
 function layers(state: Map<number, Layer> = Map(), action: Actions): Map<number, Layer> {
     switch (action.type) {
         case ActionType.RECEIVE_NETWORK:
@@ -93,6 +102,8 @@ const rootReducer = combineReducers({
     versionId: noop<string>(null),
     isLoaded,
     isSaving,
+    isEdit,
+    isReadOnly: noop <boolean>(false),
     layers,
     connections,
     selectedItem

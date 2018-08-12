@@ -13,6 +13,7 @@
     <None Remove="Source\scripts\legacy-network-editor\models\PoolingMode.ts" />
     <None Remove="Source\scripts\network-editor\actions\index.ts" />
     <None Remove="Source\scripts\network-editor\components\EditorToolbar.tsx" />
+    <None Remove="Source\scripts\network-editor\components\NetworkEditor.tsx" />
     <None Remove="Source\scripts\network-editor\components\NetworkEditorApp.tsx" />
     <None Remove="Source\scripts\network-editor\models\ActivationType.ts" />
     <None Remove="Source\scripts\network-editor\models\index.ts" />
@@ -20,6 +21,9 @@
     <None Remove="Source\scripts\network-editor\models\PoolingMode.ts" />
     <None Remove="Source\scripts\network-editor\models\SelectedItem.ts" />
     <None Remove="Source\scripts\network-editor\reducers\index.ts" />
+    <None Remove="Source\scripts\network-editor\services\dtos\NetworkDto.ts" />
+    <None Remove="Source\scripts\network-editor\services\dtos\VersionDto.ts" />
+    <None Remove="Source\scripts\network-editor\services\NetworkService.ts" />
     <None Remove="Source\scripts\shared\events\EventBus.ts" />
     <None Remove="Source\scripts\shared\events\Message.ts" />
     <None Remove="Source\scripts\legacy-network-editor\LayerDetails.tsx" />
@@ -58,13 +62,17 @@
     <TypeScriptCompile Include="Source\scripts\legacy-network-editor\models\PoolingMode.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\actions\index.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\components\EditorToolbar.tsx" />
-    <TypeScriptCompile Include="Source\scripts\network-editor\components\NetworkEditorApp.tsx" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\components\NetworkEditor.tsx" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\containers\NetworkEditorApp.tsx" />
     <TypeScriptCompile Include="Source\scripts\network-editor\models\ActivationType.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\models\index.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\models\LayerType.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\models\PoolingMode.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\models\SelectedItem.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\reducers\index.ts" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\services\dtos\NetworkDto.ts" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\services\dtos\VersionDto.ts" />
+    <TypeScriptCompile Include="Source\scripts\network-editor\services\NetworkService.ts" />
     <TypeScriptCompile Include="Source\scripts\shared\events\Message.ts" />
     <TypeScriptCompile Include="Source\scripts\shared\events\EventBus.ts" />
     <TypeScriptCompile Include="Source\scripts\legacy-network-editor\LayerDetails.tsx" />

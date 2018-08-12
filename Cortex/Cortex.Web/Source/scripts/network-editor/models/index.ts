@@ -4,6 +4,7 @@ import { SelectedItem } from './SelectedItem';
 import LayerType from './LayerType';
 import PoolingMode from './PoolingMode';
 import ActivationType from './ActivationType';
+import RootState from './RootState';
 
 export {
     Layer,
@@ -14,5 +15,6 @@ export {
     SelectedItem,
     LayerType,
     PoolingMode,
-    ActivationType
+    ActivationType,
+    RootState
 };

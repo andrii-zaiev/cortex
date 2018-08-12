@@ -11,6 +11,8 @@ export enum ActionType {
     RECEIVE_NETWORK = 'RECEIVE_NETWORK',
     SAVE_VERSION = 'SAVE_VERSION',
 
+    START_EDITING = 'START_EDITING',
+
     ADD_LAYER = 'ADD_LAYER',
     UPDATE_LAYER = 'UPDATE_LAYER',
     DELETE_LAYER = 'DELETE_LAYER',
@@ -40,6 +42,10 @@ export interface ReceiveNetworkAction {
 
 export interface SaveVersionAction {
     type: ActionType.SAVE_VERSION
+}
+
+export interface StartEditingAction {
+    type: ActionType.START_EDITING
 }
 
 export interface AddLayerAction {
@@ -97,6 +103,7 @@ export type Actions =
     | RequestNetworkAction
     | ReceiveNetworkAction
     | SaveVersionAction
+    | StartEditingAction
     | AddLayerAction
     | UpdateLayerAction
     | DeleteLayerAction
@@ -117,6 +124,12 @@ export function receiveNetwork(layers: List<Layer>, connections: List<Connection
         type: ActionType.RECEIVE_NETWORK,
         layers: layers,
         connections: connections
+    };
+}
+
+export function startEditing(): StartEditingAction {
+    return {
+        type: ActionType.START_EDITING
     };
 }
 
