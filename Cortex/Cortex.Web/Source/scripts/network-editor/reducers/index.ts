@@ -22,6 +22,15 @@ function isLoaded(state: boolean = false, action: Actions): boolean {
     }
 }
 
+function isSaving(state: boolean = false, action: Actions): boolean {
+    switch (action.type) {
+        case ActionType.SAVE_VERSION:
+            return true;
+        default:
+            return state;
+    }
+}
+
 function layers(state: Map<number, Layer> = Map(), action: Actions): Map<number, Layer> {
     switch (action.type) {
         case ActionType.RECEIVE_NETWORK:
@@ -82,7 +91,8 @@ function selectedItem(state: SelectedItem = null, action: Actions): SelectedItem
 const rootReducer = combineReducers({
     networkId: noop<string>(null),
     versionId: noop<string>(null),
-    isLoaded: noop<boolean>(false),
+    isLoaded,
+    isSaving,
     layers,
     connections,
     selectedItem

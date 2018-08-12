@@ -1,8 +1,9 @@
 ﻿import { render } from 'react-dom';
 import * as React from 'react';
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import rootReducer from './reducers'
+import thunkMiddleware from 'redux-thunk';
 import NetworkEditorApp from './components/NetworkEditorApp';
 
 const element = document.getElementById('network-editor');
@@ -16,7 +17,7 @@ if (element) {
     const isEdit = isEditString ? isEditString.toLowerCase() === 'true' : false;
 
     const initialState = { networkId, versionId, isReadOnly, isEdit };
-    const store = createStore(rootReducer, initialState);
+    const store = createStore(rootReducer, initialState, applyMiddleware(thunkMiddleware));
 
     render(
         <Provider store={store}>

@@ -1,8 +1,18 @@
-﻿import { Layer, LayerUpdate } from './Layer';
-import { Connection } from './Connection';
+﻿import { Layer, LayerUpdate, ILayer } from './Layer';
+import { Connection, IConnection } from './Connection';
 import { SelectedItem } from './SelectedItem';
 import LayerType from './LayerType';
 import PoolingMode from './PoolingMode';
 import ActivationType from './ActivationType';
 
-export { Layer, LayerUpdate, Connection, SelectedItem, LayerType, PoolingMode, ActivationType };
+export {
+    Layer,
+    LayerUpdate,
+    ILayer,
+    Connection,
+    IConnection,
+    SelectedItem,
+    LayerType,
+    PoolingMode,
+    ActivationType
+};
