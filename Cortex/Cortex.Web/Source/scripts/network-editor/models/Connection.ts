@@ -1,13 +1,15 @@
-﻿import Layer from './Layer';
+﻿import { Record } from 'immutable';
 
-export default class Connection {
-    public id: number;
-    public fromId: number;
-    public toId: number;
+export interface IConnection {
+    id: number;
+    fromId: number;
+    toId: number;
+}
 
-    constructor(id: number, fromId: number, toId: number) {
-        this.id = id;
-        this.fromId = fromId;
-        this.toId = toId;
+const ConnectionRecord = Record({ id: null, fromId: null, toId: null });
+
+export class Connection extends ConnectionRecord implements IConnection {
+    constructor(props: Partial<IConnection> = {}) {
+        super(props);
     }
 }

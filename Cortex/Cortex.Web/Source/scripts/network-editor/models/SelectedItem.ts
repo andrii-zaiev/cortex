@@ -1,14 +1,19 @@
-﻿export enum ItemType {
+﻿import { Record } from 'immutable';
+
+export enum ItemType {
     Layer,
     Connection
 }
 
-export class SelectedItem {
-    public type: ItemType;
-    public id: number;
+export interface ISelectedItem {
+    type: ItemType;
+    id: number;
+}
 
-    constructor(id: number, type: ItemType) {
-        this.id = id;
-        this.type = type;
+const SelectedItemRecord = Record({ id: null, type: null });
+
+export class SelectedItem extends SelectedItemRecord implements ISelectedItem {
+    constructor(props: Partial<ISelectedItem> = {}) {
+        super(props);
     }
 }

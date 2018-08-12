@@ -1,68 +1,70 @@
-﻿import ActivationType from "./ActivationType";
-import LayerType from "./LayerType";
-import PoolingMode from "./PoolingMode";
+﻿import ActivationType from './ActivationType';
+import LayerType from './LayerType';
+import PoolingMode from './PoolingMode';
+import { Record } from 'immutable';
 
-export default class Layer {
-    public id: number;
-    public name: string;
-    public neuronsNumber: number;
-    public type: LayerType;
-    public x: number;
-    public y: number;
-    public activation: ActivationType;
-    public kernelsNumber: number;
-    public kernelWidth: number;
-    public kernelHeight: number;
-    public poolingMode: PoolingMode;
-    public comment: string;
-    public isInput: boolean;
-    public isOutput: boolean;
+export interface ILayer {
+    id: number;
+    name: string;
+    x: number;
+    y: number;
+    comment: string;
+    isInput: boolean;
+    isOutput: boolean;
+    activation: ActivationType;
+    kernelsNumber: number;
+    kernelWidth: number;
+    kernelHeight: number;
+    poolingMode: PoolingMode;
+}
 
-    constructor(id: number,
-        name: string,
-        neuronsNumber: number,
-        type: LayerType,
-        x: number,
-        y: number,
-        activation: ActivationType,
-        kernelsNumber: number,
-        kernelWidth: number,
-        kernelHeight: number,
-        poolingMode: PoolingMode,
-        comment: string,
-        isInput: boolean,
-        isOutput: boolean) {
-        this.id = id;
-        this.name = name;
-        this.neuronsNumber = neuronsNumber;
-        this.type = type;
-        this.x = x;
-        this.y = y;
-        this.activation = activation;
-        this.kernelsNumber = kernelsNumber;
-        this.kernelWidth = kernelWidth;
-        this.kernelHeight = kernelHeight;
-        this.poolingMode = poolingMode;
-        this.comment = comment;
-        this.isInput = isInput;
-        this.isOutput = isOutput;
+const LayerRecord = Record<ILayer>({
+    id: null,
+    name: '',
+    x: null,
+    y: null,
+    comment: '',
+    isInput: false,
+    isOutput: false,
+    activation: null,
+    kernelsNumber: null,
+    kernelHeight: null,
+    kernelWidth: null,
+    poolingMode: null
+});
+
+export class Layer extends LayerRecord implements ILayer {
+    constructor(props: Partial<ILayer> = {}) {
+        super(props);
     }
+}
 
-    public static move(layer: Layer, dx: number, dy: number): Layer {
-        return new Layer(
-            layer.id,
-            layer.name,
-            layer.neuronsNumber,
-            layer.type,
-            layer.x + dx,
-            layer.y + dy,
-            layer.activation,
-            layer.kernelsNumber,
-            layer.kernelWidth,
-            layer.kernelHeight,
-            layer.poolingMode,
-            layer.comment,
-            layer.isInput,
-            layer.isOutput);
+export interface ILayerUpdate {
+    name: string;
+    comment: string;
+    isInput: boolean;
+    isOutput: boolean;
+    activation: ActivationType;
+    kernelsNumber: number;
+    kernelWidth: number;
+    kernelHeight: number;
+    poolingMode: PoolingMode;
+}
+
+const LayerUpdateRecord = Record<ILayerUpdate>({
+    name: '',
+    comment: '',
+    isInput: false,
+    isOutput: false,
+    activation: null,
+    kernelsNumber: null,
+    kernelHeight: null,
+    kernelWidth: null,
+    poolingMode: null
+});
+
+export class LayerUpdate extends LayerUpdateRecord implements ILayerUpdate {
+    constructor(props: Partial<ILayer> = {}) {
+        super(props);
     }
 }
