@@ -1,4 +1,5 @@
 ﻿import * as React from 'react';
+import EditorToolbar from '../containers/EditorToolbar';
 
 export interface INetworkEditorProps {
     versionId: string,
