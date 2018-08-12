@@ -2,12 +2,14 @@
 import { Layer, Connection } from "../models";
 import { ItemType } from "../models/SelectedItem";
 import { Record } from "immutable";
+import AddLayerDialog from "./AddLayerDialog";
 
 export interface IToolbarProps {
     selected: Layer | Connection,
     type: ItemType,
     onDelete: (id: number, item: ItemType) => void,
-    onCancel: () => void
+    onCancel: () => void,
+    onAddLayer: (layer: Layer) => void
 }
 
 interface IToolbarState {
@@ -86,7 +88,7 @@ export default class Toolbar extends React.Component<IToolbarProps, ToolbarState
                     <i className="fa fa-trash" />
                 </button>
 
-                <AddLayerDialog isOpen={this.state.isAddLayerOpen} onClose={this.closeAddLayerDialog} />
+                <AddLayerDialog isOpen={this.state.isAddLayerOpen} onClose={this.closeAddLayerDialog} onSave={this.props.onAddLayer} />
                 <AddConnectionDialog isOpen={this.state.isAddConnectionOpen} onClose={this.closeAddConnectionDialog} />
                 <SaveVersionDialog isOpen={this.state.isSaveOpen} onClose={this.closeSaveDialog} />
             </div>);

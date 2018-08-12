@@ -11,6 +11,8 @@ export interface ILayer {
     comment: string;
     isInput: boolean;
     isOutput: boolean;
+    type: LayerType,
+    neuronsNumber: number,
     activation: ActivationType;
     kernelsNumber: number;
     kernelWidth: number;
@@ -26,6 +28,8 @@ const LayerRecord = Record<ILayer>({
     comment: '',
     isInput: false,
     isOutput: false,
+    type: null,
+    neuronsNumber: null,
     activation: null,
     kernelsNumber: null,
     kernelHeight: null,

@@ -1,9 +1,9 @@
 ﻿import * as React from 'react';
 import Toolbar from '../components/Toolbar';
 import { connect } from 'react-redux';
-import { RootState } from '../models';
+import { RootState, Layer } from '../models';
 import { ItemType } from '../models/SelectedItem';
-import { deleteLayer, deleteConnection } from '../actions/index';
+import { deleteLayer, deleteConnection, addLayer } from '../actions/index';
 
 function getSelectedItem(state: RootState) {
     const item = state.selectedItem;
@@ -29,7 +29,8 @@ const mapDispatchToProps = dispatch => ({
             dispatch(deleteConnection(id));
         }
     },
-    onCancel: () => location.reload(false)
+    onCancel: () => location.reload(false),
+    onAddLayer: (layer: Layer) => dispatch(addLayer(layer))
 });
 
 const EditorToolbar = connect(mapStateToProps, mapDispatchToProps)(Toolbar);
