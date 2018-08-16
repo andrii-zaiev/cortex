@@ -3,13 +3,15 @@
 interface IMultilineInputProps {
     label: string,
     value: string,
+    isReadOnly: boolean,
     onChange: (value: string) => void
 }
 
-const MultilineInput = (props: IMultilineInputProps) => (
+const MultilineInput = (props: Partial<IMultilineInputProps>) => (
     <div className="form-row">
-        <label>{props.label}</label>
-        <textarea value={props.value} onChange={e => props.onChange(e.target.value)} />
+        <label className="top-label">{props.label}</label>
+        {!props.isReadOnly && <textarea value={props.value} onChange={e => props.onChange(e.target.value)} />}
+        {props.isReadOnly && <span>{props.value}</span>}
     </div>
 );
 

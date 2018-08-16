@@ -1,6 +1,7 @@
 ﻿import * as React from "react";
 import { Layer } from "../models";
 import { Record } from "immutable";
+import LayerForm from "./LayerForm";
 
 export interface ILayerDetailsPanelProps {
     isVisible: boolean,
@@ -28,6 +29,7 @@ export default class LayerDetailsPanel
         super(props);
 
         this.cancelChanges = this.cancelChanges.bind(this);
+        this.updateLayer = this.updateLayer.bind(this);
 
         this.state = new LayerDetailsPanelState();
     }
@@ -44,110 +46,36 @@ export default class LayerDetailsPanel
         this.setState(prevState => prevState.set('layer', this.props.layer));
     }
 
+    updateLayer(layer: Layer) {
+        this.setState(prevState => prevState.set('layer', layer).set('isModified', true))
+    }
+
     public render(): React.ReactNode {
         if (this.props.isVisible) {
-            if (this.props.isEdit) {
-                return (
-                    <div className="panel">
-                        <div className="details-heading">
-                            <h5>Layer Details</h5>
-                            {this.props.isEdit && this.state.isModified &&
-                                <div className="details-heading-buttons">
-                                    <button title="Cancel"
-                                        className="button-light button-icon"
-                                        onClick={this.cancelChanges}>
-                                        <i className="fa fa-close"></i>
-                                    </button>
-                                    <button title="Save"
-                                        className="button-primary button-icon"
-                                        onClick={() => this.props.onSave(this.state.layer)}>
-                                        <i className="fa fa-save"></i>
-                                    </button>
-                                </div>
-                            }
-                        </div>
-                        
-                    </div>
-                );
-            } else {
-                return (
-                    <div className="panel">
+            return (
+                <div className="panel">
+                    <div className="details-heading">
                         <h5>Layer Details</h5>
-                        <div className="form-dense">
-                            <div className="form-row">
-                                <label>Name</label>
-                                <span>{this.state.layer.name}</span>
+                        {this.props.isEdit && this.state.isModified &&
+                            <div className="details-heading-buttons">
+                                <button title="Cancel"
+                                    className="button-light button-icon"
+                                    onClick={this.cancelChanges}>
+                                    <i className="fa fa-close"></i>
+                                </button>
+                                <button title="Save"
+                                    className="button-primary button-icon"
+                                    onClick={() => this.props.onSave(this.state.layer)}>
+                                    <i className="fa fa-save"></i>
+                                </button>
                             </div>
-                            <div className="form-row">
-                                <label>Type</label>
-                                <span>{this.state.layer.typeName}</span>
-                            </div>
-                            <div className="form-row">
-                                <label className="top-label">Comment</label>
-                                <div>{this.state.layer.comment}</div>
-                            </div>
-                            {this.state.layer.type !== LayerType.Pooling &&
-                                <div className="form-row">
-                                    <label>Activation</label>
-                                    <span>{this.state.layer.activationName}</span>
-                                </div>
-                            }
-                            <div className="form-row">
-                                <label>Is input</label>
-                                <span>{this.state.layer.isInput ? 'Yes' : 'No'}</span>
-                            </div>
-                            <div className="form-row">
-                                <label>Is output</label>
-                                <span>{this.state.layer.isOutput ? 'Yes' : 'No'}</span>
-                            </div>
-                            {this.state.layer.initial.type == LayerType.Dense &&
-                                <div>
-                                    <div className="form-row">
-                                        <label>Neurons</label>
-                                        <span>{this.state.layer.neuronsNumber}</span>
-                                    </div>
-                                    <div className="form-row">
-                                        <label>Dropout</label>
-                                        <span>No</span>
-                                    </div>
-                                </div>
-                            }
-                            {this.state.layer.type == LayerType.Convolutional &&
-                                <div>
-                                    <div className="form-row">
-                                        <label>Kernels</label>
-                                        <span>{this.state.layer.kernelsNumber}</span>
-                                    </div>
-                                    <div className="form-row">
-                                        <label>Width</label>
-                                        <span>{this.state.layer.kernelWidth}</span>
-                                    </div>
-                                    <div className="form-row">
-                                        <label>Height</label>
-                                        <span>{this.state.layer.kernelHeight}</span>
-                                    </div>
-                                </div>
-                            }
-                            {this.state.layer.type == LayerType.Pooling &&
-                                <div>
-                                    <div className="form-row">
-                                        <label>Mode</label>
-                                        <span>{this.state.layer.poolingModeName}</span>
-                                    </div>
-                                    <div className="form-row">
-                                        <label>Width</label>
-                                        <span>{this.state.layer.kernelWidth}</span>
-                                    </div>
-                                    <div className="form-row">
-                                        <label>Height</label>
-                                        <span>{this.state.layer.kernelHeight}</span>
-                                    </div>
-                                </div>
-                            }
-                        </div>
+                        }
                     </div>
-                );
-            }
+                    <LayerForm layer={this.state.layer}
+                        onChange={l => this.updateLayer(l)}
+                        isReadOnly={!this.props.isEdit} />
+                </div>
+            );
         }
 
         return null;

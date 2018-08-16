@@ -3,15 +3,17 @@
 interface ICheckboxInputProps {
     label: string,
     value: boolean,
+    isReadOnly: boolean,
     onChange: (value: boolean) => void
 }
 
-const CheckboxInput = (props: ICheckboxInputProps) => (
+const CheckboxInput = (props: Partial<ICheckboxInputProps>) => (
     <div className="form-row">
         <label>{props.label}</label>
-        <input type="checkbox"
+        {!props.isReadOnly && <input type="checkbox"
             checked={props.value}
-            onChange={e => props.onChange(e.target.checked)} />
+            onChange={e => props.onChange(e.target.checked)} />}
+        {props.isReadOnly && <span>{props.value ? 'Yes' : 'No'}</span>}
     </div>
 );
 
