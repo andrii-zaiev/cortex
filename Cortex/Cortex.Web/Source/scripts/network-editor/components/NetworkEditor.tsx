@@ -1,5 +1,7 @@
 ﻿import * as React from 'react';
 import EditorToolbar from '../containers/EditorToolbar';
+import NetworkDisplay from '../containers/NetworkDisplay';
+import LayerDetails from '../containers/LayerDetails';
 
 export interface INetworkEditorProps {
     versionId: string,
@@ -28,8 +30,8 @@ export class NetworkEditor extends React.Component<INetworkEditorProps, {}> {
 
                 <div className="display-area"
                     style={{ borderTop: this.props.isEdit ? 'none' : '1px solid #BDBDBD' }}>
-                    <NetworkDisplayArea />
-                    <LayerDetail />
+                    <NetworkDisplay />
+                    <LayerDetails />
                 </div>
 
                 {this.props.isLoading &&

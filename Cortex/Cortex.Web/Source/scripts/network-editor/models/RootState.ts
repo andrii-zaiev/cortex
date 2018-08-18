@@ -1,4 +1,5 @@
 ﻿import { Connection, Layer, SelectedItem } from "./index";
+import { Map } from 'immutable';
 
 export default interface RootState {
     networkId: string,

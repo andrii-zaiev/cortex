@@ -1,9 +1,8 @@
 ﻿import * as React from 'react';
 import { connect } from 'react-redux';
-import { RootState } from '../models';
+import { RootState, ItemType } from '../models';
 import { updateLayer } from '../actions/index';
 import LayerDetailsPanel, { ILayerDetailsPanelProps } from '../components/LayerDetailsPanel';
-import { ItemType } from '../../legacy-network-editor/models/SelectedItem';
 
 const mapStateToProps = (state: RootState): Partial<ILayerDetailsPanelProps> => {
     const selectedLayerId = state.selectedItem !== null && state.selectedItem.type === ItemType.Layer
