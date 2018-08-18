@@ -6,7 +6,7 @@ export interface IConnection {
     toId: number;
 }
 
-const ConnectionRecord = Record({ id: null, fromId: null, toId: null });
+const ConnectionRecord = Record({ id: 0, fromId: 0, toId: 0 });
 
 export class Connection extends ConnectionRecord implements IConnection {
     constructor(props: Partial<IConnection> = {}) {
