@@ -111,6 +111,16 @@ function selectedItem(state: SelectedItem = null, action: Actions): SelectedItem
     }
 }
 
+function error(state: string = null, action: Actions): string {
+    switch (action.type) {
+        case ActionType.SHOW_ERROR:
+            return action.error;
+        case ActionType.HIDE_ERROR:
+            return null;
+        default:
+            return state;
+    }
+}
 const rootReducer = combineReducers({
     networkId: noop<string>(null),
     versionId: noop<string>(null),
@@ -120,7 +130,8 @@ const rootReducer = combineReducers({
     isReadOnly: noop <boolean>(false),
     layers,
     connections,
-    selectedItem
+    selectedItem,
+    error
 });
 
 export default rootReducer;

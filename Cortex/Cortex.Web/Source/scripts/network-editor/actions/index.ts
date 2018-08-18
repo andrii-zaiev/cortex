@@ -1,10 +1,11 @@
 ﻿import { List, Record } from 'immutable';
-import { Layer, Connection, SelectedItem, LayerUpdate, ILayer } from '../models/index';
+import { Layer, Connection, SelectedItem, LayerUpdate, ILayer, RootState } from '../models/index';
 import NetworkService from '../services/NetworkService';
 import VersionDto from '../services/dtos/VersionDto';
 import { ILayerUpdate } from '../models/Layer';
 import { Action } from 'redux';
 import { ItemType } from '../models/SelectedItem';
+import NetworkDto from '../services/dtos/NetworkDto';
 
 export enum ActionType {
     REQUEST_NETWORK = 'REQUEST_NETWORK',
@@ -221,16 +222,21 @@ export function fetchNetwork(versionId: string) {
     };
 }
 
-export function saveVersion(networkId: string, version: VersionDto) {
-    return function (dispatch) {
+export function saveVersion(comment: string) {
+    return function (dispatch, getState: () => RootState) {
         dispatch({ type: ActionType.SAVE_VERSION });
+
+        const state = getState();
+
+        const network = new NetworkDto(state.layers.valueSeq().toArray(), state.connections.valueSeq().toArray());
+        const version = new VersionDto(network, comment, state.versionId, state.networkId);
 
         const networkService = new NetworkService();
 
         return networkService.saveVersion(version)
             .then(
                 versionId => {
-                    const versionUrl = `${location.origin}/network/${networkId}/${versionId}`;
+                    const versionUrl = `${location.origin}/network/${version.networkId}/${versionId}`;
                     location.assign(versionUrl);
                 },
                 error => dispatch(showError(error)));

@@ -10,5 +10,6 @@ export default interface RootState {
     isReadOnly: boolean,
     layers: Map<number, Layer>,
     connections: Map<number, Connection>,
-    selectedItem: SelectedItem
+    selectedItem: SelectedItem,
+    error: string
 }
