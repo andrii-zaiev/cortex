@@ -4,13 +4,15 @@
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Source\scripts\legacy-network-editor\**" />
+    <Content Remove="Source\scripts\legacy-network-editor\**" />
+    <EmbeddedResource Remove="Source\scripts\legacy-network-editor\**" />
+    <None Remove="Source\scripts\legacy-network-editor\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Source\scripts\confirmation\ConfirmationDialog.tsx" />
     <None Remove="Source\scripts\confirmation\init.tsx" />
     <None Remove="Source\scripts\local-datetime\init.ts" />
-    <None Remove="Source\scripts\legacy-network-editor\dialogs\AddConnectionDialog.tsx" />
-    <None Remove="Source\scripts\legacy-network-editor\dialogs\AddLayerDialog.tsx" />
-    <None Remove="Source\scripts\legacy-network-editor\dialogs\SaveVersionDialog.tsx" />
-    <None Remove="Source\scripts\legacy-network-editor\models\PoolingMode.ts" />
     <None Remove="Source\scripts\network-editor\actions\index.ts" />
     <None Remove="Source\scripts\network-editor\components\AddConnectionDialog.tsx" />
     <None Remove="Source\scripts\network-editor\components\AddLayerDialog.tsx" />
@@ -42,18 +44,6 @@
     <None Remove="Source\scripts\network-editor\services\NetworkService.ts" />
     <None Remove="Source\scripts\shared\events\EventBus.ts" />
     <None Remove="Source\scripts\shared\events\Message.ts" />
-    <None Remove="Source\scripts\legacy-network-editor\LayerDetails.tsx" />
-    <None Remove="Source\scripts\legacy-network-editor\models\ActivationType.ts" />
-    <None Remove="Source\scripts\legacy-network-editor\models\LayerType.ts" />
-    <None Remove="Source\scripts\legacy-network-editor\models\SelectedItem.ts" />
-    <None Remove="Source\scripts\legacy-network-editor\services\dtos\VersionDto.ts" />
-    <None Remove="Source\scripts\legacy-network-editor\services\NetworkService.ts" />
-    <None Remove="Source\scripts\legacy-network-editor\view-models\ConnectionViewModel.ts" />
-    <None Remove="Source\scripts\legacy-network-editor\view-models\EditLayerViewModel.ts" />
-    <None Remove="Source\scripts\legacy-network-editor\view-models\LayerViewModel.ts" />
-    <None Remove="Source\scripts\legacy-network-editor\view-models\NetworkViewModel.ts" />
-    <None Remove="Source\scripts\legacy-network-editor\view-models\NewConnectionViewModel.ts" />
-    <None Remove="Source\scripts\legacy-network-editor\view-models\NewLayerViewModel.ts" />
     <None Remove="Source\scripts\shared\BaseService.ts" />
   </ItemGroup>
   <ItemGroup>
@@ -72,10 +62,6 @@
     <TypeScriptCompile Include="Source\scripts\confirmation\ConfirmationDialog.tsx" />
     <TypeScriptCompile Include="Source\scripts\confirmation\init.tsx" />
     <TypeScriptCompile Include="Source\scripts\local-datetime\init.ts" />
-    <TypeScriptCompile Include="Source\scripts\legacy-network-editor\dialogs\AddConnectionDialog.tsx" />
-    <TypeScriptCompile Include="Source\scripts\legacy-network-editor\dialogs\SaveVersionDialog.tsx" />
-    <TypeScriptCompile Include="Source\scripts\legacy-network-editor\dialogs\AddLayerDialog.tsx" />
-    <TypeScriptCompile Include="Source\scripts\legacy-network-editor\models\PoolingMode.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\actions\index.ts" />
     <TypeScriptCompile Include="Source\scripts\network-editor\components\AddConnectionDialog.tsx" />
     <TypeScriptCompile Include="Source\scripts\network-editor\components\AddLayerDialog.tsx" />
@@ -107,18 +93,6 @@
     <TypeScriptCompile Include="Source\scripts\network-editor\services\NetworkService.ts" />
     <TypeScriptCompile Include="Source\scripts\shared\events\Message.ts" />
     <TypeScriptCompile Include="Source\scripts\shared\events\EventBus.ts" />
-    <TypeScriptCompile Include="Source\scripts\legacy-network-editor\LayerDetails.tsx" />
-    <TypeScriptCompile Include="Source\scripts\legacy-network-editor\models\ActivationType.ts" />
-    <TypeScriptCompile Include="Source\scripts\legacy-network-editor\models\LayerType.ts" />
-    <TypeScriptCompile Include="Source\scripts\legacy-network-editor\models\SelectedItem.ts" />
-    <TypeScriptCompile Include="Source\scripts\legacy-network-editor\services\dtos\VersionDto.ts" />
-    <TypeScriptCompile Include="Source\scripts\legacy-network-editor\services\NetworkService.ts" />
-    <TypeScriptCompile Include="Source\scripts\legacy-network-editor\view-models\ConnectionViewModel.ts" />
-    <TypeScriptCompile Include="Source\scripts\legacy-network-editor\view-models\EditLayerViewModel.ts" />
-    <TypeScriptCompile Include="Source\scripts\legacy-network-editor\view-models\LayerViewModel.ts" />
-    <TypeScriptCompile Include="Source\scripts\legacy-network-editor\view-models\NetworkViewModel.ts" />
-    <TypeScriptCompile Include="Source\scripts\legacy-network-editor\view-models\NewConnectionViewModel.ts" />
-    <TypeScriptCompile Include="Source\scripts\legacy-network-editor\view-models\NewLayerViewModel.ts" />
     <TypeScriptCompile Include="Source\scripts\shared\BaseService.ts" />
   </ItemGroup>
   <PropertyGroup>

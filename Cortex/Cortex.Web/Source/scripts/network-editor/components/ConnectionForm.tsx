@@ -43,4 +43,4 @@ const ConnectionForm = (props: IConnectionFormProps) => {
         </div>);
 };
 
-export ConnectionForm;
+export default ConnectionForm;
