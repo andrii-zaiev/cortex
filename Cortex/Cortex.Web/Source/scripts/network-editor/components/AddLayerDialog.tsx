@@ -59,7 +59,7 @@ export default class AddLayerDialog extends React.Component<IAddLayerProps, IAdd
                     <h4>Add Layer</h4>
                 </div>
                 <div className="dialog-body">
-                    <LayerForm layer={this.state.layer} onChange={l => this.setState({ layer: l })} isReadOnly={false} />
+                    <LayerForm layer={this.state.layer} onChange={l => this.setState(prevState => ({ layer: l }))} isReadOnly={false} />
                 </div>
                 <div className="dialog-buttons">
                     <button className="button" onClick={this.props.onClose}>Cancel</button>

@@ -47,30 +47,33 @@ export default class LayerDetailsPanel
 
         this.cancelChanges = this.cancelChanges.bind(this);
         this.updateLayer = this.updateLayer.bind(this);
+        this.saveLayer = this.saveLayer.bind(this);
 
         this.state = { record: new LayerDetailsPanelState() };
     }
 
     static getDerivedStateFromProps(props: ILayerDetailsPanelProps, state: { record: LayerDetailsPanelState }) {
-        const newRecord = state.record.set('layer', props.layer);
-
-        if (props.layer && state.record.layer && props.layer.id !== state.record.layer.id) {
+        if ((!!props.layer !== !!state.record.layer)
+         || (props.layer && state.record.layer && props.layer.id !== state.record.layer.id)) {
             return {
-                record: newRecord.set('isModified', false)
+                record: state.record.set('layer', props.layer).set('isModified', false)
             };
         }
 
-        return {
-            record: newRecord
-        };
+        return state;
     }
 
     cancelChanges() {
-        this.setState(prevState => ({ record: prevState.record.set('layer', this.props.layer) }));
+        this.setState(prevState => ({ record: prevState.record.set('layer', this.props.layer).set('isModified', false) }));
     }
 
     updateLayer(layer: Layer) {
         this.setState(prevState => ({ record: prevState.record.set('layer', layer).set('isModified', true) }))
+    }
+
+    saveLayer() {
+        this.props.onSave(this.state.record.layer);
+        this.setState(prevState => ({ record: prevState.record.set('isModified', false) }));
     }
 
     public render(): React.ReactNode {
@@ -88,7 +91,7 @@ export default class LayerDetailsPanel
                                 </button>
                                 <button title="Save"
                                     className="button-primary button-icon"
-                                    onClick={() => this.props.onSave(this.state.record.layer)}>
+                                    onClick={() => this.saveLayer()}>
                                     <i className="fa fa-save"></i>
                                 </button>
                             </div>
