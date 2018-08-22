@@ -1,7 +1,7 @@
 ﻿import * as React from 'react';
 import * as d3 from 'd3';
 
-import { Record, Map } from 'immutable';
+import { Record, Map, List } from 'immutable';
 import { Layer, Connection, LayerType, SelectedItem, ItemType } from '../models/index';
 import { getDepth, getHeight, getInfo, getSize, getWidth, is2d, isSelected } from '../services/LayerHelpers';
 
@@ -10,8 +10,8 @@ const labelFontSize = 15;
 
 export interface INetworkDisplayAreaProps {
     isEdit: boolean,
-    layers: Layer[],
-    connections: Connection[],
+    layers: List<Layer>,
+    connections: List<Connection>,
     selectedItem: SelectedItem,
     onSelect: (item: SelectedItem) => void,
     onDeselect: () => void,
@@ -35,12 +35,10 @@ class GrabbingState extends GrabbingStateRecord {
 
 interface IDraggingState {
     isActive: boolean,
-    layerId: number,
-    dx: number,
-    dy: number
+    layerId: number
 }
 
-const DraggingStateRecord = Record<IDraggingState>({ isActive: false, layerId: 0, dx: 0, dy: 0 });
+const DraggingStateRecord = Record<IDraggingState>({ isActive: false, layerId: 0 });
 
 class DraggingState extends DraggingStateRecord {
     constructor(dragging: Partial<IDraggingState> = {}) {
@@ -49,6 +47,7 @@ class DraggingState extends DraggingStateRecord {
 }
 
 interface INetworkDisplayAreaState {
+    layers: List<Layer>;
     translate: { x: number, y: number };
     scale: number;
     grabbing: GrabbingState;
@@ -56,6 +55,7 @@ interface INetworkDisplayAreaState {
 }
 
 const NetworkDisplayAreaStateRecord = Record<INetworkDisplayAreaState>({
+    layers: List(),
     translate: { x: 0, y: 0 },
     scale: 1,
     grabbing: new GrabbingState(),
@@ -85,7 +85,11 @@ export default class NetworkDisplayArea
         this.dropLayer = this.dropLayer.bind(this);
         this.selectConnection = this.selectConnection.bind(this);
 
-        this.state = new NetworkDisplayAreaState();
+        this.state = new NetworkDisplayAreaStateRecord({ layers: props.layers });
+    }
+
+    static getDerivedStateFromProps(nextProps: INetworkDisplayAreaProps, prevState: NetworkDisplayAreaState) {
+        return prevState.set('layers', nextProps.layers);
     }
 
     componentDidMount() {
@@ -97,6 +101,10 @@ export default class NetworkDisplayArea
     }
 
     private draw(): void {
+        if (!this.state.layers) {
+            return;
+        }
+
         const svg = d3.select(`#${d3RootId}`)
             .on('mousemove', this.dragLayer)
             .on('mouseup', this.dropLayer);
@@ -107,7 +115,7 @@ export default class NetworkDisplayArea
 
     private drawLayers(svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>) {
         const layerGroup = svg.selectAll('g')
-            .data(this.props.layers, l => (l as Layer).id.toString());
+            .data(this.state.layers.toArray(), l => (l as Layer).id.toString());
         const layerRect = this.updateLayerRects(layerGroup.select('rect#front'));
         const layerTopRect = this.update2dLayerTop(layerGroup.select('polygon#top'));
         const layerSideRect = this.update2dLayerSide(layerGroup.select('polygon#side'));
@@ -254,7 +262,7 @@ export default class NetworkDisplayArea
 
     private drawConnections(svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>) {
         const line = this.updateLines(svg.selectAll('line')
-            .data(this.props.connections, l => (l as Connection).id.toString()));
+            .data(this.props.connections.toArray(), l => (l as Connection).id.toString()));
 
         this.updateLines(line.enter().append('line')
             .style('cursor', 'pointer')
@@ -264,7 +272,7 @@ export default class NetworkDisplayArea
     }
 
     private updateLines(connection: d3.Selection<d3.BaseType, Connection, d3.BaseType, {}>) {
-        const layersMap = this.props.layers.reduce(
+        const layersMap = this.state.layers.reduce(
             (r, v) => r.set(v.get('id'), v),
             Map<number, Layer>());
 
@@ -362,15 +370,15 @@ export default class NetworkDisplayArea
             return;
         }
 
-        const layer = this.props.layers.find(l => l.id === this.state.dragging.layerId);
+        const layerIndex = this.state.layers.findIndex(l => l.id === this.state.dragging.layerId);
 
-        if (layer) {
+        if (layerIndex !== -1) {
             d3.event.stopPropagation();
-
-            this.setState(prevState => prevState.set('dragging',
-                prevState.dragging
-                    .set('dx', prevState.dragging.dx + d3.event.movementX / prevState.scale)
-                    .set('dy', prevState.dragging.dy + d3.event.movementY / prevState.scale)));
+            const layer = this.state.layers.get(layerIndex);
+            const updatedLayer = layer
+                .set('x', layer.x + d3.event.movementX / this.state.scale)
+                .set('y', layer.y + d3.event.movementY / this.state.scale);
+            this.setState(prevState => prevState.set('layers', prevState.layers.set(layerIndex, updatedLayer)));
         }
     }
 
@@ -378,13 +386,15 @@ export default class NetworkDisplayArea
         if (!this.state.dragging.isActive) {
             return;
         }
+        const layerIndex = this.state.layers.findIndex(l => l.id === this.state.dragging.layerId);
 
-        const layer = this.props.layers.find(l => l.id === this.state.dragging.layerId);
-
-        if (layer) {
+        if (layerIndex !== -1) {
             d3.event.stopPropagation();
 
-            this.props.onMoveLayer(layer.id, this.state.dragging.dx, this.state.dragging.dy);
+            const oldLayer = this.props.layers.get(layerIndex);
+            const newLayer = this.state.layers.get(layerIndex);
+
+            this.props.onMoveLayer(oldLayer.id, newLayer.x - oldLayer.x, newLayer.y - oldLayer.y);
             this.setState(prevState => prevState.set('dragging', new DraggingState()));
         }
     }
@@ -397,7 +407,7 @@ export default class NetworkDisplayArea
                     onMouseMove={e => this.translate(e.clientX, e.clientY)}
                     onMouseUp={e => this.endGrabbing()}
                     onClick={() => this.deselectAll()}
-                    style={{ cursor: this.state.grabbing.cursor }}></svg>
+                style={{ cursor: this.state.grabbing && this.state.grabbing.cursor }}></svg>
         );
     }
 }

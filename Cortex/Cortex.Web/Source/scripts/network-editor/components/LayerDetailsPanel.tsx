@@ -35,7 +35,7 @@ export default class LayerDetailsPanel
     }
 
     static getDerivedStateFromProps(props: ILayerDetailsPanelProps, state: LayerDetailsPanelState): LayerDetailsPanelState {
-        if (props.layer.id !== state.layer.id) {
+        if (props.layer && props.layer.id !== state.layer.id) {
             return state.set('layer', props.layer).set('isModified', false);
         }
 

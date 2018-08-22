@@ -5,9 +5,9 @@ import NetworkDisplayArea, { INetworkDisplayAreaProps } from '../components/Netw
 import { deselectItem, moveLayer, selectItem } from '../actions';
 
 const mapStateToProps = (state: RootState): Partial<INetworkDisplayAreaProps> => ({
-    connections: state.connections.valueSeq().toArray(),
+    connections: state.connections.valueSeq().toList(),
     isEdit: state.isEdit,
-    layers: state.layers.valueSeq().toArray(),
+    layers: state.layers.valueSeq().toList(),
     selectedItem: state.selectedItem
 });
 

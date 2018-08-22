@@ -3,6 +3,7 @@
 module.exports = {
     watch: false,
     entry: './Source/index.ts',
+    devtool: 'source-map',
     module: {
         rules: [
             {
