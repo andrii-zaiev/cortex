@@ -86,7 +86,7 @@ class NetworkDisplayAreaState extends NetworkDisplayAreaStateRecord {
 }
 
 export default class NetworkDisplayArea
-    extends React.Component<INetworkDisplayAreaProps, NetworkDisplayAreaState> {
+    extends React.Component<INetworkDisplayAreaProps, { record: NetworkDisplayAreaState }> {
 
     constructor(props: INetworkDisplayAreaProps) {
         super(props);
@@ -102,11 +102,11 @@ export default class NetworkDisplayArea
         this.dropLayer = this.dropLayer.bind(this);
         this.selectConnection = this.selectConnection.bind(this);
 
-        this.state = new NetworkDisplayAreaStateRecord({ layers: props.layers });
+        this.state = { record: new NetworkDisplayAreaStateRecord({ layers: props.layers }) };
     }
 
-    static getDerivedStateFromProps(nextProps: INetworkDisplayAreaProps, prevState: NetworkDisplayAreaState) {
-        return prevState.set('layers', nextProps.layers);
+    static getDerivedStateFromProps(nextProps: INetworkDisplayAreaProps, prevState: { record: NetworkDisplayAreaState }) {
+        return { record: prevState.record.set('layers', nextProps.layers) };
     }
 
     componentDidMount() {
@@ -118,7 +118,7 @@ export default class NetworkDisplayArea
     }
 
     private draw(): void {
-        if (!this.state.layers) {
+        if (!this.state.record.layers) {
             return;
         }
 
@@ -132,7 +132,7 @@ export default class NetworkDisplayArea
 
     private drawLayers(svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>) {
         const layerGroup = svg.selectAll('g')
-            .data(this.state.layers.toArray(), l => (l as Layer).id.toString());
+            .data(this.state.record.layers.toArray(), l => (l as Layer).id.toString());
         const layerRect = this.updateLayerRects(layerGroup.select('rect#front'));
         const layerTopRect = this.update2dLayerTop(layerGroup.select('polygon#top'));
         const layerSideRect = this.update2dLayerSide(layerGroup.select('polygon#side'));
@@ -176,8 +176,8 @@ export default class NetworkDisplayArea
 
     private updateLayerRects(layerRect: d3.Selection<d3.BaseType, Layer, d3.BaseType, {}>) {
         return layerRect
-            .attr('width', l => getWidth(l) * this.state.scale)
-            .attr('height', l => getHeight(l) * this.state.scale)
+            .attr('width', l => getWidth(l) * this.state.record.scale)
+            .attr('height', l => getHeight(l) * this.state.record.scale)
             .attr('x', l => this.convertX(l.x))
             .attr('y', l => this.convertY(l.y))
             .style('fill', l => isSelected(l, this.props.selectedItem) ? 'lightgray' : 'white')
@@ -242,15 +242,15 @@ export default class NetworkDisplayArea
             .attr('y', l => is2d(l)
                 ? this.convertY(l.y - getDepth(l) - 60)
                 : this.convertY(l.y - 60))
-            .attr('font-size', () => labelFontSize * this.state.scale);
+            .attr('font-size', () => labelFontSize * this.state.record.scale);
     }
 
     private convertX(x: number) {
-        return x * this.state.scale + this.state.translate.x;
+        return x * this.state.record.scale + this.state.record.translate.x;
     }
 
     private convertY(y: number) {
-        return y * this.state.scale + this.state.translate.y;
+        return y * this.state.record.scale + this.state.record.translate.y;
     }
 
     private updateNameLabels(label: d3.Selection<d3.BaseType, Layer, d3.BaseType, {}>) {
@@ -289,7 +289,7 @@ export default class NetworkDisplayArea
     }
 
     private updateLines(connection: d3.Selection<d3.BaseType, Connection, d3.BaseType, {}>) {
-        const layersMap = this.state.layers.reduce(
+        const layersMap = this.state.record.layers.reduce(
             (r, v) => r.set(v.get('id'), v),
             Map<number, Layer>());
 
@@ -327,38 +327,42 @@ export default class NetworkDisplayArea
         event.preventDefault();
         const scrollAmount = event.deltaY;
         const scaleUpdate = -scrollAmount / 1000;
-        this.setState(prevState => prevState
-            .set('scale', prevState.scale + scaleUpdate > 0
-                ? prevState.scale + scaleUpdate
-                : 0.01));
+        this.setState(prevState => ({
+            record: prevState.record
+                .set('scale', prevState.record.scale + scaleUpdate > 0
+                    ? prevState.record.scale + scaleUpdate
+                    : 0.01)
+        }));
     }
 
     private startGrabbing(x, y) {
-        this.setState(prevState => prevState.set('grabbing',
-            prevState.grabbing
-                .set('isActive', true)
-                .set('prevX', x)
-                .set('prevY', y)
-                .set('cursor', '-webkit-grabbing')));
+        this.setState(prevState => ({
+            record: prevState.record.set('grabbing',
+                prevState.record.grabbing
+                    .set('isActive', true)
+                    .set('prevX', x)
+                    .set('prevY', y)
+                    .set('cursor', '-webkit-grabbing'))
+        }));
     }
 
     private translate(newX, newY) {
-        if (this.state.grabbing.isActive) {
-            const deltaX = newX - this.state.grabbing.prevX;
-            const deltaY = newY - this.state.grabbing.prevY;
+        if (this.state.record.grabbing.isActive) {
+            const deltaX = newX - this.state.record.grabbing.prevX;
+            const deltaY = newY - this.state.record.grabbing.prevY;
 
-            this.setState(prevState => prevState.set('translate',
-                { x: prevState.translate.x + deltaX, y: prevState.translate.y + deltaY }));
+            this.setState(prevState => ({
+                record: prevState.record
+                    .set('translate', { x: prevState.record.translate.x + deltaX, y: prevState.record.translate.y + deltaY })
+                    .set('grabbing', prevState.record.grabbing.set('prevX', newX).set('prevY', newY))
+            }));
         }
     }
 
     private endGrabbing() {
-        this.setState(prevState => prevState.set('grabbing',
-            prevState.grabbing
-                .set('isActive', false)
-                .set('prevX', 0)
-                .set('prevY', 0)
-                .set('cursor', '-webkit-grab')));
+        this.setState(prevState => ({
+            record: prevState.record.set('grabbing', new GrabbingState())
+        }));
     }
 
     private selectLayer(layer: Layer) {
@@ -375,44 +379,46 @@ export default class NetworkDisplayArea
         if (isSelected(layer, this.props.selectedItem) && this.props.isEdit) {
             d3.event.stopPropagation();
 
-            this.setState(prevState => prevState.set('dragging',
-                prevState.dragging
-                    .set('isActive', true)
-                    .set('layerId', layer.id)));
+            this.setState(prevState => ({
+                record: prevState.record.set('dragging',
+                    prevState.record.dragging
+                        .set('isActive', true)
+                        .set('layerId', layer.id))
+            }));
         }
     }
 
     private dragLayer() {
-        if (!this.state.dragging.isActive) {
+        if (!this.state.record.dragging.isActive) {
             return;
         }
 
-        const layerIndex = this.state.layers.findIndex(l => l.id === this.state.dragging.layerId);
+        const layerIndex = this.state.record.layers.findIndex(l => l.id === this.state.record.dragging.layerId);
 
         if (layerIndex !== -1) {
             d3.event.stopPropagation();
-            const layer = this.state.layers.get(layerIndex);
+            const layer = this.state.record.layers.get(layerIndex);
             const updatedLayer = layer
-                .set('x', layer.x + d3.event.movementX / this.state.scale)
-                .set('y', layer.y + d3.event.movementY / this.state.scale);
-            this.setState(prevState => prevState.set('layers', prevState.layers.set(layerIndex, updatedLayer)));
+                .set('x', layer.x + d3.event.movementX / this.state.record.scale)
+                .set('y', layer.y + d3.event.movementY / this.state.record.scale);
+            this.setState(prevState => ({ record: prevState.record.set('layers', prevState.record.layers.set(layerIndex, updatedLayer)) }));
         }
     }
 
     private dropLayer() {
-        if (!this.state.dragging.isActive) {
+        if (!this.state.record.dragging.isActive) {
             return;
         }
-        const layerIndex = this.state.layers.findIndex(l => l.id === this.state.dragging.layerId);
+        const layerIndex = this.state.record.layers.findIndex(l => l.id === this.state.record.dragging.layerId);
 
         if (layerIndex !== -1) {
             d3.event.stopPropagation();
 
             const oldLayer = this.props.layers.get(layerIndex);
-            const newLayer = this.state.layers.get(layerIndex);
+            const newLayer = this.state.record.layers.get(layerIndex);
 
             this.props.onMoveLayer(oldLayer.id, newLayer.x - oldLayer.x, newLayer.y - oldLayer.y);
-            this.setState(prevState => prevState.set('dragging', new DraggingState()));
+            this.setState(prevState => ({ record: prevState.record.set('dragging', new DraggingState()) }));
         }
     }
 
@@ -424,7 +430,7 @@ export default class NetworkDisplayArea
                     onMouseMove={e => this.translate(e.clientX, e.clientY)}
                     onMouseUp={e => this.endGrabbing()}
                     onClick={() => this.deselectAll()}
-                style={{ cursor: this.state.grabbing && this.state.grabbing.cursor }}></svg>
+                style={{ cursor: this.state.record.grabbing && this.state.record.grabbing.cursor }}></svg>
         );
     }
 }

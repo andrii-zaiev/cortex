@@ -25,7 +25,7 @@ function noop<T>(def: T) {
 }
 
 function getNewId(items: Map<number, any>) {
-    return items.size > 0 ? items.keySeq().max() + 1 : 0;
+    return items.size > 0 ? items.keySeq().max() + 1 : 1;
 }
 
 function isLoaded(state: boolean = false, action: Actions): boolean {
@@ -66,7 +66,7 @@ function layers(state: Map<number, Layer> = Map(), action: Actions): Map<number,
                     Map());
         case ActionType.ADD_LAYER:
             const id = getNewId(state);
-            return state.set(id, action.layer);
+            return state.set(id, action.layer.set('id', id));
         case ActionType.UPDATE_LAYER:
             const layer = state.get(action.id).merge(action.layer);
             return state.set(action.id, layer);
@@ -91,7 +91,7 @@ function connections(state: Map<number, Connection> = Map(), action: Actions): M
                     Map());
         case ActionType.ADD_CONNECTION:
             const id = getNewId(state);
-            return state.set(id, action.connection);
+            return state.set(id, action.connection.set('id', id));
         case ActionType.DELETE_CONNECTION:
             return state.delete(action.id);
         case ActionType.DELETE_LAYER:

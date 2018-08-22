@@ -151,10 +151,10 @@ export function startEditing(): StartEditingAction {
     };
 }
 
-export function addLayer(layer: Partial<ILayer>): AddLayerAction {
+export function addLayer(layer: Layer): AddLayerAction {
     return {
         type: ActionType.ADD_LAYER,
-        layer: new Layer(layer)
+        layer: layer
     };
 }
 

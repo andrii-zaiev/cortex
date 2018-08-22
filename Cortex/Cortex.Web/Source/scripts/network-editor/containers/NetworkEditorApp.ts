@@ -17,9 +17,10 @@
 
 import * as React from 'react';
 import { NetworkEditor, INetworkEditorProps } from '../components/NetworkEditor'
-import { fetchNetwork, startEditing } from '../actions';
+import { fetchNetwork, startEditing, receiveNetwork } from '../actions';
 import { connect } from 'react-redux';
 import { RootState } from '../models';
+import { List } from 'immutable';
 
 const mapStateToProps = (state: RootState): Partial<INetworkEditorProps> => ({
     versionId: state.versionId,
@@ -29,7 +30,7 @@ const mapStateToProps = (state: RootState): Partial<INetworkEditorProps> => ({
 });
 
 const mapDispatchToProps = (dispatch): Partial<INetworkEditorProps> => ({
-    onLoad: versionId => dispatch(fetchNetwork(versionId)),
+    onLoad: versionId => versionId ? dispatch(fetchNetwork(versionId)) : dispatch(receiveNetwork(List(), List())),
     onEdit: () => dispatch(startEditing())
 });
 

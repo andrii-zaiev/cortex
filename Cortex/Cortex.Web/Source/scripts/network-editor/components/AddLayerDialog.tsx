@@ -17,12 +17,11 @@
 
 import * as React from 'react';
 import * as Modal from 'react-modal';
-import { TextInput, SelectInput, CheckboxInput, NumericInput, MultilineInput } from './inputs/index';
+import { TextInput, SelectInput, CheckboxInput, NumericInput, MultilineInput } from './inputs';
 import { List } from 'immutable';
 import { IOption } from './inputs';
-import { ActivationType, LayerType, PoolingMode } from '../models';
+import { ActivationType, LayerType, PoolingMode, Layer } from '../models';
 import LayerForm from './LayerForm';
-import { Layer } from '../models';
 
 export interface IAddLayerProps {
     isOpen: boolean;
@@ -40,7 +39,17 @@ export default class AddLayerDialog extends React.Component<IAddLayerProps, IAdd
     constructor(props) {
         super(props);
 
-        this.state = { layer: new Layer() };
+        this.state = {
+            layer: new Layer({
+                activation: ActivationType.ReLU,
+                type: LayerType.Dense,
+                poolingMode: PoolingMode.Average,
+                kernelHeight: 1,
+                kernelWidth: 1,
+                kernelsNumber: 1,
+                neuronsNumber: 1
+            })
+        };
     }
 
     public render() {

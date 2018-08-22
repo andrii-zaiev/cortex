@@ -41,30 +41,36 @@ class LayerDetailsPanelState extends StateRecord {
 }
 
 export default class LayerDetailsPanel
-    extends React.Component<ILayerDetailsPanelProps, LayerDetailsPanelState> {
+    extends React.Component<ILayerDetailsPanelProps, { record: LayerDetailsPanelState }> {
     constructor(props: ILayerDetailsPanelProps) {
         super(props);
 
         this.cancelChanges = this.cancelChanges.bind(this);
         this.updateLayer = this.updateLayer.bind(this);
 
-        this.state = new LayerDetailsPanelState();
+        this.state = { record: new LayerDetailsPanelState() };
     }
 
-    static getDerivedStateFromProps(props: ILayerDetailsPanelProps, state: LayerDetailsPanelState): LayerDetailsPanelState {
-        if (props.layer && props.layer.id !== state.layer.id) {
-            return state.set('layer', props.layer).set('isModified', false);
+    static getDerivedStateFromProps(props: ILayerDetailsPanelProps, state: { record: LayerDetailsPanelState }) {
+        const newRecord = state.record.set('layer', props.layer);
+
+        if (props.layer && state.record.layer && props.layer.id !== state.record.layer.id) {
+            return {
+                record: newRecord.set('isModified', false)
+            };
         }
 
-        return state;
+        return {
+            record: newRecord
+        };
     }
 
     cancelChanges() {
-        this.setState(prevState => prevState.set('layer', this.props.layer));
+        this.setState(prevState => ({ record: prevState.record.set('layer', this.props.layer) }));
     }
 
     updateLayer(layer: Layer) {
-        this.setState(prevState => prevState.set('layer', layer).set('isModified', true))
+        this.setState(prevState => ({ record: prevState.record.set('layer', layer).set('isModified', true) }))
     }
 
     public render(): React.ReactNode {
@@ -73,7 +79,7 @@ export default class LayerDetailsPanel
                 <div className="panel">
                     <div className="details-heading">
                         <h5>Layer Details</h5>
-                        {this.props.isEdit && this.state.isModified &&
+                        {this.props.isEdit && this.state.record.isModified &&
                             <div className="details-heading-buttons">
                                 <button title="Cancel"
                                     className="button-light button-icon"
@@ -82,13 +88,13 @@ export default class LayerDetailsPanel
                                 </button>
                                 <button title="Save"
                                     className="button-primary button-icon"
-                                    onClick={() => this.props.onSave(this.state.layer)}>
+                                    onClick={() => this.props.onSave(this.state.record.layer)}>
                                     <i className="fa fa-save"></i>
                                 </button>
                             </div>
                         }
                     </div>
-                    <LayerForm layer={this.state.layer}
+                    <LayerForm layer={this.state.record.layer}
                         onChange={l => this.updateLayer(l)}
                         isReadOnly={!this.props.isEdit} />
                 </div>

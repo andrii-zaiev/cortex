@@ -46,7 +46,7 @@ class ToolbarState extends StateRecord implements IToolbarState {
     }
 }
 
-export default class Toolbar extends React.Component<IToolbarProps, ToolbarState> {
+export default class Toolbar extends React.Component<IToolbarProps, { record: ToolbarState }> {
     constructor(props: IToolbarProps) {
         super(props);
 
@@ -56,32 +56,44 @@ export default class Toolbar extends React.Component<IToolbarProps, ToolbarState
         this.closeSaveDialog = this.closeSaveDialog.bind(this);
         this.closeAddLayerDialog = this.closeAddLayerDialog.bind(this);
         this.closeAddConnectionDialog = this.closeAddConnectionDialog.bind(this);
+        this.addLayer = this.addLayer.bind(this);
+        this.addConnection = this.addConnection.bind(this);
 
-        this.state = new ToolbarState();
+        this.state = { record: new ToolbarState() };
     }
 
     openSaveDialog() {
-        this.setState(state => state.set('isSaveOpen', true));
+        this.setState(state => ({ record: state.record.set('isSaveOpen', true) }));
     }
 
     openAddLayerDialog() {
-        this.setState(state => state.set('isAddLayerOpen', true));
+        this.setState(state => ({ record: state.record.set('isAddLayerOpen', true) }));
     }
 
     openAddConnectionDialog() {
-        this.setState(state => state.set('isAddConnectionOpen', true));
+        this.setState(state => ({ record: state.record.set('isAddConnectionOpen', true) }));
     }
 
     closeSaveDialog() {
-        this.setState(state => state.set('isSaveOpen', false));
+        this.setState(state => ({ record: state.record.set('isSaveOpen', false) }));
     }
 
     closeAddLayerDialog() {
-        this.setState(state => state.set('isAddLayerOpen', false));
+        this.setState(state => ({ record: state.record.set('isAddLayerOpen', false) }));
     }
 
     closeAddConnectionDialog() {
-        this.setState(state => state.set('isAddConnectionOpen', false));
+        this.setState(state => ({ record: state.record.set('isAddConnectionOpen', false) }));
+    }
+
+    addLayer(layer: Layer) {
+        this.props.onAddLayer(layer);
+        this.closeAddLayerDialog();
+    }
+
+    addConnection(connection: Connection) {
+        this.props.onAddConnection(connection);
+        this.closeAddConnectionDialog();
     }
 
     render(): React.ReactNode {
@@ -108,10 +120,13 @@ export default class Toolbar extends React.Component<IToolbarProps, ToolbarState
                     <i className="fa fa-trash" />
                 </button>
 
-                <AddLayerDialog isOpen={this.state.isAddLayerOpen} onClose={this.closeAddLayerDialog} onSave={this.props.onAddLayer} />
-                <AddConnectionDialog isOpen={this.state.isAddConnectionOpen} onClose={this.closeAddConnectionDialog}
-                    onSave={this.props.onAddConnection} />
-                <VersionSaver isOpen={this.state.isSaveOpen} onClose={this.closeSaveDialog}  />
+                <AddLayerDialog isOpen={this.state.record.isAddLayerOpen}
+                    onClose={this.closeAddLayerDialog}
+                    onSave={this.addLayer} />
+                <AddConnectionDialog isOpen={this.state.record.isAddConnectionOpen}
+                    onClose={this.closeAddConnectionDialog}
+                    onSave={this.addConnection} />
+                <VersionSaver isOpen={this.state.record.isSaveOpen} onClose={this.closeSaveDialog}  />
             </div>);
     }
 }

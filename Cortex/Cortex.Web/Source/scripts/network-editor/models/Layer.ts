@@ -40,17 +40,17 @@ export interface ILayer {
 const LayerRecord = Record<ILayer>({
     id: null,
     name: '',
-    x: null,
-    y: null,
+    x: 0,
+    y: 0,
     comment: '',
     isInput: false,
     isOutput: false,
     type: null,
     neuronsNumber: null,
     activation: null,
-    kernelsNumber: null,
-    kernelHeight: null,
-    kernelWidth: null,
+    kernelsNumber: 0,
+    kernelHeight: 0,
+    kernelWidth: 0,
     poolingMode: null
 });
 

@@ -32,15 +32,15 @@ interface ISelectInputProps {
 }
 
 const SelectInput = (props: Partial<ISelectInputProps>) => {
-    const options = props.options.map(op => <option value={op.value}>{op.label}</option>);
+    const options = props.options.map(op => <option key={op.value} value={op.value}>{op.label}</option>);
     const selectedOption = props.options.find(op => op.value === props.value);
-    const selectedLabel = selectedOption === null ? '' : selectedOption.label;
+    const selectedLabel = selectedOption === undefined ? '' : selectedOption.label;
 
     return (
         <div className="form-row">
             <label>{props.label}</label>
             {!props.isReadOnly &&
-                <select value={props.value} onChange={e => props.onChange(e.target.value)}>
+                <select value={props.value || ''} onChange={e => props.onChange(Number(e.target.value))}>
                     {options}
                 </select>}
             {props.isReadOnly && <span>{selectedLabel}</span>}

@@ -29,7 +29,7 @@ const mapStateToProps = (state: RootState): Partial<INetworkDisplayAreaProps> =>
 });
 
 const mapDispatchToProps = (dispatch): Partial<INetworkDisplayAreaProps> => ({
-    onDeselect: dispatch(deselectItem()),
+    onDeselect: () => dispatch(deselectItem()),
     onMoveLayer: (id, dx, dy) => dispatch(moveLayer(id, dx, dy)),
     onSelect: (item) => dispatch(selectItem(item.id, item.type))
 });

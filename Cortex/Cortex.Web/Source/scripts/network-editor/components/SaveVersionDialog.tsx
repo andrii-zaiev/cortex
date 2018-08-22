@@ -42,7 +42,7 @@ class SaveVersionDialogState extends SaveVersionDialogStateRecord {
 }
 
 export default class SaveVersionDialog
-    extends React.Component<ISaveVersionDialogProps, SaveVersionDialogState> {
+    extends React.Component<ISaveVersionDialogProps, { record: SaveVersionDialogState }> {
     private appElement = document.getElementById('network-editor');
 
     constructor(props) {
@@ -50,11 +50,11 @@ export default class SaveVersionDialog
 
         this.updateComment = this.updateComment.bind(this);
 
-        this.state = new SaveVersionDialogState();
+        this.state = { record: new SaveVersionDialogState() };
     }
 
     private updateComment(comment: string) {
-        this.setState(prevState => prevState.set('comment', comment));
+        this.setState(prevState => ({ record: prevState.record.set('comment', comment) }));
     }
 
     public render() {
@@ -65,7 +65,7 @@ export default class SaveVersionDialog
                 </div>
                 <div className="dialog-body">
                     <div className="form">
-                        <MultilineInput value={this.state.comment} onChange={this.updateComment} label={'Comment'} />
+                        <MultilineInput value={this.state.record.comment} onChange={this.updateComment} label={'Comment'} />
                     </div>
                     {this.props.error && 
                         <div className="form-row">
@@ -74,7 +74,7 @@ export default class SaveVersionDialog
                 </div>
                 <div className="dialog-buttons">
                     <button className="button" onClick={this.props.onClose}>Cancel</button>
-                    <button className="button-primary" onClick={() => this.props.onSave(this.state.comment)}>Save</button>
+                    <button className="button-primary" onClick={() => this.props.onSave(this.state.record.comment)}>Save</button>
                 </div>
                 {this.props.isSaving &&
                     <div className="fade">

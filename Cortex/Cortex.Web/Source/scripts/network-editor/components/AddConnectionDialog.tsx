@@ -42,7 +42,7 @@ class AddConnectionDialogState extends AddConnectionDialogStateRecord {
 }
 
 export default class AddConnectionDialog
-    extends React.Component<IAddConnectionDialogProps, AddConnectionDialogState> {
+    extends React.Component<IAddConnectionDialogProps, { record: AddConnectionDialogState }> {
     private appElement = document.getElementById('network-editor');
 
     constructor(props) {
@@ -50,15 +50,15 @@ export default class AddConnectionDialog
 
         this.updateConnection = this.updateConnection.bind(this);
 
-        this.state = new AddConnectionDialogState();
+        this.state = { record: new AddConnectionDialogState() };
     }
 
     updateConnection(connection: Connection) {
         if (connection === null) {
-            this.setState(prevState => prevState.set('isValid', false));
+            this.setState(prevState => ({ record: prevState.record.set('isValid', false) }));
         }
         else {
-            this.setState(prevState => prevState.set('isValid', true).set('connection', connection));
+            this.setState(prevState => ({ record: prevState.record.set('isValid', true).set('connection', connection) }));
         }
     }
 
@@ -69,14 +69,14 @@ export default class AddConnectionDialog
                     <h4>Add Connection</h4>
                 </div>
                 <div className="dialog-body">
-                    <ValidatedConnectionForm connection={this.state.connection}
+                    <ValidatedConnectionForm connection={this.state.record.connection}
                         onChange={c => this.updateConnection(c)} />
                 </div>
                 <div className="dialog-buttons">
                     <button className="button" onClick={this.props.onClose}>Cancel</button>
                     <button className="button-primary"
-                        onClick={() => this.props.onSave(this.state.connection)}
-                        disabled={!this.state.isValid}>
+                        onClick={() => this.props.onSave(this.state.record.connection)}
+                        disabled={!this.state.record.isValid}>
                         Add
                     </button>
                 </div>

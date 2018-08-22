@@ -47,7 +47,7 @@ export function getHeight(layer: Layer) {
 }
 
 export function getDepth(layer: Layer) {
-    if (is2d(layer)) {
+    if (!is2d(layer)) {
         throw new Error('Unexpected depth calculations');
     }
 
