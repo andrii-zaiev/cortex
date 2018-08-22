@@ -39,17 +39,38 @@ export default class AddLayerDialog extends React.Component<IAddLayerProps, IAdd
     constructor(props) {
         super(props);
 
+        this.save = this.save.bind(this);
+        this.close = this.close.bind(this);
+
         this.state = {
-            layer: new Layer({
-                activation: ActivationType.ReLU,
-                type: LayerType.Dense,
-                poolingMode: PoolingMode.Average,
-                kernelHeight: 1,
-                kernelWidth: 1,
-                kernelsNumber: 1,
-                neuronsNumber: 1
-            })
+            layer: this.getDefaultLayer()
         };
+    }
+
+    reset() {
+        this.setState({ layer: this.getDefaultLayer() })
+    }
+
+    getDefaultLayer() {
+        return new Layer({
+            activation: ActivationType.ReLU,
+            type: LayerType.Dense,
+            poolingMode: PoolingMode.Average,
+            kernelHeight: 1,
+            kernelWidth: 1,
+            kernelsNumber: 1,
+            neuronsNumber: 1
+        });
+    }
+
+    save() {
+        this.props.onSave(this.state.layer);
+        this.reset();
+    }
+
+    close() {
+        this.props.onClose();
+        this.reset();
     }
 
     public render() {
@@ -59,11 +80,11 @@ export default class AddLayerDialog extends React.Component<IAddLayerProps, IAdd
                     <h4>Add Layer</h4>
                 </div>
                 <div className="dialog-body">
-                    <LayerForm layer={this.state.layer} onChange={l => this.setState(prevState => ({ layer: l }))} isReadOnly={false} />
+                    <LayerForm layer={this.state.layer} onChange={l => this.setState({ layer: l })} isReadOnly={false} />
                 </div>
                 <div className="dialog-buttons">
-                    <button className="button" onClick={this.props.onClose}>Cancel</button>
-                    <button className="button-primary" onClick={() => this.props.onSave(this.state.layer)}>Add</button>
+                    <button className="button" onClick={this.close}>Cancel</button>
+                    <button className="button-primary" onClick={this.save}>Add</button>
                 </div>
             </Modal>
         );
