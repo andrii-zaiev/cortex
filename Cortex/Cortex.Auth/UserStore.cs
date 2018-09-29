@@ -25,7 +25,10 @@ using Microsoft.AspNetCore.Identity;
 namespace Cortex.Auth
 {
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-    public class UserStore : IUserPasswordStore<IdentityUser>, IUserEmailStore<IdentityUser>
+    public class UserStore
+        : IUserPasswordStore<IdentityUser>,
+          IUserEmailStore<IdentityUser>,
+          IUserSecurityStampStore<IdentityUser>
     {
         private readonly IUserRepository _userRepository;
 
@@ -65,7 +68,7 @@ namespace Cortex.Auth
 
         public async Task<IdentityResult> CreateAsync(IdentityUser user, CancellationToken cancellationToken)
         {
-            UserModel userModel = UserModel.CreateNew(user.Id, user.Name, user.UserName, user.Email, user.PasswordHash);
+            UserModel userModel = UserModel.CreateNew(user.Id, user.Name, user.UserName, user.Email, user.PasswordHash, user.Stamp);
 
             await _userRepository.CreateAsync(userModel);
 
@@ -80,7 +83,8 @@ namespace Cortex.Auth
                 userModel.UpdateUserName(user.UserName)
                     .UpdateEmail(user.Email)
                     .UpdateName(user.Name)
-                    .UpdatePasswordHash(user.PasswordHash);
+                    .UpdatePasswordHash(user.PasswordHash)
+                    .UpdateStamp(user.Stamp);
 
                 await _userRepository.UpdateAsync(userModel);
 
@@ -161,6 +165,16 @@ namespace Cortex.Auth
             return SetEmailAsync(user, normalizedEmail, cancellationToken);
         }
 
+        public async Task SetSecurityStampAsync(IdentityUser user, string stamp, CancellationToken cancellationToken)
+        {
+            user.Stamp = stamp;
+        }
+
+        public async Task<string> GetSecurityStampAsync(IdentityUser user, CancellationToken cancellationToken)
+        {
+            return user.Stamp;
+        }
+
         private static IdentityUser ConvertToIdentityUser(UserModel user)
         {
             if (user == null)
@@ -174,7 +188,8 @@ namespace Cortex.Auth
                 Email = user.Email,
                 Name = user.Name,
                 PasswordHash = user.PasswordHash,
-                UserName = user.UserName
+                UserName = user.UserName,
+                Stamp = user.Stamp
             };
         }
     }

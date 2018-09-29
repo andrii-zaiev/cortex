@@ -30,5 +30,7 @@ namespace Cortex.Auth
         public string PasswordHash { get; set; }
 
         public string Name { get; set; }
+
+        public string Stamp { get; set; }
     }
 }

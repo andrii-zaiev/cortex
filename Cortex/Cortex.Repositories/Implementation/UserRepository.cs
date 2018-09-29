@@ -49,7 +49,8 @@ namespace Cortex.Repositories.Implementation
                 Email = user.Email,
                 Name = user.Name,
                 PasswordHash = user.PasswordHash,
-                UserName = user.UserName
+                UserName = user.UserName,
+                Stamp = user.Stamp
             };
 
             await base.CreateAsync(entity);
@@ -65,6 +66,7 @@ namespace Cortex.Repositories.Implementation
                 entity.Name = user.Name;
                 entity.PasswordHash = user.PasswordHash;
                 entity.UserName = user.UserName;
+                entity.Stamp = user.Stamp;
 
                 await base.UpdateAsync(entity);
             }

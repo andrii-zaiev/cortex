@@ -25,20 +25,21 @@ namespace Cortex.DomainModels
     public class UserModel
     {
         public UserModel(User user)
-            : this(user.Id, user.Name, user.UserName, user.Email, user.PasswordHash)
+            : this(user.Id, user.Name, user.UserName, user.Email, user.PasswordHash, user.Stamp)
         {
         }
 
-        private UserModel(Guid id, string name, string userName, string email, string passwordHash)
+        private UserModel(Guid id, string name, string userName, string email, string passwordHash, string stamp)
         {
             Id = id;
             Name = name;
             UserName = userName;
             Email = email;
             PasswordHash = passwordHash;
+            Stamp = stamp;
         }
 
-        public Guid Id { get; private set; }
+        public Guid Id { get; }
 
         public string Name { get; private set; }
 
@@ -48,14 +49,17 @@ namespace Cortex.DomainModels
 
         public string PasswordHash { get; private set; }
 
-        public static UserModel CreateNew(Guid id, string name, string userName, string email, string passwordHash)
+        public string Stamp { get; private set; }
+
+        public static UserModel CreateNew(Guid id, string name, string userName, string email, string passwordHash, string stamp)
         {
             return new UserModel(
                 id,
                 name,
                 userName?.ToUpper(),
                 email?.ToUpper(),
-                passwordHash);
+                passwordHash,
+                stamp);
         }
 
         public UserModel UpdateName(string name)
@@ -79,6 +83,12 @@ namespace Cortex.DomainModels
         public UserModel UpdatePasswordHash(string passwordHash)
         {
             PasswordHash = passwordHash;
+            return this;
+        }
+
+        public UserModel UpdateStamp(string stamp)
+        {
+            Stamp = stamp;
             return this;
         }
     }

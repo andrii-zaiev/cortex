@@ -37,5 +37,8 @@ namespace Cortex.DataAccess.Entities
 
         [Required]
         public string PasswordHash { get; set; }
+
+        [MaxLength(50)]
+        public string Stamp { get; set; }
     }
 }
