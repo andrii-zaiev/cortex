@@ -54,6 +54,18 @@ namespace Cortex.Services
             return new User(user);
         }
 
+        public async Task<User> GetUserAsync(string userName)
+        {
+            UserModel user = await _userRepository.GetByUserNameAsync(userName);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            return new User(user);
+        }
+
         public async Task<IList<User>> FindUsersAsync(string query)
         {
             IList<UserModel> users = await _userRepository.FindUsersAsync(query);

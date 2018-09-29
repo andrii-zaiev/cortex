@@ -1,4 +1,4 @@
-@*
+﻿@*
     Cortex - web application for creating and managing neural networks diagrams.
     Copyright (C) 2018  Andrii Zaiev <andrii.zaiev@gmail.com>
     
@@ -17,7 +17,6 @@
 *@
 
 
-@using Cortex.Auth
 @{
     if (ViewBag.IsLanding == null)
     {
@@ -46,7 +45,13 @@
             @if (User.Identity.IsAuthenticated)
             {
                 <li class="navbar-item">
-                    <a id="user-name-label" href="#" class="fs-4">@User.Identity.Name.ToLower()</a>
+                    <a id="user-name-label"
+                       class="fs-4"
+                       asp-controller="Users"
+                       asp-action="GetUser"
+                       asp-route-userName="@User.Identity.Name.ToLower()">
+                        @User.Identity.Name.ToLower()
+                    </a>
                 </li>
                 <li class="navbar-item">
                     <form method="post" asp-controller="Account" asp-action="LogOut">

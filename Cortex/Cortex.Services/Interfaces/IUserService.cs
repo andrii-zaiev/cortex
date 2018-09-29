@@ -28,6 +28,8 @@ namespace Cortex.Services.Interfaces
 
         Task<User> GetUserAsync(Guid id);
 
+        Task<User> GetUserAsync(string userName);
+
         Task<IList<User>> FindUsersAsync(string query);
     }
 }

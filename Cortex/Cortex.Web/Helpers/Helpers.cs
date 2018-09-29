@@ -27,14 +27,12 @@ namespace Cortex.Web.Helpers
     {
         public static IHtmlContent DisplayForUser(this IHtmlHelper helper, UserDisplayModel model, Guid? userId)
         {
-            if (userId == model.Id)
-            {
-                return new HtmlString("<span>you</span>");
-            }
-
             string name = HttpUtility.HtmlEncode(model.Name);
-            string username = HttpUtility.HtmlEncode($"<{model.UserName.ToLower()}>");
-            return new HtmlString($"<span>{name} {username}</span>");
+            string username = HttpUtility.HtmlEncode(model.UserName.ToLower());
+
+            string linkText = userId == model.Id ? "you" : $"{name} <{username}>";
+
+            return helper.ActionLink(linkText, "GetUser", "Users", new { userName = username }, new { });
         }
     }
 }
