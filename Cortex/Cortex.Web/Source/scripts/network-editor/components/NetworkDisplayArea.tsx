@@ -69,6 +69,7 @@ interface INetworkDisplayAreaState {
     scale: number;
     grabbing: GrabbingState;
     dragging: DraggingState;
+    prevProps: INetworkDisplayAreaProps;
 }
 
 const NetworkDisplayAreaStateRecord = Record<INetworkDisplayAreaState>({
@@ -76,7 +77,8 @@ const NetworkDisplayAreaStateRecord = Record<INetworkDisplayAreaState>({
     translate: { x: 0, y: 0 },
     scale: 1,
     grabbing: new GrabbingState(),
-    dragging: new DraggingState()
+    dragging: new DraggingState(),
+    prevProps: null
 });
 
 class NetworkDisplayAreaState extends NetworkDisplayAreaStateRecord {
@@ -106,7 +108,13 @@ export default class NetworkDisplayArea
     }
 
     static getDerivedStateFromProps(nextProps: INetworkDisplayAreaProps, prevState: { record: NetworkDisplayAreaState }) {
-        return { record: prevState.record.set('layers', nextProps.layers) };
+        if (nextProps === prevState.record.prevProps) {
+            return prevState;
+        }
+
+        return {
+            record: prevState.record.set('layers', nextProps.layers).set('prevProps', nextProps)
+        };
     }
 
     componentDidMount() {
@@ -141,7 +149,7 @@ export default class NetworkDisplayArea
         const layerInfoLabel = this.updateInfoLabels(layerLabel.select('tspan#info'));
         const layerSizeLabel = this.updateSizeLabels(layerLabel.select('tspan#size'));
 
-        // Enter…
+        // Enter
         const groupEnter = layerGroup.enter().append('g');
         this.updateLayerRects(groupEnter.append('rect')
             .attr('id', 'front')
@@ -170,7 +178,7 @@ export default class NetworkDisplayArea
         this.updateInfoLabels(layerEnter.append('tspan').attr('id', 'info').attr('dy', '1.2em'));
         this.updateSizeLabels(layerEnter.append('tspan').attr('id', 'size').attr('dy', '1.2em'));
 
-        // Exit…
+        // Exit
         layerGroup.exit().remove();
     }
 
