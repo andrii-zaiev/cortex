@@ -33,11 +33,11 @@ else
             <div class="list-item-container">
                 <div class="list-item-row-heading">
                     <small>
+                        @Html.DisplayForUser(version.Author, User.GetNullableId())
                         <a asp-controller="NetworkVersions"
                            asp-action="GetVersion"
                            asp-route-networkId="@version.NetworkId"
                            asp-route-versionId="@version.Id">
-                            @Html.DisplayForUser(version.Author, User.GetNullableId())
                             <time datetime="@version.Date.ToString("o")" data-local></time>
                         </a>
                     </small>

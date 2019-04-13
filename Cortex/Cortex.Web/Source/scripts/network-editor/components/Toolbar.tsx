@@ -26,6 +26,7 @@ import VersionSaver from "../containers/VersionSaver";
 export interface IToolbarProps {
     selected: Layer | Connection,
     type: ItemType,
+    canAddConnection: boolean,
     onDelete: (id: number, item: ItemType) => void,
     onCancel: () => void,
     onAddLayer: (layer: Layer) => void,
@@ -110,9 +111,11 @@ export default class Toolbar extends React.Component<IToolbarProps, { record: To
                 <button className="toolbar-button" title="Add layer..." onClick={this.openAddLayerDialog}>
                     <i className="fa fa-plus-square" />
                 </button>
-                <button className="toolbar-button" title="Add connection..." onClick={this.openAddConnectionDialog}>
-                    <i className="fa fa-minus" />
-                </button>
+                {this.props.canAddConnection &&
+                    <button className="toolbar-button" title="Add connection..." onClick={this.openAddConnectionDialog}>
+                        <i className="fa fa-minus" />
+                    </button>
+                }
                 <button className="toolbar-button"
                         title="Delete"
                         onClick={() => this.props.onDelete(this.props.selected.id, this.props.type)}

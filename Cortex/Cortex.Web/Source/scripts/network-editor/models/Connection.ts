@@ -30,3 +30,16 @@ export class Connection extends ConnectionRecord implements IConnection {
         super(props);
     }
 }
+
+export interface INewConnection {
+    connection: Connection,
+    isValid: boolean
+}
+
+const NewConnectionRecord = Record<INewConnection>({ connection: new Connection(), isValid: false });
+
+export class NewConnection extends NewConnectionRecord implements INewConnection {
+    constructor(props: Partial<INewConnection> = {}) {
+        super(props);
+    }
+}

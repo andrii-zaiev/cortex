@@ -35,7 +35,8 @@ function getSelectedItem(state: RootState) {
 
 const mapStateToProps = (state: RootState): Partial<IToolbarProps> => ({
     selected: getSelectedItem(state),
-    type: state.selectedItem !== null ? state.selectedItem.type : null
+    type: state.selectedItem !== null ? state.selectedItem.type : null,
+    canAddConnection: state.layers.count() > 1
 });
 
 const mapDispatchToProps = (dispatch): Partial<IToolbarProps> => ({

@@ -20,6 +20,7 @@ import * as Modal from 'react-modal';
 import { Connection } from '../models';
 import { Record } from 'immutable';
 import ValidatedConnectionForm from '../containers/ValidatedConnectionForm';
+import { NewConnection } from '../models/Connection';
 
 
 export interface IAddConnectionDialogProps {
@@ -33,7 +34,7 @@ interface IAddConnectionDialogState {
     isValid: boolean
 }
 
-const AddConnectionDialogStateRecord = Record<IAddConnectionDialogState>({ connection: new Connection(), isValid: false });
+const AddConnectionDialogStateRecord = Record<IAddConnectionDialogState>({ connection: null, isValid: false });
 
 class AddConnectionDialogState extends AddConnectionDialogStateRecord {
     constructor(state: Partial<IAddConnectionDialogState> = {}) {
@@ -53,13 +54,11 @@ export default class AddConnectionDialog
         this.state = { record: new AddConnectionDialogState() };
     }
 
-    updateConnection(connection: Connection) {
-        if (connection === null) {
-            this.setState(prevState => ({ record: prevState.record.set('isValid', false) }));
-        }
-        else {
-            this.setState(prevState => ({ record: prevState.record.set('isValid', true).set('connection', connection) }));
-        }
+    updateConnection(connection: NewConnection) {
+        this.setState(prevState => ({
+            record: prevState.record.set('isValid', connection.isValid)
+                .set('connection', connection.connection)
+        }));
     }
 
     public render() {

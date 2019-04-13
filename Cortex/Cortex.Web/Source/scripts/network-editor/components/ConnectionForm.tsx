@@ -19,30 +19,24 @@ import * as React from 'react';
 import { Connection, Layer } from '../models';
 import { List } from 'immutable';
 import { SelectInput, IOption } from './inputs';
+import { NewConnection } from '../models/Connection';
 
 export interface IConnectionFormProps {
     connection: Connection,
     layers: List<Layer>,
     connections: List<Connection>,
-    onChange: (connection: Connection) => void
+    onChange: (connection: NewConnection) => void
 }
 
 const ConnectionForm = (props: IConnectionFormProps) => {
     const layerOptions: List<IOption> = props.layers.map(l => ({ value: l.id, label: l.name }));
 
-    function validate(connection: Connection): Connection {
+    function validate(connection: Connection): NewConnection {
         const isSameLayer = connection.fromId === connection.toId;
-        if (isSameLayer) {
-            return null;
-        }
-
         const isExistingConnection = props.connections
             .some(c => c.fromId === connection.fromId && c.toId === connection.toId);
-        if (isExistingConnection) {
-            return null;
-        }
 
-        return connection;
+        return new NewConnection({ connection: connection, isValid: !isSameLayer && !isExistingConnection });
     }
 
     return (
@@ -55,7 +49,7 @@ const ConnectionForm = (props: IConnectionFormProps) => {
             <SelectInput label="To"
                 value={props.connection.toId}
                 options={layerOptions}
-                onChange={v => props.onChange(props.connection.set('toId', v))}
+                onChange={v => props.onChange(validate(props.connection.set('toId', v)))}
                 isReadOnly={false} />
         </div>);
 };

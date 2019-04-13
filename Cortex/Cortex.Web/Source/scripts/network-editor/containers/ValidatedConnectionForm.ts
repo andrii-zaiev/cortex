@@ -19,18 +19,21 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { RootState, Connection } from '../models';
 import ConnectionForm, { IConnectionFormProps } from '../components/ConnectionForm';
+import { NewConnection } from '../models/Connection';
 
 export interface IValidatedConnectionFormProps {
     connection: Connection,
-    onChange: (connection: Connection) => void
+    onChange: (connection: NewConnection) => void
 }
 
-const mapStateToProps = (state: RootState, props: IValidatedConnectionFormProps): Partial<IConnectionFormProps> => ({
-    connections: state.connections.valueSeq().toList(),
-    layers: state.layers.valueSeq().toList(),
-    connection: props.connection,
-    onChange: props.onChange
-});
+const mapStateToProps = (state: RootState, props: IValidatedConnectionFormProps): Partial<IConnectionFormProps> => {
+    return {
+        connections: state.connections.valueSeq().toList(),
+        layers: state.layers.valueSeq().toList(),
+        connection: props.connection ? props.connection : new Connection({ fromId: state.layers.valueSeq().get(0).id, toId: state.layers.valueSeq().get(1).id }),
+        onChange: props.onChange
+    };
+};
 
 const mapDispatchToProps = (dispatch): Partial<IConnectionFormProps> => ({});
 
